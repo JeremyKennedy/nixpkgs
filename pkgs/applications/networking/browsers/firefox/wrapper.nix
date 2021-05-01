@@ -34,6 +34,7 @@ let
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , forceWayland ? false
+    , waylandDesktopSuffix ? " (Wayland)"
     , useGlvnd ? true
     , cfg ? config.${applicationName} or {}
 
@@ -166,7 +167,7 @@ let
         name = applicationName;
         exec = "${applicationName}${nameSuffix} %U";
         inherit icon;
-        desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
+        desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland waylandDesktopSuffix}";
         genericName = "Web Browser";
         categories = [ "Network" "WebBrowser" ];
         mimeTypes = [
