@@ -26680,6 +26680,8 @@ with pkgs;
 
   firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
 
+  firefox-pmos-mobile = callPackage ../applications/networking/browsers/firefox-pmos-mobile { };
+
   fmtoy = callPackage ../tools/audio/fmtoy { };
 
   flac = callPackage ../applications/audio/flac { };
