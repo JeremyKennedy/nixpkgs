@@ -16,6 +16,8 @@ let
 in
 
 final: prev: {
+  fetchNodeModules = callPackage ../../build-support/fetchnodemodules { };
+
   "@angular/cli" = prev."@angular/cli".override {
     prePatch = ''
       export NG_CLI_ANALYTICS=false
