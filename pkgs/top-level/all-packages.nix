@@ -3876,6 +3876,8 @@ with pkgs;
 
   klipper = callPackage ../servers/klipper { };
 
+  klipperscreen = callPackage ../applications/misc/klipperscreen { };
+
   klog = qt5.callPackage ../applications/radio/klog { };
 
   krapslog = callPackage ../tools/misc/krapslog { };
