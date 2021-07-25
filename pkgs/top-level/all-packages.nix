@@ -255,6 +255,8 @@ with pkgs;
 
   bingo = callPackage ../development/tools/bingo {};
 
+  bgpalerter = callPackage ../servers/monitoring/bgpalerter { };
+
   breakpad = callPackage ../development/misc/breakpad { };
 
   buf = callPackage ../development/tools/buf { };
