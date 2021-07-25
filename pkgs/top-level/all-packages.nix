@@ -204,6 +204,8 @@ with pkgs;
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
 
+  bgpalerter = callPackage ../servers/monitoring/bgpalerter { };
+
   breakpad = callPackage ../development/misc/breakpad { };
 
   buf = callPackage ../development/tools/buf { };
