@@ -271,6 +271,8 @@ with pkgs;
 
   bootstrap-studio = callPackage ../development/web/bootstrap-studio {};
 
+  bgpalerter = callPackage ../servers/monitoring/bgpalerter { };
+
   breakpad = callPackage ../development/misc/breakpad { };
 
   buf = callPackage ../development/tools/buf {
