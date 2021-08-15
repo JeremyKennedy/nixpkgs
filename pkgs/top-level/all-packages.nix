@@ -33152,7 +33152,7 @@ with pkgs;
 
   ### SCIENCE/PROGRAMMING
 
-  dafny = dotnetPackages.Dafny;
+  dafny = callPackage ../applications/science/programming/dafny { };
 
   groove = callPackage ../applications/science/programming/groove { };
 
