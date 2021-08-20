@@ -2374,6 +2374,8 @@ with pkgs;
 
   parquet-tools = callPackage ../tools/misc/parquet-tools { };
 
+  parsec-gaming = callPackage ../applications/misc/parsec-gaming { };
+
   pass = callPackage ../tools/security/pass { };
 
   passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
