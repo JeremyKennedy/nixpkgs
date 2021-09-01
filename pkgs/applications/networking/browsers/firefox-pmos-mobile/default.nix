@@ -3,7 +3,7 @@
 , fetchFromGitLab
 , stdenv
 , wrapFirefox
-, firefoxLibName ? "firefox"
+, libName ? "firefox"
 , forceWayland ? true
 , keepHomepage ? true
 }:
@@ -54,7 +54,7 @@ let
 
   wrapped = wrapFirefox firefox-unwrapped {
     version = "${lib.getVersion firefox-unwrapped}-pmos-${version}";
-    inherit forceWayland firefoxLibName extraPolicies;
+    inherit forceWayland libName extraPolicies;
 
     waylandDesktopSuffix = "";
   };
@@ -62,9 +62,9 @@ in wrapped.overrideAttrs (old: {
   buildCommand = old.buildCommand + ''
     # Inject default configs with AutoConfig commented out
     # They are problematic as the AutoConfig file is specified by wrapFirefox
-    sed '/general\.config\.\(filename\|obscure_value\)/ s|^|//|g' < "${mobile-config-firefox}/mobile-config-prefs.js" > "$out/lib/${firefoxLibName}/defaults/pref/mobile-config-prefs.js"
+    sed '/general\.config\.\(filename\|obscure_value\)/ s|^|//|g' < "${mobile-config-firefox}/mobile-config-prefs.js" > "$out/lib/${libName}/defaults/pref/mobile-config-prefs.js"
 
     # Inject forced configs
-    cat "${mobile-config-firefox}/mobile-config-autoconfig.js" >> "$out/lib/${firefoxLibName}/mozilla.cfg"
+    cat "${mobile-config-firefox}/mobile-config-autoconfig.js" >> "$out/lib/${libName}/mozilla.cfg"
   '';
 })
