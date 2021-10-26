@@ -20,7 +20,21 @@ let
                  optionalString fixBinary "F";
   in ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
 
-  activationSnippet = name: { interpreter, ... }: ''
+  activationSnippet = name: { interpreter, preserveArgvZero, rewriteQemuPreserveArgvZero, ... }:
+  if preserveArgvZero && rewriteQemuPreserveArgvZero then ''
+    rm -f /run/binfmt/${name}
+    cat > /run/binfmt/${name} << 'EOF'
+    #!${pkgs.bash}/bin/sh
+
+    # The P flag is enabled and we will receive one extra argument:
+    # - $1: Full path to the binary (like normal)
+    # - $2: Original argv[0]
+    # - ''${@:3}: Other args
+
+    exec -- ${interpreter} -0 "$2" "$1" "''${@:3}"
+    EOF
+    chmod +x /run/binfmt/${name}
+  '' else ''
     rm -f /run/binfmt/${name}
     cat > /run/binfmt/${name} << 'EOF'
     #!${pkgs.bash}/bin/sh
@@ -30,6 +44,7 @@ let
   '';
 
   getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
+  getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
 
   # Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
   # - https://github.com/cleverca22/nixos-configs/blob/master/qemu.nix
@@ -202,6 +217,15 @@ in {
               type = types.bool;
             };
 
+            rewriteQemuPreserveArgvZero = mkOption {
+              default = false;
+              internal = true;
+              description = ''
+                Whether to rewrite the QEMU invocation to support the 'P' flag.
+              '';
+              type = types.bool;
+            };
+
             openBinary = mkOption {
               default = config.matchCredentials;
               description = ''
@@ -257,8 +281,14 @@ in {
   config = {
     boot.binfmt.registrations = builtins.listToAttrs (map (system: {
       name = system;
-      value = {
+      value = let
         interpreter = getEmulator system;
+        qemuArch = getQemuArch system;
+        canPreserveArgvZero = "qemu-${qemuArch}" == baseNameOf interpreter;
+      in {
+        inherit interpreter;
+        preserveArgvZero = lib.mkDefault canPreserveArgvZero;
+        rewriteQemuPreserveArgvZero = canPreserveArgvZero;
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"));
     }) cfg.emulatedSystems);
     # TODO: add a nix.extraPlatforms option to NixOS!
