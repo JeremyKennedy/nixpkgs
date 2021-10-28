@@ -16,10 +16,13 @@ pkgsStatic.stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    $CC -o $out -static -std=c99 -O2 \
+
+    mkdir -p $out/bin
+    $CC -o $out/bin/${name} -static -std=c99 -O2 \
         -DTARGET_QEMU=\"${emulator}\" \
         ${lib.optionalString enableDebug "-DDEBUG"} \
         $src
+
     runHook postBuild
   '';
 }
