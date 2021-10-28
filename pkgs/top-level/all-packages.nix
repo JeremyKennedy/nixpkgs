@@ -27743,6 +27743,8 @@ with pkgs;
 
   qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
 
+  wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
+
   qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
     withGrass = false;
   };
