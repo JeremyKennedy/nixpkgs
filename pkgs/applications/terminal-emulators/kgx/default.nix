@@ -20,16 +20,16 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "kgx";
-  version = "unstable-2021-03-13";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "ZanderBrown";
     repo = "kgx";
-    rev = "105adb6a8d09418a3ce622442aef6ae623dee787";
-    sha256 = "0m34y0nbcfkyicb40iv0iqaq6f9r3f66w43lr803j3351nxqvcz2";
+    rev = version;
+    sha256 = "sha256-i7YsE8dn+w+kjrlsf+ddY3ZPpDiMivkDTqRLO+9EAww=";
   };
 
   buildInputs = [
