@@ -4264,6 +4264,8 @@ with pkgs;
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
+  smali2java = callPackage ../development/tools/smali2java { };
+
   snazy = callPackage ../development/tools/snazy { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
