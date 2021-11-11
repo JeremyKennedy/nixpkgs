@@ -3537,6 +3537,8 @@ with pkgs;
 
   simplenes = callPackage ../misc/emulators/simplenes { };
 
+  smali2java = callPackage ../development/tools/smali2java { };
+
   snipes = callPackage ../games/snipes { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
