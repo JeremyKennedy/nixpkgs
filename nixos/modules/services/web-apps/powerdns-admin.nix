@@ -90,7 +90,7 @@ in
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         # gunicorn needs setuid
-        SystemCallFilter = [ "@system-service" "~@privileged @resources @keyring" "@setuid" ];
+        SystemCallFilter = [ "@system-service" "~@privileged @resources @keyring" "@setuid" "@chown" ];
         TemporaryFileSystem = "/:ro";
         # Does not work well with the temporary root
         #UMask = "0066";
