@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "info" ];
 
+  configurePlatforms = [ "build" "host" ];
+
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
     "--enable-pax_emutramp"
