@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , coreutils
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-+FzTEpotxco4+9gLVUL+rkCWoMjRCorKQ47JINHsnNA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "memtrace-underflow.patch";
+      url = "https://github.com/zhaofengli/aws-c-common/commit/affba363a7e0814fa7d35cb44e6e77bba9228ce9.patch";
+      sha256 = "sha256-7ZXdhRJuuvTlo+/n6XxoebBRUNnwyvWzj08yzQ5hWpw=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -41,6 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  checkFlagsArray = lib.optional stdenv.hostPlatform.isRiscV "ARGS=-E test_memtrace_stacks";
 
   meta = with lib; {
     description = "AWS SDK for C common core";
