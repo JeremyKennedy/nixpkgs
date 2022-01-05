@@ -1,10 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonAtLeast
 , fetchFromGitHub
 , attrs
 , pexpect
-, doCheck ? true
+, doCheck ? !stdenv.hostPlatform.isRiscV
 , pytestCheckHook
 , pytest-xdist
 , sortedcontainers
