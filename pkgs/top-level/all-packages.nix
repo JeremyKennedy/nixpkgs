@@ -8401,6 +8401,8 @@ with pkgs;
     luaPackages = lua53Packages;
   };
 
+  opensbi = callPackage ../misc/opensbi { };
+
   opensc = callPackage ../tools/security/opensc {
     inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
   };
