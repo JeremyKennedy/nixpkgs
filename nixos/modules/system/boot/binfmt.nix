@@ -4,14 +4,14 @@ let
 
   cfg = config.boot.binfmt;
 
-  makeBinfmtLine = name: { recognitionType, offset, magicOrExtension
+  makeBinfmtLine = name: { interpreterName, recognitionType, offset, magicOrExtension
                          , mask, preserveArgvZero, openBinary
                          , matchCredentials, fixBinary, ...
                          }: let
     type = if recognitionType == "magic" then "M" else "E";
     offset' = toString offset;
     mask' = toString mask;
-    interpreter = "/run/binfmt/${name}";
+    interpreter = "/run/binfmt/${interpreterName}";
     flags = if !(matchCredentials -> openBinary)
               then throw "boot.binfmt.registrations.${name}: you can't specify openBinary = false when matchCredentials = true."
             else optionalString preserveArgvZero "P" +
@@ -20,7 +20,7 @@ let
                  optionalString fixBinary "F";
   in ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
 
-  activationSnippet = name: { interpreter, wrapInterpreterInShell, ... }: if wrapInterpreterInShell then ''
+  activationSnippet = name: { interpreter, interpreterName, wrapInterpreterInShell, ... }: if wrapInterpreterInShell then ''
     rm -f /run/binfmt/${name}
     cat > /run/binfmt/${name} << 'EOF'
     #!${pkgs.bash}/bin/sh
@@ -28,11 +28,12 @@ let
     EOF
     chmod +x /run/binfmt/${name}
   '' else ''
-    rm -f /run/binfmt/${name}
-    ln -s ${interpreter} /run/binfmt/${name}
+    rm -f /run/binfmt/${interpreterName}
+    ln -s ${interpreter} /run/binfmt/${interpreterName}
   '';
 
   getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
+  getStaticEmulator = system: (lib.systems.elaborate { inherit system; }).staticEmulator pkgs;
   getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
 
   # Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
@@ -158,8 +159,14 @@ in {
           See https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html for more details.
         '';
 
-        type = types.attrsOf (types.submodule ({ config, ... }: {
+        type = types.attrsOf (types.submodule ({ name, config, ... }: {
           options = {
+            interpreterName = mkOption {
+              description = "Name of the interpreter binary in /run/binfmt";
+              default = name;
+              internal = true;
+            };
+
             recognitionType = mkOption {
               default = "magic";
               description = lib.mdDoc "Whether to recognize executables by magic number or extension.";
@@ -282,22 +289,21 @@ in {
     boot.binfmt.registrations = builtins.listToAttrs (map (system: {
       name = system;
       value = let
-        interpreter = getEmulator system;
+        staticEmulator = getStaticEmulator system;
+        interpreter =
+          if staticEmulator != null then staticEmulator
+          else getEmulator system;
         qemuArch = getQemuArch system;
 
-        preserveArgvZero = "qemu-${qemuArch}" == baseNameOf interpreter;
-        interpreterReg = let
-          wrapperName = "qemu-${qemuArch}-binfmt-P";
-          wrapper = pkgs.wrapQemuBinfmtP wrapperName interpreter;
-        in
-          if preserveArgvZero then "${wrapper}/bin/${wrapperName}"
-          else interpreter;
+        isQemu = "qemu-${qemuArch}" == baseNameOf interpreter;
       in {
-        inherit preserveArgvZero;
+        inherit interpreter;
 
-        interpreter = interpreterReg;
-        wrapInterpreterInShell = !preserveArgvZero;
-        interpreterSandboxPath = dirOf (dirOf interpreterReg);
+        interpreterName = lib.optionalString isQemu "${system}-binfmt-P";
+        fixBinary = isQemu;
+        preserveArgvZero = isQemu;
+        wrapInterpreterInShell = !isQemu;
+        interpreterSandboxPath = dirOf (dirOf interpreter);
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"));
     }) cfg.emulatedSystems);
     nix.settings = lib.mkIf (cfg.emulatedSystems != []) {
@@ -307,7 +313,7 @@ in {
         hasWrappedRule = lib.any (system: (ruleFor system).wrapInterpreterInShell) cfg.emulatedSystems;
       in [ "/run/binfmt" ]
         ++ lib.optional hasWrappedRule "${pkgs.bash}"
-        ++ (map (system: (ruleFor system).interpreterSandboxPath) cfg.emulatedSystems);
+        ++ lib.unique (map (system: (ruleFor system).interpreterSandboxPath) cfg.emulatedSystems);
     };
 
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
