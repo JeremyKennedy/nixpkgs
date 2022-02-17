@@ -4,7 +4,7 @@
 , makeWrapper, runtimeShell, removeReferencesTo
 , attr, libcap, libcap_ng, socat
 , CoreServices, Cocoa, Hypervisor, rez, setfile
-, guestAgentSupport ? with stdenv.hostPlatform; isLinux || isSunOS || isWindows
+, guestAgentSupport ? with stdenv.hostPlatform; (isLinux || isSunOS || isWindows) && !isStatic
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
@@ -26,11 +26,13 @@
 , smbdSupport ? false, samba
 , tpmSupport ? true
 , uringSupport ? stdenv.isLinux, liburing
+, systemSupport ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
+, withTools ? !stdenv.hostPlatform.isStatic
 , nixosTestRunner ? false
 , doCheck ? false
 , qemu  # for passthru.tests
@@ -82,6 +84,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals uringSupport [ liburing ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
@@ -102,6 +105,12 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/99eb313ddbbcf73c1adcdadceba1423b691c6d05.diff";
       sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
       revert = true;
+    })
+
+    # Adds binfmt P support, activated when argv[0] ends with `-binfmt-P`.
+    (fetchpatch {
+      url = "https://salsa.debian.org/qemu-team/qemu/-/raw/f0f56fc77fb3737b5d9f1908d4c987008fe528b8/debian/patches/linux-user-binfmt-P.diff";
+      sha256 = "sha256-IeoWtmGkZ3ZBw2wBBN/kW+SJzi4OBTns8Dgw0N/LVss=";
     })
     # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
     (fetchpatch {
@@ -127,7 +136,14 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-zQHDXedIXZBnabv4+3TA4z5mY1+KZiPmqUbhaSkGLgA=";
     })
   ]
-  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+    ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
+    ++ lib.optional stdenv.hostPlatform.isStatic ./aio-find-static-library.patch
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = "https://github.com/alpinelinux/aports/raw/01ad5fded5cd1ce1d4fb3bbb952fd4bb420bc674/community/qemu/0006-linux-user-signal.c-define-__SIGRTMIN-MAX-for-non-GN.patch";
+      sha256 = "sha256-ATMvhSjpiGdGeIbpTCiXMeF/ZWPcZ99aoH4Xmv10+ps=";
+    })
+  ];
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -151,7 +167,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
     "--enable-docs"
-    "--enable-tools"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     # Always use our Meson, not the bundled version, which doesn't
@@ -178,7 +193,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional tpmSupport "--enable-tpm"
     ++ lib.optional libiscsiSupport "--enable-libiscsi"
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
-    ++ lib.optional uringSupport "--enable-linux-io-uring";
+    ++ lib.optional uringSupport "--enable-linux-io-uring"
+    ++ lib.optional (!systemSupport) "--disable-system"
+    ++ lib.optional withTools "--enable-tools"
+
+    # FIXME: "multiple definition of `strtoll'" with libnbcompat
+    ++ lib.optional stdenv.hostPlatform.isStatic "--static --extra-ldflags=-Wl,--allow-multiple-definition";
 
   dontWrapGApps = true;
 
@@ -240,7 +260,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall = ''
+  postInstall = lib.optionalString systemSupport ''
     ln -s $out/libexec/virtiofsd $out/bin
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
