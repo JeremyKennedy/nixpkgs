@@ -327,5 +327,9 @@ in {
       "proc-sys-fs-binfmt_misc.mount"
       "systemd-binfmt.service"
     ];
+    systemd.services.systemd-binfmt.restartTriggers = [
+      config.environment.etc."binfmt.d/nixos.conf".source
+      (pkgs.writeText "binfmt-activation.cfg" config.system.activationScripts.binfmt.text)
+    ];
   };
 }
