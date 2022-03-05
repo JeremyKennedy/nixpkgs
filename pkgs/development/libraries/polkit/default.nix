@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/polkit/raw/0a203bd46a1e2ec8cc4b3626840e2ea9d0d13a9a/f/CVE-2021-4115.patch";
       sha256 = "sha256-BivHVVpYB4Ies1YbBDyKwUmNlqq2D1MpMipH9/dZM54=";
     })
+    # test: Extend timeout for test-polkitbackendjsauthority
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/b10a1bdb697045db40774f2a9a8c58ae5c7189c3.patch";
+      sha256 = "sha256-h1WJ+qwRHgBfzgF4XswqLQJZ/iHLtw/CcDDMEHZGdD4=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Make netgroup support optional (musl does not have it)
     # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
