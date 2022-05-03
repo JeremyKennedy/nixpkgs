@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
 
     for f in Dafny DafnyLanguageServer DafnyServer; do
       makeWrapper $out/lib/dafny/$f $out/bin/$f \
-        --set DOTNET_ROOT "${dotnetCorePackages.net_5_0}" \
+        --set DOTNET_ROOT "${dotnetCorePackages.sdk_5_0}" \
         --prefix PATH : ${z3}/bin
     done
 
