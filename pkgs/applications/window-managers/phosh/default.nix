@@ -27,6 +27,7 @@
 , networkmanager
 , polkit
 , libsecret
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -115,6 +116,8 @@ stdenv.mkDerivation rec {
     providedSessions = [
      "sm.puri.Phosh"
     ];
+
+    tests.moonraker = nixosTests.phosh;
   };
 
   meta = with lib; {
