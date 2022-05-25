@@ -25,13 +25,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "weylus";
-  version = "0.11.4";
+  version = "unstable-2022-05-21";
 
   src = fetchFromGitHub {
     owner = "H-M-H";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0gq2czxvahww97j4i3k18np29zl6wx85f8253wn3ibqrpfnklz6l";
+    rev = "5fa33172e34d18ff960e1758887c36bdfaf1102c";
+    sha256 = "sha256-Zae2iLKFPiWTteHGGiesGFD6JoGwcG4DaUauwxX9a5o=";
   };
 
   buildInputs = [
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
     libtool
   ];
 
-  cargoSha256 = "1pigmch0sy9ipsafd83b8q54xwqjxdaif363n1q8n46arq4v81j0";
+  cargoSha256 = "sha256-9KD5NzjbNQIU8RDsCB3+O3brSteRpXxV+Bj0Ohc5qIE=";
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];
