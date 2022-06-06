@@ -22,35 +22,30 @@ let
   phocWlroots = wlroots.overrideAttrs (old: {
     patches = (old.patches or []) ++ [
       # Temporary fix. Upstream report: https://source.puri.sm/Librem5/phosh/-/issues/422
+      ./0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch
+
+      # wlr_output_layout_contains_point: handle outputs that aren't in the layout
+      # https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/13fcdba75cf5
+      ./0002-handle-outputs-that-arent-in-the-layout.patch
+
+      # seat: Allow to cancel touches
       (fetchpatch {
-        name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/78fde4aaf1a74eb13a3f083cb6dfb29f578c3265/community/wlroots/0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        sha256 = "1zjn7mwdj21z0jsc2mz90cnrzk97yqkiq58qqgpjav4h4dgpfb38";
+        name = "seat-Allow-to-cancel-touches.patch";
+        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/17b2b0663372.patch";
+        sha256 = "sha256-BAeXa3ZB5TXnlq0ZP2+rZlVXEPWpLP4Wi4TLwoXjkz4=";
       })
 
-      # xwayland: Allow to retrieve _NET_STARTUP_ID
+      # xdg-activation: Deduplicate token creation code
       (fetchpatch {
-        name = "allow-to-retrieve-net-startup-id.patch";
-        url = "https://github.com/swaywm/wlroots/commit/66593071bc90a1cccaeedc636eb6f33c973f5362.patch";
-        sha256 = "sha256-yKf/twdUzrII5IakH7AH6LGyPDo9Nl/gIB0pTThSTfY=";
-      })
-      # xdg-activation: Allow to submit tokens
-      (fetchpatch {
-        name = "allow-to-submit-tokens.patch";
-        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/4c59f7d46a949548caa55805b00922f846d58525.patch";
-        sha256 = "sha256-1kUIt6lV3HXN2BBBER8sjYVLTvgqELdSeFullJjNGo8=";
-      })
-      # xwayland: Allow to retrieve startup-id via _NET_STARTUP_INFO
-      (fetchpatch {
-        name = "allow-to-retrieve-startup-id-via-net-startup-info.patch";
-        url = "https://github.com/swaywm/wlroots/commit/235bb6f2fcb8ee4174215ba74b5bc2f191c5960a.patch";
-        sha256 = "sha256-7AWBq12tF/781CmgvTaOvTIiiJMywxRn6eWp+jacdak=";
+        name = "xdg-activation-deduplicate-token-creation-code.patch";
+        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/dd03d839ab56.patch";
+        sha256 = "sha256-mxt68MISC24xpaBtVSc1F2W4cyNs5wQowtbUQH9Eqr8=";
       })
     ];
   });
 in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.13.0";
+  version = "0.20.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -58,7 +53,7 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-65u59S6ntvkoQUO5BvkHZVcbj6cHIU4CgHWjzFo6s94=";
+    sha256 = "sha256-3mfYhKMTa9idWU7VWkF6/r9+twcNrL36zU/O04s9pNY=";
   };
 
   nativeBuildInputs = [

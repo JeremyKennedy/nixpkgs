@@ -1,0 +1,31 @@
+diff --git a/types/wlr_layer_shell_v1.c b/types/wlr_layer_shell_v1.c
+index 456dbc0e..55a6cfb8 100644
+--- a/types/wlr_layer_shell_v1.c
++++ b/types/wlr_layer_shell_v1.c
+@@ -328,26 +328,6 @@ static void layer_surface_role_commit(struct wlr_surface *wlr_surface) {
+ 		return;
+ 	}
+ 
+-	const uint32_t horiz = ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT |
+-		ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT;
+-	if (surface->pending.desired_width == 0 &&
+-		(surface->pending.anchor & horiz) != horiz) {
+-		wl_resource_post_error(surface->resource,
+-			ZWLR_LAYER_SURFACE_V1_ERROR_INVALID_SIZE,
+-			"width 0 requested without setting left and right anchors");
+-		return;
+-	}
+-
+-	const uint32_t vert = ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP |
+-		ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM;
+-	if (surface->pending.desired_height == 0 &&
+-		(surface->pending.anchor & vert) != vert) {
+-		wl_resource_post_error(surface->resource,
+-			ZWLR_LAYER_SURFACE_V1_ERROR_INVALID_SIZE,
+-			"height 0 requested without setting top and bottom anchors");
+-		return;
+-	}
+-
+ 	surface->current = surface->pending;
+ 	surface->pending.committed = 0;
+ 
