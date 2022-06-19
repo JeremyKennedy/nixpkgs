@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, mkYarnPackage, nixosTests, writeText, python3 }:
 
 let
-  version = "0.2.4";
+  version = "0.2.5";
   src = fetchFromGitHub {
     owner = "ngoduykhanh";
     repo = "PowerDNS-Admin";
     rev = "v${version}";
-    sha256 = "sha256-xJ0NNnDVwGl+t9q1INPhCxcTmQayYBYdjEG0PbPCI9E=";
+    sha256 = "sha256-JExjSU718K5E0uaISYw+9XzoCLcFnMwig30iS8hAEnk=";
   };
 
   python = python3.override {
@@ -43,8 +43,8 @@ let
     flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-sslify
     mysqlclient psycopg2 sqlalchemy
     cffi configobj cryptography bcrypt requests ldap pyotp qrcode dnspython
-    gunicorn python3-saml pyopenssl pytz cssmin jsmin authlib bravado-core
-    lima pytimeparse pyyaml
+    gunicorn python3-saml pytz cssmin jsmin authlib bravado-core
+    lima pytimeparse pyyaml jinja2 itsdangerous werkzeug
   ];
 
   assets = mkYarnPackage {
