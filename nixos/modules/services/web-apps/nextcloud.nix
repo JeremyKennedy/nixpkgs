@@ -565,6 +565,12 @@ in {
         '';
       };
     };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = "[not for upstream] Extra configurations.";
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -735,6 +741,7 @@ in {
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
               ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles},"}
               ${objectstoreConfig}
+              ${cfg.extraConfig}
             ];
           '';
           occInstallCmd = let
