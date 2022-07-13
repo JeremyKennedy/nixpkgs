@@ -13,5 +13,5 @@
     "multiselect": "^0.9.12"
   },
   "name": "powerdns-admin-assets",
-  "version": "0.2.5"
+  "version": "0.3.0"
 }

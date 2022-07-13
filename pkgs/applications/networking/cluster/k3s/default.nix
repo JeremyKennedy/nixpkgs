@@ -46,10 +46,10 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.24.1+k3s1";     # k3s git tag
-  k3sCommit = "0581808f5c160b0c0cafec5b8f20430835f34f44"; # k3s git commit at the above version
-  k3sRepoSha256 = "0zh60nav50s0viiaqxdaajhywh28zqckjnpyazlk2fdb077dyi65";
-  k3sVendorSha256 = "sha256-7cJ728vV9GA4/MDUBsnrR12gGf3DXzka3czrdHjsNIM=";
+  k3sVersion = "1.24.2+k3s2";     # k3s git tag
+  k3sCommit = "a237260237b549b90dd3aae449de09231caf1351"; # k3s git commit at the above version
+  k3sRepoSha256 = "1dmlsq7f0z0wq8ypbmdqwk1hl59pcnywvqhz7qblzm3wnbdb62cl";
+  k3sVendorSha256 = "sha256-w5dYkewoNnI9GvqCAkmecg7JsKgO+gu1WcyPRItLvWY=";
 
   # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
   # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
