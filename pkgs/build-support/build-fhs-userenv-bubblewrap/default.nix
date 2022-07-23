@@ -41,10 +41,10 @@ let
       "zprofile"
       # Users, Groups, NSS
       "passwd"
-      "group"
+      #"group" # HACK
       "shadow"
       "hosts"
-      "resolv.conf"
+      #"resolv.conf" # HACK
       "nsswitch.conf"
       # User profiles
       "profiles"
@@ -94,6 +94,13 @@ let
   init = run: writeShellScriptBin "${name}-init" ''
     source /etc/profile
     ${createLdConfCache}
+
+    # HACK: I just want to play my games :/
+    # This is incorrect and ugly - Please don't use this!
+
+    cat /etc/resolv.conf.mnt > /etc/resolv.conf
+    cat /etc/group.mnt > /etc/group
+
     exec ${run} "$@"
   '';
 
@@ -166,6 +173,8 @@ let
       --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
       --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc \
       --remount-ro ${pkgsi686Linux.glibc}/etc \
+      --ro-bind $(${coreutils}/bin/readlink -f /etc/resolv.conf) /etc/resolv.conf.mnt \
+      --ro-bind $(${coreutils}/bin/readlink -f /etc/group) /etc/group.mnt \
       ${etcBindFlags}
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
