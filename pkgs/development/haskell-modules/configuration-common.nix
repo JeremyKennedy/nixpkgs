@@ -352,11 +352,22 @@ self: super: {
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
 
-  # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  # Needs brick ^>= 0.70
-  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_70_1;
+  brick_0_73 = doDistribute (super.brick_0_73.overrideScope (self: super: {
+    vty = self.vty_5_36;
+    text-zipper = self.text-zipper_0_12;
   }));
+
+  # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
+  matterhorn = doJailbreak (appendPatches [
+    # Fix build with brick 0.73
+    (fetchpatch {
+      name = "matterhorn-brick-0.72.patch";
+      url = "https://github.com/matterhorn-chat/matterhorn/commit/d52df3342b8420e219095aad477205e47fbef11b.patch";
+      sha256 = "1ifvv926g9m8niyc9nl1hy9bkx4kf12ciyv2v8vnrzz3njp4fsrz";
+    })
+  ] (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_73;
+  })));
 
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
@@ -627,12 +638,6 @@ self: super: {
 
   # 2022-03-19: Testsuite is failing: https://github.com/puffnfresh/haskell-jwt/issues/2
   jwt = dontCheck super.jwt;
-
-  # 2022-03-16: ghc 9 support has not been merged: https://github.com/hasura/monad-validate/pull/5
-  monad-validate = appendPatch (fetchpatch {
-    url = "https://github.com/hasura/monad-validate/commit/7ba916e23c219a8cd397e2a1801c74682b52fcf0.patch";
-    sha256 = "sha256-udJ+/2VvfWA5Bm36nftH0sbPNuMkWj8rCh9cNN2f9Zw=";
-  }) (dontCheck super.monad-validate);
 
   # Build the latest git version instead of the official release. This isn't
   # ideal, but Chris doesn't seem to make official releases any more.
@@ -1294,10 +1299,6 @@ self: super: {
   # 2021-12-26: Too strict bounds on doctest
   polysemy-plugin = doJailbreak super.polysemy-plugin;
 
-  # Test suite requires running a database server. Testing is done upstream.
-  hasql-notifications = dontCheck super.hasql-notifications;
-  hasql-pool = dontCheck super.hasql-pool;
-
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
@@ -1662,6 +1663,12 @@ self: super: {
   hspec-core_2_10_0 = super.hspec-core_2_10_0.override {
     hspec-meta = self.hspec-meta_2_9_3;
   };
+
+  # Point hspec 2.7.10 to correct dependencies
+  hspec_2_7_10 = doDistribute (super.hspec_2_7_10.override {
+    hspec-discover = self.hspec-discover_2_7_10;
+    hspec-core = self.hspec-core_2_7_10;
+  });
 
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
@@ -2145,13 +2152,21 @@ self: super: {
 
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
   });
 
   ghc-lib-parser-ex_9_2_1_0 = super.ghc-lib-parser-ex_9_2_1_0.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
   };
+
+  ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
+    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
+  };
+
+  hlint_3_4_1 = doDistribute (super.hlint_3_4_1.override {
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+  });
 
   # To strict bound on hspec
   # https://github.com/dagit/zenc/issues/5
@@ -2213,9 +2228,10 @@ self: super: {
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
 
-  # Too strict bound on deepseq
-  # https://github.com/hadolint/hadolint/issues/800
-  hadolint = doJailbreak super.hadolint;
+  # Stackage LTS 19 still has 10.*
+  hadolint = super.hadolint.override {
+    language-docker = self.language-docker_11_0_0;
+  };
 
   nix-tree = super.nix-tree;
 
@@ -2384,7 +2400,11 @@ self: super: {
   # https://hub.darcs.net/shelarcy/regex-compat-tdfa/issue/3
   regex-compat-tdfa = appendPatches [
     ./patches/regex-compat-tdfa-ghc-9.0.patch
-  ] super.regex-compat-tdfa;
+  ] (overrideCabal {
+    # Revision introduces bound base < 4.15
+    revision = null;
+    editedCabalFile = null;
+  } super.regex-compat-tdfa);
 
   # https://github.com/kowainik/validation-selective/issues/64
   validation-selective = doJailbreak super.validation-selective;
@@ -2533,15 +2553,6 @@ self: super: {
   })
   super.polynomial);
 
-  fast-tags = appendPatches [
-    (fetchpatch {
-      name = "fast-tags-ghc-9.0-fix-test-nondeterminism.patch";
-      url = "https://github.com/elaforge/fast-tags/commit/af861acc2dd239fedd8b169ddc5e3fa694e7af57.patch";
-      sha256 = "0ml678q1n29daqnxsb5p94s5lf7a6dk4lqbbgmiayxrbyxnlbi4f";
-      excludes = [ ".github/**" ];
-    })
-  ] super.fast-tags;
-
   # lucid-htmx has restrictive upper bounds on lucid and servant:
   #
   #   Setup: Encountered missing or private dependencies:
@@ -2558,21 +2569,13 @@ self: super: {
     lsp-types = self.lsp-types_1_5_0_0;
   });
 
-  # A delay between futhark package uploads caused us to end up with conflicting
-  # versions of futhark and futhark-manifest
-  futhark = assert super.futhark.version == "0.21.12"; overrideCabal (drv: {
-    editedCabalFile = null;
-    revision = null;
-    version = "0.21.13";
-    sha256 = "0bzqlsaaqbbi47zvmvv7hd6hcz54hzw676rh9nxcjxgff3hzqb08";
-    libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
-      self.fgl
-      self.fgl-visualize
-      self.co-log-core
-    ];
-  }) (super.futhark.override {
+  futhark = super.futhark.override {
     lsp = self.lsp_1_5_0_0;
-  });
+  };
+
+  # Too strict bounds on hspec
+  # https://github.com/klapaucius/vector-hashtables/issues/11
+  vector-hashtables = doJailbreak super.vector-hashtables;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
@@ -2622,4 +2625,7 @@ in {
   purescript-ast = purescriptStOverride super.purescript-ast;
 
   purenix = purescriptStOverride super.purenix;
+
+  # tests use doctest-parallel which produces some errors during testing
+  clash-prelude = dontCheck super.clash-prelude;
 })
