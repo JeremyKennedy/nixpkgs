@@ -28,7 +28,7 @@ let
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
   ]);
 
-  etcBindFlags = let
+  etcBindEntries = let
     files = [
       # NixOS Compatibility
       "static"
@@ -70,8 +70,8 @@ let
       "ca-certificates"
       "pki"
     ];
-  in concatStringsSep "\n  "
-  (map (file: "--ro-bind-try $(${coreutils}/bin/readlink -f /etc/${file}) /etc/${file}") files);
+  in concatStringsSep " "
+    (map (file: "\"/etc/${file}\"") files);
 
   # Create this on the fly instead of linking from /nix
   # The container might have to modify it and re-run ldconfig if there are
@@ -101,6 +101,7 @@ let
     blacklist=(/nix /dev /proc /etc)
     ro_mounts=()
     symlinks=()
+    etc_blacklist=()
     for i in ${env}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
@@ -123,8 +124,20 @@ let
           continue
         fi
         ro_mounts+=(--ro-bind "$i" "/etc$path")
+        etc_blacklist+=("/etc$path")
       done
     fi
+
+    for i in ${etcBindEntries}; do
+      if [[ "''${etc_blacklist[@]}" =~ "$i" ]]; then
+        continue
+      fi
+      if [[ -L $i ]]; then
+        symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$i")
+      else
+        ro_mounts+=(--ro-bind-try "$i" "$i")
+      fi
+    done
 
     declare -a auto_mounts
     # loop through all directories in the root
@@ -166,7 +179,6 @@ let
       --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
       --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc \
       --remount-ro ${pkgsi686Linux.glibc}/etc \
-      ${etcBindFlags}
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
       "''${auto_mounts[@]}"
