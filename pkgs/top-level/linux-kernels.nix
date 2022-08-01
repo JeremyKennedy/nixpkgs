@@ -483,11 +483,13 @@ in {
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
-    xmm7360-pci = callPackage ../os-specific/linux/xmm7360-pci { };
+    xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
 
     xone = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/xone { } else null;
 
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
+
+    ithc = callPackage ../os-specific/linux/ithc { };
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
@@ -500,6 +502,8 @@ in {
     can-isotp = callPackage ../os-specific/linux/can-isotp { };
 
     qc71_laptop = callPackage ../os-specific/linux/qc71_laptop { };
+
+    hid-ite8291r3 = callPackage ../os-specific/linux/hid-ite8291r3 { };
 
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;

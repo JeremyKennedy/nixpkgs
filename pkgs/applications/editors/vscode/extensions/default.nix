@@ -13,7 +13,7 @@
 , jq
 , shellcheck
 , moreutils
-, racket-minimal
+, racket
 , clojure-lsp
 , alejandra
 }:
@@ -34,11 +34,16 @@ let
         mktplcRef = {
           publisher = "1Password";
           name = "op-vscode";
-          version = "1.0.0";
-          sha256 = "sha256-ZeKTP3WKjyuR/ryBdJRHXJT+l2gbY4QnWNTsN9+4nOA=";
+          version = "1.0.1";
+          sha256 = "sha256-0SsHf1zZgmrb7oIsRU6Xpa3AvR8bSfANz5ZlRogjiS0=";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          changelog = "https://github.com/1Password/op-vscode/releases";
+          description = "A VSCode extension that integrates your development workflow with 1Password service";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=1Password.op-vscode";
+          homepage = "https://github.com/1Password/op-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ _2gn ];
         };
       };
 
@@ -901,17 +906,18 @@ let
         mktplcRef = {
           name = "magic-racket";
           publisher = "evzen-wybitul";
-          version = "0.5.7";
-          sha256 = "sha256-34/H0WgM73yzuOGU2w6Ipq7KuEBuN1bykcLGuvzY3mU=";
+          version = "0.6.4";
+          sha256 = "sha256-Hxa4VPm3QvJICzpDyfk94fGHu1hr+YN9szVBwDB8X4U=";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
           cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."magic-racket.general.racketPath".default = "${racket-minimal}/bin/racket"' package.json | sponge package.json
+          jq '.contributes.configuration.properties."magicRacket.general.racketPath".default = "${racket}/bin/racket"' package.json | sponge package.json
+          jq '.contributes.configuration.properties."magicRacket.general.racoPath".default = "${racket}/bin/raco"' package.json | sponge package.json
         '';
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/evzen-wybitul.magic-racket/changelog";
-          description = "The best coding experience for Racket in VS Code ";
+          description = "The best coding experience for Racket in VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket";
           homepage = "https://github.com/Eugleo/magic-racket";
           license = licenses.agpl3Only;
@@ -1330,8 +1336,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "8.27.2";
-          sha256 = "sha256-scvT6cjlMrfG4yrhWlUwGM7ozu1E0xAryPRpV7FGCas=";
+          version = "8.28.0";
+          sha256 = "sha256-ZH2n/r4iKNxf6QETmNnGc5KIAIE0hcAReX3p2MDkve8=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -1709,9 +1715,7 @@ let
         };
       };
 
-      ms-python.python = callPackage ./python {
-        extractNuGet = callPackage ./python/extract-nuget.nix { };
-      };
+      ms-python.python = callPackage ./python { };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
         mktplcRef = {
