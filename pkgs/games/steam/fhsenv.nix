@@ -96,9 +96,11 @@ in buildFHSUserEnv rec {
     json-glib # paradox launcher (Stellaris)
     libdrm
     libxkbcommon # paradox launcher
+    libvorbis # Dead Cells
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
+    xorg.libXScrnSaver # Dead Cells
     udev # shadow of the tomb raider
     icu # dotnet runtime, e.g. stardew valley
 
@@ -183,6 +185,7 @@ in buildFHSUserEnv rec {
     flac
     freeglut
     libjpeg
+    libpng
     libpng12
     libsamplerate
     libmikmod
