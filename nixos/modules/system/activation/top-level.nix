@@ -134,7 +134,7 @@ let
     configurationName = config.boot.loader.grub.configurationName;
 
     # Needed by switch-to-configuration.
-    perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp NetDBus DevelTrace ]);
+    perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp DevelTrace ]);
   };
 
   # Handle assertions and warnings
@@ -195,12 +195,12 @@ in
           options.inheritParentConfig = mkOption {
             type = types.bool;
             default = true;
-            description = "Include the entire system's configuration. Set to false to make a completely differently configured system.";
+            description = lib.mdDoc "Include the entire system's configuration. Set to false to make a completely differently configured system.";
           };
 
           options.configuration = mkOption {
             default = {};
-            description = ''
+            description = lib.mdDoc ''
               Arbitrary NixOS configuration.
 
               Anything you can add to a normal NixOS configuration, you can add
@@ -265,7 +265,7 @@ in
       toplevel = mkOption {
         type = types.package;
         readOnly = true;
-        description = ''
+        description = lib.mdDoc ''
           This option contains the store path that typically represents a NixOS system.
 
           You can read this path in a custom deployment tool for example.
@@ -277,11 +277,11 @@ in
     system.copySystemConfiguration = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If enabled, copies the NixOS configuration file
-        (usually <filename>/etc/nixos/configuration.nix</filename>)
+        (usually {file}`/etc/nixos/configuration.nix`)
         and links it from the resulting system
-        (getting to <filename>/run/current-system/configuration.nix</filename>).
+        (getting to {file}`/run/current-system/configuration.nix`).
         Note that only this single file is copied, even if it imports others.
       '';
     };
@@ -298,7 +298,7 @@ in
     system.extraDependencies = mkOption {
       type = types.listOf types.package;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         A list of packages that should be included in the system
         closure but not otherwise made available to users. This is
         primarily used by the installation tests.
@@ -312,12 +312,12 @@ in
         { ... }: {
           options.original = mkOption {
             type = types.package;
-            description = "The original package to override.";
+            description = lib.mdDoc "The original package to override.";
           };
 
           options.replacement = mkOption {
             type = types.package;
-            description = "The replacement package.";
+            description = lib.mdDoc "The replacement package.";
           };
         })
       );
@@ -325,7 +325,7 @@ in
         oldDependency = original;
         newDependency = replacement;
       });
-      description = ''
+      description = lib.mdDoc ''
         List of packages to override without doing a full rebuild.
         The original derivation and replacement derivation must have the same
         name length, and ideally should have close-to-identical directory layout.
@@ -343,11 +343,11 @@ in
         then "unnamed"
         else config.networking.hostName;
       '';
-      description = ''
-        The name of the system used in the <option>system.build.toplevel</option> derivation.
+      description = lib.mdDoc ''
+        The name of the system used in the {option}`system.build.toplevel` derivation.
 
         That derivation has the following name:
-        <literal>"nixos-system-''${config.system.name}-''${config.system.nixos.label}"</literal>
+        `"nixos-system-''${config.system.name}-''${config.system.nixos.label}"`
       '';
     };
 

@@ -1357,6 +1357,37 @@ buildLuarocksPackage {
   };
 }) {};
 
+lua-subprocess = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua
+}:
+buildLuarocksPackage {
+  pname = "subprocess";
+  version = "scm-1";
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/0x0ade/lua-subprocess.git",
+  "rev": "bfa8e97da774141f301cfd1106dca53a30a4de54",
+  "date": "2021-01-09T22:31:54+01:00",
+  "path": "/nix/store/3lr7n1k85kbf718wxr51xd40i8dfs5qd-lua-subprocess",
+  "sha256": "0p91hda0b0hpgdbff5drcyygaizq086gw8vnvzn0y0fg3mc9if70",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/xlq/lua-subprocess";
+    description = "A Lua module written in C that allows you to create child processes and communicate with them.";
+    maintainers = with lib.maintainers; [ scoder12 ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 lua-term = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchurl}:
 buildLuarocksPackage {
@@ -2169,6 +2200,32 @@ buildLuarocksPackage {
     homepage = "https://www.zash.se/luaunbound.html";
     description = "A binding to libunbound";
     license.fullName = "MIT";
+  };
+}) {};
+
+luaunit = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchurl, lua
+}:
+buildLuarocksPackage {
+  pname = "luaunit";
+  version = "3.4-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luaunit-3.4-1.rockspec";
+    sha256 = "111435fa8p2819vcvg76qmknj0wqk01gy9d1nh55c36616xnj54n";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://github.com/bluebird75/luaunit/releases/download/LUAUNIT_V3_4/rock-luaunit-3.4.zip";
+    sha256 = "1v8nkiwz2nr242h5cl4af6vmn5gxmn94skps1qhb55ak60j20nvr";
+  };
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua lua ];
+
+  meta = {
+    homepage = "http://github.com/bluebird75/luaunit";
+    description = "A unit testing framework for Lua";
+    maintainers = with lib.maintainers; [ lockejan ];
+    license.fullName = "BSD";
   };
 }) {};
 
