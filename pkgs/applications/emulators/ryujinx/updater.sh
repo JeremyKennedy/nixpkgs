@@ -75,16 +75,4 @@ fi
 
 echo "building Nuget lockfile"
 
-STORE_SRC="$(nix-build . -A ryujinx.src --no-out-link)"
-SRC="$(mktemp -d /tmp/ryujinx-src.XXX)"
-cp -rT "$STORE_SRC" "$SRC"
-chmod -R +w "$SRC"
-pushd "$SRC"
-
-mkdir nuget_tmp.packages
-DOTNET_CLI_TELEMETRY_OPTOUT=1 dotnet restore Ryujinx.sln --packages nuget_tmp.packages
-
-nuget-to-nix ./nuget_tmp.packages >"$DEPS_FILE"
-
-popd
-rm -r "$SRC"
+$(nix-build -A ryujinx.fetch-deps --no-out-link) "$DEPS_FILE"
