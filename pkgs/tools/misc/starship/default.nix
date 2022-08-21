@@ -4,10 +4,8 @@
 , rustPlatform
 , installShellFiles
 , libiconv
-, libgit2
 , cmake
 , fetchpatch
-, pkg-config
 , nixosTests
 , Security
 , Foundation
@@ -16,19 +14,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.10.0";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mumlnY9KGKdS3x4U84J4I8m5uMJI7SZR52aT6DPi/MM=";
+    sha256 = "sha256-RSARAcId8U5b6vH4m5Zr6FqV1OFolqC+wyfqZbJZH4w=";
   };
 
-  nativeBuildInputs = [ installShellFiles cmake ]
-    ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles cmake ];
 
-  buildInputs = [ libgit2 ] ++ lib.optionals stdenv.isDarwin [ libiconv Security Foundation Cocoa ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security Foundation Cocoa ];
 
   buildNoDefaultFeatures = true;
   # the "notify" feature is currently broken on darwin
@@ -41,15 +38,7 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/starship completions zsh)
   '';
 
-  cargoPatches = [
-    # Bump chrono dependency to fix panic when no timezone
-    (fetchpatch {
-      url = "https://github.com/starship/starship/commit/e652e8643310c3b41ce19ad05b8168abc29bb683.patch";
-      sha256 = "sha256-iGYLJuptPMc45E7o+GXjIx7y2PxuO1mGM7xSopDBve0=";
-    })
-  ];
-
-  cargoSha256 = "sha256-w7UCExSkgEY52D98SSe2EkuiwtjM6t0/uTiafrtEBaU=";
+  cargoSha256 = "sha256-UhTbrORUp+aP0SF1XjgpTunS0bpRvYxvUwEKBH7wFnQ=";
 
   preCheck = ''
     HOME=$TMPDIR

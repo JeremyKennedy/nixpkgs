@@ -87,6 +87,8 @@ let
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
+      launcherName = "${applicationName}${nameSuffix}";
+
       #########################
       #                       #
       #   EXTRA PREF CHANGES  #
@@ -168,7 +170,7 @@ let
 
       desktopItem = makeDesktopItem {
         name = applicationName;
-        exec = "${applicationName}${nameSuffix} %U";
+        exec = "${launcherName} %U";
         inherit icon;
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland waylandDesktopSuffix}";
         genericName = "Web Browser";
@@ -183,6 +185,20 @@ let
           "x-scheme-handler/ftp"
         ];
         startupWMClass = wmClass;
+        actions = {
+          new-window = {
+            name = "New Window";
+            exec = "${launcherName} --new-window %U";
+          };
+          new-private-window = {
+            name = "New Private Window";
+            exec = "${launcherName} --private-window %U";
+          };
+          profile-manager-window = {
+            name = "Profile Manager";
+            exec = "${launcherName} --ProfileManger";
+          };
+        };
       };
 
       nativeBuildInputs = [ makeWrapper lndir jq ];
@@ -256,13 +272,14 @@ let
           mv "$executablePath" "$oldExe"
         fi
 
+        # make xdg-open overrideable at runtime
         makeWrapper "$oldExe" \
           "''${executablePath}${nameSuffix}" \
             --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --prefix PATH ':' "${xdg-utils}/bin" \
+            --suffix PATH ':' "${xdg-utils}/bin" \
             --suffix PATH ':' "$out/bin" \
-            --set MOZ_APP_LAUNCHER "${applicationName}${nameSuffix}" \
+            --set MOZ_APP_LAUNCHER "${launcherName}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \

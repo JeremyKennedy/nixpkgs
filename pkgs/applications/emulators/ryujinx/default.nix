@@ -26,13 +26,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.220"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.223"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "2197f41506e1ed7c4c657a1899491298bd66f7f9";
-    sha256 = "0ifcczsfvqywmf83xcnch2aaxdsynmyqscz2pgkg040dr02aagbf";
+    rev = "951700fdd8f54fb34ffe8a3fb328a68b5bf37abe";
+    sha256 = "0kzchsxir8wh74rxvp582mci855hbd0vma6yhcc9vpz0zmhi2cpf";
   };
 
   projectFile = "Ryujinx.sln";
@@ -83,6 +83,7 @@ buildDotnetModule rec {
   makeWrapperArgs = [
     # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
     "--set GDK_BACKEND x11"
+    "--set SDL_VIDEODRIVER x11"
   ];
 
   preInstall = ''
