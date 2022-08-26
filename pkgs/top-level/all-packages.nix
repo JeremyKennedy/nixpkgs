@@ -36663,4 +36663,43 @@ with pkgs;
   swift-corelibs-libdispatch = callPackage ../development/libraries/swift-corelibs-libdispatch { };
 
   swaysettings = callPackage ../applications/misc/swaysettings { };
+
+  # Quick hacks for LC_UUID experiment
+  wrapBintoolsWithWip =
+    { bintools
+    , libc ? if stdenv.targetPlatform != stdenv.hostPlatform then libcCross else stdenv.cc.libc
+    , ...
+    } @ extraArgs:
+      callPackage ../build-support/bintools-wrapper-wip (let self = {
+    nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
+    nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
+    nativePrefix = stdenv.cc.nativePrefix or "";
+
+    noLibc = (self.libc == null);
+
+    inherit bintools libc;
+    inherit (darwin) postLinkSignHook signingUtils;
+  } // extraArgs; in self);
+
+  bintoolsWip = wrapBintoolsWithWip {
+    bintools = bintools-unwrapped;
+  };
+
+  clangWip = llvmPackages.clang.override {
+    bintools = bintoolsWip;
+  };
+
+  stdenvWip = overrideCC stdenv clangWip;
+
+  helloWip = hello.override { stdenv = stdenvWip; };
+
+  libuvWip = (libuv.override { stdenv = stdenvWip; }).overrideAttrs (old: {
+    postInstall = (old.postInstall or "") + ''
+      >&2 echo " *** UUID of libuv.1.dylib in build dir: $(otool -l .libs/libuv.1.dylib | grep uuid)"
+    '';
+    postFixup = (old.postFixup or "") + ''
+      >&2 echo " ***      UUID of libuv.1.dylib in \$out: $(otool -l $out/lib/libuv.1.dylib | grep uuid)"
+    '';
+    doCheck = false;
+  });
 }
