@@ -185,6 +185,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
+          an SMS alerting tool for the Prometheus Alertmanager.
+          Available as
+          <link linkend="opt-services.prometheus.sachet.enable">services.prometheus.sachet</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
           a hardware True Random Number Generator dongle. Available as
           <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
@@ -196,6 +204,20 @@
           a tool to improve keyboard comfort and usability with advanced
           customization. Available as
           <link xlink:href="options.html#opt-services.kanata.enable">services.kanata</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.getoutline.com/">Outline</link>,
+          a wiki and knowledge base similar to Notion. Available as
+          <link linkend="opt-services.outline.enable">services.outline</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://netbird.io">netbird</link>, a zero
+          configuration VPN. Available as
+          <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
         </para>
       </listitem>
       <listitem>
@@ -241,6 +263,11 @@
   <section xml:id="sec-release-22.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          Nixpkgs now requires Nix 2.3 or newer.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>isCompatible</literal> predicate checking CPU
@@ -448,6 +475,12 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>services.matrix-synapse</literal> systemd unit
+          has been hardened.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Matrix Synapse now requires entries in the
           <literal>state_group_edges</literal> table to be unique, in
           order to prevent accidentally introducing duplicate
@@ -455,6 +488,14 @@
           restored multiple times). If your Synapse database already has
           duplicate rows in this table, this could fail with an error
           and require manual remediation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>diamond</literal> package has been update from
+          0.8.36 to 2.0.15. See the
+          <link xlink:href="https://github.com/bbuchfink/diamond/releases">upstream
+          release notes</link> for more details.
         </para>
       </listitem>
       <listitem>

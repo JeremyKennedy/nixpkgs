@@ -254,6 +254,14 @@ in {
       '';
     };
 
+    fastcgiTimeout = mkOption {
+      type = types.int;
+      default = 120;
+      description = lib.mdDoc ''
+        FastCGI timeout for database connection in seconds.
+      '';
+    };
+
     database = {
 
       createLocally = mkOption {
@@ -519,7 +527,7 @@ in {
     occ = mkOption {
       type = types.package;
       default = occ;
-      defaultText = literalDocBook "generated script";
+      defaultText = literalMD "generated script";
       internal = true;
       description = ''
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
@@ -1039,7 +1047,7 @@ in {
               fastcgi_pass unix:${fpm.socket};
               fastcgi_intercept_errors on;
               fastcgi_request_buffering off;
-              fastcgi_read_timeout 120s;
+              fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
             '';
           };
           "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''

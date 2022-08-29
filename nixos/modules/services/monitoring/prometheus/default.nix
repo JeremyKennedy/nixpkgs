@@ -99,14 +99,14 @@ let
 
   mkDefOpt = type: defaultStr: description: mkOpt type (description + ''
 
-    Defaults to <literal>${defaultStr}</literal> in prometheus
-    when set to <literal>null</literal>.
+    Defaults to ````${defaultStr}```` in prometheus
+    when set to `null`.
   '');
 
   mkOpt = type: description: mkOption {
     type = types.nullOr type;
     default = null;
-    inherit description;
+    description = lib.mdDoc description;
   };
 
   mkSdConfigModule = extraOptions: types.submodule {
@@ -308,7 +308,7 @@ let
 
         If honor_labels is set to "false", label conflicts are
         resolved by renaming conflicting labels in the scraped data
-        to "exported_&lt;original-label&gt;" (for example
+        to "exported_\<original-label\>" (for example
         "exported_instance", "exported_job") and then attaching
         server-side labels. This is useful for use cases such as
         federation, where all labels specified in the target should
@@ -319,10 +319,10 @@ let
         honor_timestamps controls whether Prometheus respects the timestamps present
         in scraped data.
 
-        If honor_timestamps is set to <literal>true</literal>, the timestamps of the metrics exposed
+        If honor_timestamps is set to `true`, the timestamps of the metrics exposed
         by the target will be used.
 
-        If honor_timestamps is set to <literal>false</literal>, the timestamps of the metrics exposed
+        If honor_timestamps is set to `false`, the timestamps of the metrics exposed
         by the target will be ignored.
       '';
 
@@ -343,13 +343,13 @@ let
       bearer_token = mkOpt types.str ''
         Sets the `Authorization` header on every scrape request with
         the configured bearer token. It is mutually exclusive with
-        <option>bearer_token_file</option>.
+        {option}`bearer_token_file`.
       '';
 
       bearer_token_file = mkOpt types.str ''
         Sets the `Authorization` header on every scrape request with
         the bearer token read from the configured file. It is mutually
-        exclusive with <option>bearer_token</option>.
+        exclusive with {option}`bearer_token`.
       '';
 
       tls_config = mkOpt promTypes.tls_config ''
@@ -399,7 +399,7 @@ let
       gce_sd_configs = mkOpt (types.listOf promTypes.gce_sd_config) ''
         List of Google Compute Engine service discovery configurations.
 
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#gce_sd_config">the relevant Prometheus configuration docs</link>
+        See [the relevant Prometheus configuration docs](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#gce_sd_config)
         for more detail.
       '';
 
@@ -611,7 +611,7 @@ let
 
     allow_stale = mkOpt types.bool ''
       Allow stale Consul results
-      (see <link xlink:href="https://www.consul.io/api/index.html#consistency-modes"/>).
+      (see <https://www.consul.io/api/index.html#consistency-modes>).
 
       Will reduce load on Consul.
     '';
@@ -652,16 +652,16 @@ let
         options = {
           name = mkOption {
             type = types.str;
-            description = ''
+            description = lib.mdDoc ''
               Name of the filter. The available filters are listed in the upstream documentation:
-              Services: <link xlink:href="https://docs.docker.com/engine/api/v1.40/#operation/ServiceList"/>
-              Tasks: <link xlink:href="https://docs.docker.com/engine/api/v1.40/#operation/TaskList"/>
-              Nodes: <link xlink:href="https://docs.docker.com/engine/api/v1.40/#operation/NodeList"/>
+              Services: <https://docs.docker.com/engine/api/v1.40/#operation/ServiceList>
+              Tasks: <https://docs.docker.com/engine/api/v1.40/#operation/TaskList>
+              Nodes: <https://docs.docker.com/engine/api/v1.40/#operation/NodeList>
             '';
           };
           values = mkOption {
             type = types.str;
-            description = ''
+            description = lib.mdDoc ''
               Value for the filter.
             '';
           };
@@ -727,12 +727,12 @@ let
 
       access_key = mkOpt types.str ''
         The AWS API key id. If blank, the environment variable
-        <literal>AWS_ACCESS_KEY_ID</literal> is used.
+        `AWS_ACCESS_KEY_ID` is used.
       '';
 
       secret_key = mkOpt types.str ''
         The AWS API key secret. If blank, the environment variable
-         <literal>AWS_SECRET_ACCESS_KEY</literal> is used.
+         `AWS_SECRET_ACCESS_KEY` is used.
       '';
 
       profile = mkOpt types.str ''
@@ -758,8 +758,8 @@ let
           options = {
             name = mkOption {
               type = types.str;
-              description = ''
-                See <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">this list</link>
+              description = lib.mdDoc ''
+                See [this list](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html)
                 for the available filters.
               '';
             };
@@ -767,7 +767,7 @@ let
             values = mkOption {
               type = types.listOf types.str;
               default = [ ];
-              description = ''
+              description = lib.mdDoc ''
                 Value of the filter.
               '';
             };
@@ -826,7 +826,7 @@ let
       filter = mkOpt types.str ''
         Filter can be used optionally to filter the instance list by other
         criteria Syntax of this filter string is described here in the filter
-        query parameter section: <link xlink:href="https://cloud.google.com/compute/docs/reference/latest/instances/list"/>.
+        query parameter section: <https://cloud.google.com/compute/docs/reference/latest/instances/list>.
       '';
 
       refresh_interval = mkDefOpt types.str "60s" ''
@@ -842,7 +842,7 @@ let
         The tag separator used to separate concatenated GCE instance network tags.
 
         See the GCP documentation on network tags for more information:
-        <link xlink:href="https://cloud.google.com/vpc/docs/add-remove-network-tags"/>
+        <https://cloud.google.com/vpc/docs/add-remove-network-tags>
       '';
     };
   };
@@ -937,7 +937,7 @@ let
             options = {
               role = mkOption {
                 type = types.str;
-                description = ''
+                description = lib.mdDoc ''
                   Selector role
                 '';
               };
@@ -996,11 +996,11 @@ let
       '';
 
       access_key = mkOpt types.str ''
-        The AWS API keys. If blank, the environment variable <literal>AWS_ACCESS_KEY_ID</literal> is used.
+        The AWS API keys. If blank, the environment variable `AWS_ACCESS_KEY_ID` is used.
       '';
 
       secret_key = mkOpt types.str ''
-        The AWS API keys. If blank, the environment variable <literal>AWS_SECRET_ACCESS_KEY</literal> is used.
+        The AWS API keys. If blank, the environment variable `AWS_SECRET_ACCESS_KEY` is used.
       '';
 
       profile = mkOpt types.str ''
@@ -1050,14 +1050,14 @@ let
 
     auth_token = mkOpt types.str ''
       Optional authentication information for token-based authentication:
-      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token"/>
-      It is mutually exclusive with <literal>auth_token_file</literal> and other authentication mechanisms.
+      <https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token>
+      It is mutually exclusive with `auth_token_file` and other authentication mechanisms.
     '';
 
     auth_token_file = mkOpt types.str ''
       Optional authentication information for token-based authentication:
-      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token"/>
-      It is mutually exclusive with <literal>auth_token</literal> and other authentication mechanisms.
+      <https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token>
+      It is mutually exclusive with `auth_token` and other authentication mechanisms.
     '';
   };
 
@@ -1319,7 +1319,7 @@ let
       };
 
       groups = mkOpt (types.listOf types.str) ''
-        A list of groups for which targets are retrieved, only supported when targeting the <literal>container</literal> role.
+        A list of groups for which targets are retrieved, only supported when targeting the `container` role.
         If omitted all containers owned by the requesting account are scraped.
       '';
 
