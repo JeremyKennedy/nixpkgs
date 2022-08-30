@@ -18,7 +18,8 @@ let
               kernelParams = config.boot.kernelParams;
               initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
               initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
-              label = "NixOS ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
+              label = "NixOS ${config.system.nixos.codeName} ${config.system.nixos.label}"
+                + (lib.optionalString (config.boot.kernelPackages.kernel ? modDirVersion) " (Linux ${config.boot.kernelPackages.kernel.modDirVersion})");
             });
 
       generator =
