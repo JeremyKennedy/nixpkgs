@@ -319,7 +319,7 @@ in
         }
       ];
 
-      environment.systemPackages = optional (!config.networking.firewall.enable) config.networking.firewall.package;
+      environment.systemPackages = [ config.networking.firewall.package ];
 
       boot = {
         kernelModules = [ "nf_nat_ftp" ];
