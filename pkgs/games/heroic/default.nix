@@ -3,9 +3,8 @@
 , fetchFromGitHub
 , makeWrapper
 , electron
-, autoPatchelfHook
-, stdenv
-, zlib
+, gogdl
+, legendary-gl
 }:
 
 mkYarnPackage rec {
@@ -25,12 +24,6 @@ mkYarnPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-    autoPatchelfHook
-  ];
-
-  extraBuildInputs = [
-    zlib
-    stdenv.cc.cc # libstdc++.so.6
   ];
 
   DISABLE_ESLINT_PLUGIN = "true";
@@ -50,11 +43,14 @@ mkYarnPackage rec {
   postInstall = let
     deps = "$out/libexec/heroic/deps/heroic";
   in ''
+    rm -rf "${deps}/public/bin" "${deps}/build/bin"
+    mkdir -p "${deps}/public/bin/linux"
+    ln -s "${gogdl}/bin/gogdl" "${legendary-gl}/bin/legendary" "${deps}/public/bin/linux"
+
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
       --add-flags --disable-gpu-compositing \
-      --add-flags "${deps}" \
-      --prefix PATH : "${deps}/build/linux"
+      --add-flags "${deps}"
 
     substituteInPlace "${deps}/flatpak/com.heroicgameslauncher.hgl.desktop" \
       --replace "Exec=heroic-run" "Exec=heroic"
