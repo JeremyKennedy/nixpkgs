@@ -32596,7 +32596,11 @@ with pkgs;
 
   gotypist = callPackage ../games/gotypist { };
 
-  heroic = callPackage ../games/heroic { };
+  heroic-unwrapped = callPackage ../games/heroic { };
+
+  heroic = callPackage ../games/heroic/fhsenv.nix {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  };
 
   julius = callPackage ../games/julius { };
 
@@ -33024,6 +33028,8 @@ with pkgs;
   gnujump = callPackage ../games/gnujump { };
 
   gnushogi = callPackage ../games/gnushogi { };
+
+  gogdl = python3Packages.callPackage ../games/gogdl { };
 
   gogui = callPackage ../games/gogui { };
 
