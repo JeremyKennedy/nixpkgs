@@ -189,6 +189,7 @@ in buildPythonApplication rec {
   # append module paths to xorg.conf
   postInstall = ''
     cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
   '';
 
   doCheck = false;
