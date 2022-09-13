@@ -148,6 +148,7 @@ let
            + optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
            + optionalString (dev.header != null) " --header=${dev.header}";
     cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
+    fido2luksCredentials = dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
   in ''
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
@@ -420,7 +421,7 @@ let
     }
     ''}
 
-    ${optionalString (luks.fido2Support && (dev.fido2.credential != null)) ''
+    ${optionalString (luks.fido2Support && fido2luksCredentials != []) ''
 
     open_with_hardware() {
       local passsphrase
@@ -436,7 +437,7 @@ let
           echo "Please move your mouse to create needed randomness."
         ''}
           echo "Waiting for your FIDO2 device..."
-          fido2luks open${optionalString dev.allowDiscards " --allow-discards"} ${dev.device} ${dev.name} ${dev.fido2.credential} --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+          fido2luks open${optionalString dev.allowDiscards " --allow-discards"} ${dev.device} ${dev.name} "${builtins.concatStringsSep "," fido2luksCredentials}" --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
@@ -447,7 +448,7 @@ let
     # commands to run right before we mount our device
     ${dev.preOpenCommands}
 
-    ${if (luks.yubikeySupport && (dev.yubikey != null)) || (luks.gpgSupport && (dev.gpgCard != null)) || (luks.fido2Support && (dev.fido2.credential != null)) then ''
+    ${if (luks.yubikeySupport && (dev.yubikey != null)) || (luks.gpgSupport && (dev.gpgCard != null)) || (luks.fido2Support && fido2luksCredentials != []) then ''
     open_with_hardware
     '' else ''
     open_normally
@@ -526,7 +527,7 @@ in
       type = types.bool;
       default = false;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure luks support in the initrd, when no luks
         devices are configured.
       '';
@@ -566,7 +567,7 @@ in
             default = name;
             example = "luksroot";
             type = types.str;
-            description = "Name of the unencrypted device in <filename>/dev/mapper</filename>.";
+            description = lib.mdDoc "Name of the unencrypted device in {file}`/dev/mapper`.";
           };
 
           device = mkOption {
@@ -708,6 +709,17 @@ in
               description = lib.mdDoc "The FIDO2 credential ID.";
             };
 
+            credentials = mkOption {
+              default = [];
+              example = [ "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2" ];
+              type = types.listOf types.str;
+              description = lib.mdDoc ''
+                List of FIDO2 credential IDs.
+
+                Use this if you have multiple FIDO2 keys you want to use for the same luks device.
+              '';
+            };
+
             gracePeriod = mkOption {
               default = 10;
               type = types.int;
@@ -832,7 +844,7 @@ in
             default = [];
             example = [ "_netdev" ];
             visible = false;
-            description = ''
+            description = lib.mdDoc ''
               Only used with systemd stage 1.
 
               Extra options to append to the last column of the generated crypttab file.

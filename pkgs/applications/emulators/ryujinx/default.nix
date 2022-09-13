@@ -27,13 +27,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.227"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.257"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "54421760c33f77de78fee58d637552d2e00d464b";
-    sha256 = "0ndxnfngi8kw9wskvg3pgsl8sw434ra1a4qnc9haznip61h5pzgf";
+    rev = "81f1a4dc3161882b0385c9d4752fbba84b9eca96";
+    sha256 = "1p4c8k8pc47hl32bml050fvxyhdjcd002xx60rwvzlgvdgw6b3xq";
   };
 
   nugetDeps = ./deps.nix;
@@ -114,6 +114,8 @@ buildDotnetModule rec {
 
     substituteInPlace $out/share/applications/ryujinx.desktop \
       --replace "Exec=Ryujinx" "Exec=$out/bin/Ryujinx"
+
+    ln -s $out/bin/Ryujinx $out/bin/ryujinx
 
     popd
   '';

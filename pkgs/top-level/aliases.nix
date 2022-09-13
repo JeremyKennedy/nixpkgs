@@ -463,6 +463,7 @@ mapAliases ({
 
   g4py = python3Packages.geant4; # Added 2020-06-06
   gaia = throw "gaia has been removed because it seems abandoned upstream and uses no longer supported dependencies"; # Added 2020-06-06
+  gammy = throw "'gammy' is deprecated upstream and has been replaced by 'gummy'"; # Added 2022-09-03
   gawp = throw "gawp has been dropped due to the lack of maintanence from upstream since 2017"; # Added 2022-06-02
   gdal_1_11 = throw "gdal_1_11 was removed. Use gdal instead"; # Added 2021-04-03
   gdb-multitarget = throw "'gdb-multitarget' has been renamed to/replaced by 'gdb'"; # Converted to throw 2022-02-22
@@ -650,6 +651,7 @@ mapAliases ({
   julia_11 = throw "julia_11 has been deprecated in favor of the latest stable version"; # Added 2020-09-15
   julia_13 = throw "julia_13 has been deprecated in favor of the latest stable version"; # Added 2021-03-13
   julia_10-bin = throw "julia_10-bin has been deprecated in favor of the latest LTS version"; # Added 2021-12-02
+  julia_17-bin = throw "julia_17-bin has been deprecated in favor of the latest stable version"; # Added 2022-09-04
 
   json_glib = throw "'json_glib' has been renamed to/replaced by 'json-glib'"; # Converted to throw 2022-02-22
   jvmci8 = throw "graalvm8 and its tools were deprecated in favor of graalvm8-ce"; # Added 2021-10-15
@@ -1243,6 +1245,7 @@ mapAliases ({
   rimshot = throw "rimshot has been removed, because it is broken and no longer maintained upstream"; # Added 2022-01-15
   ring-daemon = jami-daemon; # Added 2021-10-26
   rkt = throw "rkt was archived by upstream"; # Added 2020-05-16
+  rls = throw "rls was discontinued upstream, use rust-analyzer instead"; # Added 2022-09-06
   rng_tools = throw "'rng_tools' has been renamed to/replaced by 'rng-tools'"; # Converted to throw 2022-02-22
   robomongo = throw "'robomongo' has been renamed to/replaced by 'robo3t'"; # Converted to throw 2022-02-22
   rockbox_utility = rockbox-utility; # Added 2022-03-17

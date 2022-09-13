@@ -319,6 +319,9 @@ in
         }
       ];
 
+      # Use the same iptables package as in config.networking.firewall.
+      # When the firewall is enabled, this should be deduplicated without any
+      # error.
       environment.systemPackages = [ config.networking.firewall.package ];
 
       boot = {
