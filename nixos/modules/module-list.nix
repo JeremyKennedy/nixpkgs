@@ -1054,6 +1054,7 @@
   ./services/video/epgstation/default.nix
   ./services/video/mirakurun.nix
   ./services/video/replay-sorcery.nix
+  ./services/web-apps/alps.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
@@ -1267,6 +1268,7 @@
   ./tasks/network-interfaces-scripted.nix
   ./tasks/scsi-link-power-management.nix
   ./tasks/snapraid.nix
+  ./tasks/stratis.nix
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix
   ./tasks/powertop.nix
