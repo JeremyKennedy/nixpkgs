@@ -95,6 +95,7 @@ mapAliases ({
   avldrums-lv2 = x42-avldrums; # Added 2020-03-29
   avxsynth = throw "avxsynth was removed because it was broken"; # Added 2021-05-18
   awesome-4-0 = awesome; # Added 2022-05-05
+  aws = throw "aws has been removed: abandoned by upstream. For the AWS CLI maintained by Amazon, see 'awscli' or 'awscli2'"; # Added 2022-09-21
   awless = throw "awless has been dropped due to the lack of maintenance from upstream since 2018"; # Added 2022-05-30
   aws-okta = throw "aws-okta is on indefinite hiatus. See https://github.com/segmentio/aws-okta/issues/278"; # Added 2022-04-05;
   axoloti = throw "axoloti has been removed: abandoned by upstream"; # Added 2022-05-13
@@ -1254,6 +1255,7 @@ mapAliases ({
   rockbox_utility = rockbox-utility; # Added 2022-03-17
   rocm-runtime-ext = throw "rocm-runtime-ext has been removed, since its functionality was added to rocm-runtime"; #added 2020-08-21
   rpiboot-unstable = rpiboot; # Added 2021-07-30
+  rr-unstable = rr; # Added 2022-09-17
   rssglx = throw "'rssglx' has been renamed to/replaced by 'rss-glx'"; # Converted to throw 2022-02-22
   rssh = throw "rssh has been removed from nixpkgs: no upstream releases since 2012, several known CVEs"; # Added 2020-08-25
   rtv = throw "rtv was archived by upstream. Consider using tuir, an actively maintained fork"; # Added 2021-08-08

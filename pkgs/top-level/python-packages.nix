@@ -782,6 +782,8 @@ in {
 
   astunparse = callPackage ../development/python-modules/astunparse { };
 
+  asyauth = callPackage ../development/python-modules/asyauth { };
+
   async_generator = callPackage ../development/python-modules/async_generator { };
 
   async-dns = callPackage ../development/python-modules/async-dns { };
@@ -2297,6 +2299,8 @@ in {
   dbfread = callPackage ../development/python-modules/dbfread { };
 
   dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
+
+  dbus-fast = callPackage ../development/python-modules/dbus-fast { };
 
   dbus-next = callPackage ../development/python-modules/dbus-next { };
 
@@ -5703,7 +5707,9 @@ in {
 
   minio = callPackage ../development/python-modules/minio { };
 
-  miniupnpc = callPackage ../development/python-modules/miniupnpc { };
+  miniupnpc = callPackage ../development/python-modules/miniupnpc {
+    inherit (pkgs.darwin) cctools;
+  };
 
   misaka = callPackage ../development/python-modules/misaka { };
 
@@ -6781,6 +6787,8 @@ in {
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
   overly = callPackage ../development/python-modules/overly { };
+
+  overpy = callPackage ../development/python-modules/overpy { };
 
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
@@ -9613,6 +9621,8 @@ in {
 
   rich = callPackage ../development/python-modules/rich { };
 
+  rich-click = callPackage ../development/python-modules/rich-click { };
+
   rich-rst = callPackage ../development/python-modules/rich-rst { };
 
   rig = callPackage ../development/python-modules/rig { };
@@ -10424,6 +10434,8 @@ in {
 
   sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
 
+  sphinxemoji = callPackage ../development/python-modules/sphinxemoji { };
+
   sphinx-inline-tabs = callPackage ../development/python-modules/sphinx-inline-tabs { };
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
@@ -10477,6 +10489,8 @@ in {
   sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
+
+  sqlglot = callPackage ../development/python-modules/sqlglot { };
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
