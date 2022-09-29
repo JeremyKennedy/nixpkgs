@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.4.0";
+  version = "1.15.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,11 +19,15 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vbsigiUSGeetY+1MEeQ/cO3Oj8Ah0Yg9BUPo2Gc06KU=";
+    hash = "sha256-Uq+f0l9/W6PjP9MczF3VJNJicDgOnMrfXpOkHp7frVY=";
   };
 
   nativeBuildInputs = [
     poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    async-timeout
   ];
 
   checkInputs = [
@@ -32,7 +37,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" "" \
+      --replace "[tool.poetry.group.dev.dependencies]" ""
   '';
 
   pythonImportsCheck = [
