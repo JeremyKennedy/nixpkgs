@@ -2,6 +2,7 @@
 , buildPythonApplication
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 , requests
 }:
 
@@ -19,7 +20,10 @@ buildPythonApplication rec {
 
   disabled = pythonOlder "3.8";
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    setuptools
+    requests
+  ];
 
   pythonImportsCheck = [ "gogdl" ];
 

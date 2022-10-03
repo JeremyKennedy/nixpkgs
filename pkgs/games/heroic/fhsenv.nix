@@ -12,9 +12,12 @@ buildFHSUserEnv {
 
   targetPkgs = pkgs: with pkgs; [
     heroic-unwrapped
+    curl
+    gawk
     gnome.zenity
     kdialog
     mangohud
+    nettools
     opencl-headers
     p7zip
     perl
