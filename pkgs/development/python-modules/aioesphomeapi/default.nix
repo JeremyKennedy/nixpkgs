@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "10.14.0";
+  version = "11.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ASFErnWUNcq/30AOYM596w+j0FOYGuQ3Tj4OdczWanM=";
+    hash = "sha256-fyY3G2tsrqy5aTXYI+KGqMahWspdTjjjkS9JK/ohjhc=";
   };
 
   postPatch = ''

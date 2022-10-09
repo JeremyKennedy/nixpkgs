@@ -450,6 +450,7 @@ broken-packages:
   - bottom
   - boundingboxes
   - bowntz
+  - box
   - bpath
   - BPS
   - braid
@@ -1138,6 +1139,7 @@ broken-packages:
   - disjoint-containers
   - disjoint-set
   - disjoint-set-stateful
+  - disk-bytes
   - Dist
   - distance
   - distributed-closure
@@ -2103,6 +2105,7 @@ broken-packages:
   - HDBC-postgresql-hstore
   - hdevtools
   - hdf
+  - hdf5
   - hDFA
   - hdigest
   - hdis86
@@ -3904,6 +3907,7 @@ broken-packages:
   - platinum-parsing
   - PlayingCards
   - playlists
+  - plex
   - plist
   - plist-buddy
   - plivo
@@ -4218,7 +4222,6 @@ broken-packages:
   - reanimate-svg
   - reasonable-lens
   - reason-export
-  - rec-def
   - record
   - record-encode
   - record-impl
@@ -4427,7 +4430,6 @@ broken-packages:
   - sandman
   - sarasvati
   - sat
-  - satchmo
   - Saturnin
   - satyros
   - savage
@@ -4654,7 +4656,6 @@ broken-packages:
   - singnal
   - singular-factory
   - sink
-  - sint
   - sitepipe
   - sixfiguregroup
   - sized-grid
@@ -5031,6 +5032,7 @@ broken-packages:
   - tasty-mgolden
   - tasty-stats
   - tasty-test-vector
+  - TastyTLT
   - TBC
   - TBit
   - tcache-AWS
@@ -5178,6 +5180,7 @@ broken-packages:
   - time-w3c
   - timezone-detect
   - tintin
+  - tinyid
   - TinyLaunchbury
   - tiny-scheduler
   - tinytemplate
@@ -5294,6 +5297,7 @@ broken-packages:
   - twine
   - twirp
   - twisty
+  - twitchapi
   - twitter
   - twitter-feed
   - twitter-types
@@ -5325,6 +5329,7 @@ broken-packages:
   - type-of-html-static
   - typeparams
   - type-prelude
+  - type-reflection
   - type-rig
   - types-compat
   - type-settheory
@@ -5563,7 +5568,6 @@ broken-packages:
   - web3-ipfs
   - webapi
   - webapp
-  - webauthn
   - WebBits
   - webcloud
   - webcrank
