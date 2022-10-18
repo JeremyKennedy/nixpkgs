@@ -46,13 +46,7 @@ with lib;
 with builtins;
 
 let majorVersion = "11";
-    # The patch below for aarch64-darwin does not apply to 11.3.0 and an
-    # updated version is not available. Keep aarch64-darwin on 11.2.0 so the
-    # large body of packages which depend on gfortran are still functional
-    # until GCC 12 is the default.
-    # On x86_64-darwin, building libgcc suffers from some different issues with 11.3.0.
-    version = if stdenv.isDarwin then
-      "${majorVersion}.2.0" else "${majorVersion}.3.0";
+    version = "${majorVersion}.3.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -69,10 +63,14 @@ let majorVersion = "11";
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
 
-      ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
-        url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.2.0...gcc-11.2.0-arm-20211201.diff";
-        sha256 = "sha256-z62s/cXuH9Kgq/oD/OiiZ8LWnX1xl1D43sONnwaEW1w=";
-      })
+      ++ optionals stdenv.isDarwin [
+        (fetchpatch {
+          # Corresponds to https://github.com/iains/gcc-11-branch/releases/tag/gcc-11.3-darwin-r2
+          url = "https://github.com/Homebrew/formula-patches/raw/8184603db1db7da12d0fbfa47e1329ba0e21558e/gcc/gcc-11.3.0-arm.diff";
+          sha256 = "sha256-sEClJ7BzXJccLm+V6LF9Ioe4o/aV3iJ4akvOVoPG5pA=";
+        })
+        ./libgcc-darwin-libemutls-no-shared.patch
+      ]
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch;
@@ -92,9 +90,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = if stdenv.isDarwin
-      then "sha256-0I7cU2tUw3KhAQ/2YZ3SdMDxYDqkkhK6IPeqLNo2+os="
-      else "sha256-tHzygYaR9bHiHfK7OMeV+sLPvWQO3i0KXhyJ4zijrDk=";
+    sha256 = "sha256-tHzygYaR9bHiHfK7OMeV+sLPvWQO3i0KXhyJ4zijrDk=";
   };
 
   inherit patches;

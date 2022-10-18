@@ -1,0 +1,28 @@
+From dc655807b03680ff301bf3df53daa973e63af354 Mon Sep 17 00:00:00 2001
+From: Zhaofeng Li <hello@zhaofeng.li>
+Date: Tue, 18 Oct 2022 03:20:54 -0600
+Subject: [PATCH] Darwin, libgcc: Only build libemutls_w.a with shared
+
+---
+ libgcc/config.host | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/libgcc/config.host b/libgcc/config.host
+index 771a42cfb89..25812d910ef 100644
+--- a/libgcc/config.host
++++ b/libgcc/config.host
+@@ -264,7 +264,10 @@ case ${host} in
+       echo "Warning: libgcc configured to support macOS 10.5" 1>&2
+       ;;
+   esac
+-  extra_parts="crt3.o crttms.o crttme.o libemutls_w.a"
++  extra_parts="crt3.o crttms.o crttme.o"
++  if test x$enable_shared = xyes; then
++    extra_parts="$extra_parts libemutls_w.a"
++  fi
+   ;;
+ *-*-dragonfly*)
+   tmake_file="$tmake_file t-crtstuff-pic t-libgcc-pic t-eh-dw2-dip"
+-- 
+2.37.3
+
