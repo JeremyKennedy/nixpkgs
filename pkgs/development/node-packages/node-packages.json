@@ -1,5 +1,6 @@
 [
   "@angular/cli"
+, "@ansible/ansible-language-server"
 , "@antfu/ni"
 , "@antora/cli"
 , "@antora/site-generator-default"
@@ -120,6 +121,7 @@
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "@electron-forge/cli"
+, "eas-cli"
 , "elm-oracle"
 , "emoj"
 , "emojione"
@@ -150,6 +152,7 @@
 , "gitmoji-cli"
 , "glob"
 , "gramma"
+, "grammarly-languageserver"
 , "graphql"
 , "graphql-cli"
 , "graphql-language-service-cli"
@@ -397,5 +400,6 @@
 , "yalc"
 , "yarn"
 , "yo"
+, "@zwave-js/server"
 , "zx"
 ]
