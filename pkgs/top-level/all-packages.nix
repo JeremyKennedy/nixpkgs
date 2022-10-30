@@ -16508,8 +16508,6 @@ with pkgs;
 
   cubiomes-viewer = libsForQt5.callPackage ../applications/misc/cubiomes-viewer { };
 
-  cubeb = callPackage ../development/libraries/cubeb { };
-
   ctmg = callPackage ../tools/security/ctmg { };
 
   cmake = callPackage ../development/tools/build-managers/cmake {
@@ -18136,6 +18134,8 @@ with pkgs;
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
   cachix = haskell.lib.compose.justStaticExecutables haskellPackages.cachix;
+
+  cubeb = callPackage ../development/libraries/audio/cubeb { };
 
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
