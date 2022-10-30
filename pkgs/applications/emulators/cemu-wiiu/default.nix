@@ -109,8 +109,6 @@ stdenv.mkDerivation rec {
     homepage = "https://cemu.info";
     license = licenses.mpl20;
     platforms = platforms.linux;
-
-    # TODO: Add baduhai and romatthe
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [ zhaofengli baduhai ];
   };
 }
