@@ -16504,6 +16504,8 @@ with pkgs;
 
   cubiomes-viewer = libsForQt5.callPackage ../applications/misc/cubiomes-viewer { };
 
+  cubeb = callPackage ../development/libraries/cubeb { };
+
   ctmg = callPackage ../tools/security/ctmg { };
 
   cmake = callPackage ../development/tools/build-managers/cmake {
