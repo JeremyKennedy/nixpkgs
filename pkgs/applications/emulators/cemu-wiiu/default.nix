@@ -21,7 +21,7 @@
 , rapidjson
 , vulkan-headers
 , wxGTK32
-, zstd
+, zarchive
 
 , vulkan-loader
 }:
@@ -30,21 +30,6 @@ let
   version = "unstable-2022-10-28";
   rev = "e0aaf631c460cd893c3ec682a237891f2d1baa50";
   hash = "sha256-GJA/lJJqShuHeYirBW1kyVsU44kMpmAn916PSGOnKkY=";
-
-  # TODO: Maybe put into a separate package? This is written by a Cemu
-  # developer and not really used outside Cemu.
-  zarchive = stdenv.mkDerivation rec {
-    pname = "zarchive";
-    version = "0.1.2";
-    src = fetchFromGitHub {
-      owner = "Exzap";
-      repo = "ZArchive";
-      rev = "v${version}";
-      hash = "sha256-hX637O/mVLTzmG0a9swJu9w+3o26VHo+K/9RhMuf1lI=";
-    };
-    buildInputs = [ zstd ];
-    nativeBuildInputs = [ cmake ];
-  };
 in stdenv.mkDerivation {
   pname = "cemu";
   inherit version;
