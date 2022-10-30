@@ -1,0 +1,134 @@
+{ lib, stdenv, fetchFromGitHub
+, addOpenGLRunpath
+, wrapGAppsHook
+, cmake
+, glslang
+, nasm
+, pkg-config
+
+, SDL2
+, boost
+, cubeb
+, curl
+, fmt_9
+, glm
+, gtk3
+, imgui
+, libpng
+, libzip
+, libXrender
+, pugixml
+, rapidjson
+, vulkan-headers
+, wxGTK32
+, zstd
+
+, vulkan-loader
+}:
+
+let
+  version = "unstable-2022-10-28";
+  rev = "e0aaf631c460cd893c3ec682a237891f2d1baa50";
+  hash = "sha256-GJA/lJJqShuHeYirBW1kyVsU44kMpmAn916PSGOnKkY=";
+
+  # TODO: Maybe put into a separate package? This is written by a Cemu
+  # developer and not really used outside Cemu.
+  zarchive = stdenv.mkDerivation rec {
+    pname = "zarchive";
+    version = "0.1.2";
+    src = fetchFromGitHub {
+      owner = "Exzap";
+      repo = "ZArchive";
+      rev = "v${version}";
+      hash = "sha256-hX637O/mVLTzmG0a9swJu9w+3o26VHo+K/9RhMuf1lI=";
+    };
+    buildInputs = [ zstd ];
+    nativeBuildInputs = [ cmake ];
+  };
+in stdenv.mkDerivation {
+  pname = "cemu";
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner = "cemu-project";
+    repo = "Cemu";
+    inherit rev hash;
+  };
+
+  patches = [
+    # glslangTargets want SPIRV-Tools-opt to be defined:
+    # > The following imported targets are referenced, but are missing:
+    # > SPIRV-Tools-opt
+    ./cmakelists.patch
+  ];
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+    wrapGAppsHook
+    cmake
+    glslang
+    nasm
+    pkg-config
+  ];
+
+  buildInputs = [
+    SDL2
+    boost
+    cubeb
+    curl
+    fmt_9
+    glm
+    gtk3
+    imgui
+    libpng
+    libzip
+    libXrender
+    pugixml
+    rapidjson
+    vulkan-headers
+    wxGTK32
+    zarchive
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG"
+    "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG"
+    "-DENABLE_VCPKG=OFF"
+
+    # PORTABLE:
+    # "All data created and maintained by Cemu will be in the directory where the executable file is located"
+    "-DPORTABLE=OFF"
+  ];
+
+  preConfigure = ''
+    rm -rf dependencies/imgui
+    ln -s ${imgui}/include/imgui dependencies/imgui
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp -r ../bin/Cemu_release $out/bin/Cemu
+    ln -s $out/bin/Cemu $out/bin/cemu
+
+    runHook postInstall
+  '';
+
+  preFixup = let
+    libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
+    libPath = builtins.concatStringsSep ":" (map (l: "${l}/lib") libs);
+  in ''
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${libPath}")
+  '';
+
+  meta = with lib; {
+    description = "Cemu is a Wii U emulator";
+    homepage = "https://cemu.info";
+    license = licenses.mpl20;
+    platforms = platforms.linux;
+
+    # TODO: Add baduhai and romatthe
+    maintainers = with maintainers; [ zhaofengli ];
+  };
+}
