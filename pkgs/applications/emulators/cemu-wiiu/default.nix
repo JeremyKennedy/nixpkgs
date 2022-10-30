@@ -26,18 +26,15 @@
 , vulkan-loader
 }:
 
-let
-  version = "unstable-2022-10-28";
-  rev = "e0aaf631c460cd893c3ec682a237891f2d1baa50";
-  hash = "sha256-GJA/lJJqShuHeYirBW1kyVsU44kMpmAn916PSGOnKkY=";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cemu";
-  inherit version;
+  version = "2.0-10";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
-    inherit rev hash;
+    rev = "v${version}";
+    hash = "sha256-GJA/lJJqShuHeYirBW1kyVsU44kMpmAn916PSGOnKkY=";
   };
 
   patches = [
