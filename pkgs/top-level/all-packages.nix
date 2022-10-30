@@ -1498,6 +1498,8 @@ with pkgs;
 
   cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
+  cemu-wiiu = callPackage ../applications/emulators/cemu-wiiu { };
+
   cen64 = callPackage ../applications/emulators/cen64 { };
 
   citra-canary = callPackage ../applications/emulators/citra {
@@ -5171,8 +5173,6 @@ with pkgs;
   cemu = qt5.callPackage ../applications/science/math/cemu {
     stdenv = gcc9Stdenv;
   };
-
-  cemu-wiiu = callPackage ../applications/emulators/cemu-wiiu { };
 
   cider = callPackage ../applications/audio/cider { };
 
