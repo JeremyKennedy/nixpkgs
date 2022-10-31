@@ -105,9 +105,8 @@ stdenv.mkDerivation rec {
 
   preFixup = let
     libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
-    libPath = builtins.concatStringsSep ":" (map (l: "${l}/lib") libs);
   in ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${libPath}")
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}")
   '';
 
   meta = with lib; {
