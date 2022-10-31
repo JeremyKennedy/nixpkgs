@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub
 , cmake
-, gtest
 , pkg-config
 , jack2
 , pulseaudio
@@ -25,7 +24,6 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    gtest
     pkg-config
   ];
 
@@ -38,6 +36,7 @@ in stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_TESTS=OFF" # tests require an audio server
     "-DBUNDLE_SPEEX=OFF"
     "-DUSE_SANITIZERS=OFF"
 
