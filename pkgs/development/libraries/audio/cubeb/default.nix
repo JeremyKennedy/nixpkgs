@@ -53,6 +53,7 @@ in stdenv.mkDerivation {
     description = "Cross platform audio library";
     homepage = "https://github.com/mozilla/cubeb";
     license = licenses.isc;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ zhaofengli ];
   };
 }
