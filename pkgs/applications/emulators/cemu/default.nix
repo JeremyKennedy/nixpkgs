@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     description = "Cemu is a Wii U emulator";
     homepage = "https://cemu.info";
     license = licenses.mpl20;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ zhaofengli baduhai ];
   };
 }
