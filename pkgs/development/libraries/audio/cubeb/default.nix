@@ -8,18 +8,15 @@
 , lazyLoad ? true
 }:
 
-let
-  version = "unstable-2022-10-18";
-  rev = "27d2a102b0b75d9e49d43bc1ea516233fb87d778";
-  hash = "sha256-q+uz1dGU4LdlPogL1nwCR/KuOX4Oy3HhMdA6aJylBRk=";
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "cubeb";
-  inherit version;
+  version = "unstable-2022-10-18";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cubeb";
-    inherit rev hash;
+    rev = "27d2a102b0b75d9e49d43bc1ea516233fb87d778";
+    hash = "sha256-q+uz1dGU4LdlPogL1nwCR/KuOX4Oy3HhMdA6aJylBRk=";
   };
 
   nativeBuildInputs = [
