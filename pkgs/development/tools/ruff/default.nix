@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.82";
+  version = "0.0.92";
 
   src = fetchFromGitHub {
     owner = "charliermarsh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BBk6mmsSd4SuvLMA/HvvVqGrxheGWJdx0luj5IRg7AI=";
+    sha256 = "sha256-PTlLxFtp1IdHobhwN4zoxVQgDDc8CAG4q5YD2DqQ7oM=";
   };
 
-  cargoSha256 = "sha256-w848QIVq+604DtT8di1IJqdlFSX7f9y19kAM3cGPtkA=";
+  cargoSha256 = "sha256-bhOT0kecoJL/DqOkYVgKZojV2U+nX0/ckWCPb8Zchu4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices

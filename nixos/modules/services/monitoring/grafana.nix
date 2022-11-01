@@ -245,17 +245,17 @@ in {
     (mkRenamedOptionModule [ "services" "grafana" "users" "autoAssignOrg" ] [ "services" "grafana" "settings" "users" "auto_assign_org" ])
     (mkRenamedOptionModule [ "services" "grafana" "users" "autoAssignOrgRole" ] [ "services" "grafana" "settings" "users" "auto_assign_org_role" ])
     (mkRenamedOptionModule [ "services" "grafana" "auth" "disableLoginForm" ] [ "services" "grafana" "settings" "auth" "disable_login_form" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "anonymous" "enable" ] [ "services" "grafana" "settings" "auth" "anonymous" "enable" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "anonymous" "org_name" ] [ "services" "grafana" "settings" "auth" "anonymous" "org_name" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "anonymous" "org_role" ] [ "services" "grafana" "settings" "auth" "anonymous" "org_role" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "enable" ] [ "services" "grafana" "settings" "auth" "azuread" "enable" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "allowSignUp" ] [ "services" "grafana" "settings" "auth" "azuread" "allow_sign_up" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "clientId" ] [ "services" "grafana" "settings" "auth" "azuread" "client_id" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "allowedDomains" ] [ "services" "grafana" "settings" "auth" "azuread" "allowed_domains" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "allowedGroups" ] [ "services" "grafana" "settings" "auth" "azuread" "allowed_groups" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "google" "enable" ] [ "services" "grafana" "settings" "auth" "google" "enable" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "google" "allowSignUp" ] [ "services" "grafana" "settings" "auth" "google" "allow_sign_up" ])
-    (mkRenamedOptionModule [ "services" "grafana" "auth" "google" "clientId" ] [ "services" "grafana" "settings" "auth" "google" "client_id" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "anonymous" "enable" ] [ "services" "grafana" "settings" "auth.anonymous" "enabled" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "anonymous" "org_name" ] [ "services" "grafana" "settings" "auth.anonymous" "org_name" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "anonymous" "org_role" ] [ "services" "grafana" "settings" "auth.anonymous" "org_role" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "enable" ] [ "services" "grafana" "settings" "auth.azuread" "enabled" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "allowSignUp" ] [ "services" "grafana" "settings" "auth.azuread" "allow_sign_up" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "clientId" ] [ "services" "grafana" "settings" "auth.azuread" "client_id" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "allowedDomains" ] [ "services" "grafana" "settings" "auth.azuread" "allowed_domains" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "allowedGroups" ] [ "services" "grafana" "settings" "auth.azuread" "allowed_groups" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "google" "enable" ] [ "services" "grafana" "settings" "auth.google" "enabled" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "google" "allowSignUp" ] [ "services" "grafana" "settings" "auth.google" "allow_sign_up" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "google" "clientId" ] [ "services" "grafana" "settings" "auth.google" "client_id" ])
     (mkRenamedOptionModule [ "services" "grafana" "analytics" "reporting" "enable" ] [ "services" "grafana" "settings" "analytics" "reporting_enabled" ])
 
     (mkRemovedOptionModule [ "services" "grafana" "database" "passwordFile" ] ''
@@ -351,7 +351,7 @@ in {
             protocol = mkOption {
               description = lib.mdDoc "Which protocol to listen.";
               default = "http";
-              type = types.enum ["http" "https" "socket"];
+              type = types.enum ["http" "https" "h2" "socket"];
             };
 
             http_addr = mkOption {
@@ -408,7 +408,7 @@ in {
 
             socket = mkOption {
               description = lib.mdDoc "Path where the socket should be created when protocol=socket. Make sure that Grafana has appropriate permissions before you change this setting.";
-              default = "";
+              default = "/run/grafana/grafana.sock";
               type = types.str;
             };
           };
@@ -852,7 +852,7 @@ in {
                 };
 
                 contactPoints = mkOption {
-                  description = lib.mdDoc "List of contact points to import or update.";
+                  description = lib.mdDoc "List of contact points to import or update. Please note that sensitive data will end up in world-readable Nix store.";
                   default = [];
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
@@ -1158,29 +1158,35 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = flatten [
+    warnings = let
+      usesFileProvider = opt: defaultValue: builtins.match "^${defaultValue}$|^\\$__file\\{.*}$" opt != null;
+    in flatten [
       (optional (
-        cfg.settings.database.password != "" ||
-        cfg.settings.security.admin_password != "admin"
+        ! usesFileProvider cfg.settings.database.password "" ||
+        ! usesFileProvider cfg.settings.security.admin_password "admin"
       ) "Grafana passwords will be stored as plaintext in the Nix store! Use file provider instead.")
       (optional (
         let
           checkOpts = opt: any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) opt;
           datasourcesUsed = if (cfg.provision.datasources.settings == null) then [] else cfg.provision.datasources.settings.datasources;
         in if (builtins.isList cfg.provision.datasources) then checkOpts cfg.provision.datasources else checkOpts datasourcesUsed
-      ) "Datasource passwords will be stored as plaintext in the Nix store! Use file provider instead.")
+        ) ''
+          Datasource passwords will be stored as plaintext in the Nix store!
+          It is not possible to use file provider in provisioning; please provision
+          datasources via `services.grafana.provision.datasources.path` instead.
+        '')
       (optional (
         any (x: x.secure_settings != null) cfg.provision.notifiers
       ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.")
       (optional (
-        builtins.isList cfg.provision.datasources
+        builtins.isList cfg.provision.datasources && cfg.provision.datasources != []
       ) ''
           Provisioning Grafana datasources with options has been deprecated.
           Use `services.grafana.provision.datasources.settings` or
           `services.grafana.provision.datasources.path` instead.
         '')
       (optional (
-        builtins.isList cfg.provision.dashboards
+        builtins.isList cfg.provision.datasources && cfg.provision.dashboards != []
       ) ''
           Provisioning Grafana dashboards with options has been deprecated.
           Use `services.grafana.provision.dashboards.settings` or
@@ -1253,8 +1259,8 @@ in {
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
         # Hardening
-        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+        AmbientCapabilities = lib.mkIf (cfg.settings.server.http_port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = if (cfg.settings.server.http_port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
         DeviceAllow = [ "" ];
         LockPersonality = true;
         NoNewPrivileges = true;
