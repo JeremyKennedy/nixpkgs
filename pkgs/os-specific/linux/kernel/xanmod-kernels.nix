@@ -9,8 +9,8 @@ let
   };
 
   mainVariant = {
-    version = "6.0.6";
-    hash = "sha256-JMfAtiPDgoVF+ypeFXev06PL39ZM2H7m07IxpasjAoM=";
+    version = "6.0.7";
+    hash = "sha256-qeM2oswuop42rvyBGlrH6VvODScLCpAOjTc4KR5a2Ec=";
     variant = "main";
   };
 
@@ -27,7 +27,7 @@ let
 
     structuredExtraConfig = with lib.kernel; {
       # AMD P-state driver
-      X86_AMD_PSTATE = yes;
+      X86_AMD_PSTATE = lib.mkOverride 60 yes;
 
       # Google's BBRv2 TCP congestion Control
       TCP_CONG_BBR2 = yes;

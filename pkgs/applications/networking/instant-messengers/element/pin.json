@@ -1,7 +1,7 @@
 {
-  "version": "1.11.12",
-  "desktopSrcHash": "85mH9y3/IlThrdZY4Nv6iZQ8SxVGoYcZ1bbkCuAAroU=",
-  "desktopYarnHash": "1scp9y2lmah3n20f1kpc9paspd3qgslg129diis7g11cz4h0wyi5",
-  "webSrcHash": "MfiPrTw7BFLFPbm6xR5QbQHNPYpaJBtZES6KjISMTeE=",
-  "webYarnHash": "sha256-KZNBocVEs3wD5020h6C4n2jgp4shv4IgFENSi87rUFM="
+  "version": "1.11.14",
+  "desktopSrcHash": "91WCtb+ylVz9gSqOHb5GuSC1YZjDS3M8gdFIZYVls3c=",
+  "desktopYarnHash": "1ng9fwpwxsw91bzgd2kb2pdq927rkjv5rrrkmszvn55bj6ry7sqi",
+  "webSrcHash": "ss7Pmjg205EE/V/xIV7nvfZFRyyJfuB8MDM9dCnPckQ=",
+  "webYarnHash": "1v6qlk58msam9dglal4jzcyqcsrspa6idsdb8acjnscdkj26bkps"
 }
