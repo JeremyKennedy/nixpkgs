@@ -31987,6 +31987,16 @@ with pkgs;
     };
   }).latest;
 
+  bambu-studio = callPackage ../applications/misc/prusa-slicer/bambu-studio.nix {
+    wxGTK31 = wxGTK31.override {
+      # https://github.com/supermerill/SuperSlicer/issues/1093
+      withEGL = false;
+
+      withCurl = true;
+      withWebKit = true;
+    };
+  };
+
   snapmaker-luban = callPackage ../applications/misc/snapmaker-luban { };
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
