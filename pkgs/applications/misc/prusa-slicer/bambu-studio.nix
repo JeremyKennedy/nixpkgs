@@ -1,4 +1,5 @@
 { lib, fetchFromGitHub, fetchpatch, prusa-slicer
+, curl
 , wxGTK31
 , glfw
 , mesa
@@ -85,6 +86,8 @@ let
       makeWrapper = makeShellWrapper;
     };
     wxGTK31-override = wxGTK31';
+
+    inherit curl;
   };
 
   allVersions = builtins.mapAttrs (_name: version: (prusa-slicer'.overrideAttrs (override version))) versions;
