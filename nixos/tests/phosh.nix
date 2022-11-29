@@ -25,6 +25,13 @@ in {
         };
       };
 
+      systemd.services.phosh = {
+        environment = {
+          # Accelerated graphics fail on phoc 0.20 (wlroots 0.15)
+          "WLR_RENDERER" = "pixman";
+        };
+      };
+
       virtualisation.resolution = { x = 720; y = 1440; };
       virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci,xres=720,yres=1440" ];
     };
@@ -55,15 +62,9 @@ in {
         phone.wait_for_text("All Apps")
         phone.screenshot("03launcher")
 
-    with subtest("Check that we can launch an app"):
-        phone.send_chars("settings\n\n", delay=0.2)
-
-        phone.wait_for_text("Network")
-        phone.screenshot("04settings")
-
-    with subtest("Check that we can summon the on-screen keyboard"):
-        phone.succeed("busctl call --machine=nixos@.host --user sm.puri.OSK0 /sm/puri/OSK0 sm.puri.OSK0 SetVisible b true")
-        phone.wait_for_text("123") # Button label for the number layer
-        phone.screenshot("05keyboard")
+    with subtest("Check the on-screen keyboard shows"):
+        phone.send_chars("setting", delay=0.2)
+        phone.wait_for_text("123") # A button on the OSK
+        phone.screenshot("04osk")
   '';
 })

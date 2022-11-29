@@ -29,6 +29,7 @@
 , polkit
 , libsecret
 , evolution-data-server
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -124,6 +125,8 @@ stdenv.mkDerivation rec {
     providedSessions = [
       "sm.puri.Phosh"
     ];
+
+    tests.phosh = nixosTests.phosh;
   };
 
   meta = with lib; {

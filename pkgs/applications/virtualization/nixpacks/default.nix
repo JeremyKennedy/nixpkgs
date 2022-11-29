@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nixpacks";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uxy0/Ngzzh96YZDR9whLVYNnQOlj3wkCEuuJTQjT6GE=";
+    sha256 = "sha256-c1AqqbeBKXfXUKgalbo5OXc0oVyQyntqwmpB0AFlwRs=";
   };
 
-  cargoSha256 = "sha256-99J4ucjE0yTPQSdM6PDTWEjBltJdIU6yEDqhgSfOaJU=";
+  cargoSha256 = "sha256-SybFjc1oyfJpen+KH2xj/u3i1S5SLiprwkUPp9IpMfc=";
 
   # skip test due FHS dependency
   doCheck = false;

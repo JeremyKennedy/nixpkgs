@@ -1586,13 +1586,7 @@ in
 
   options.services.prometheus = {
 
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Enable the Prometheus monitoring daemon.
-      '';
-    };
+    enable = mkEnableOption (lib.mdDoc "Prometheus monitoring daemon");
 
     package = mkOption {
       type = types.package;
