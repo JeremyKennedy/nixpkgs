@@ -4,7 +4,6 @@
 , stdenv
 , wrapFirefox
 , libName ? "firefox"
-, forceWayland ? true
 , keepHomepage ? true
 }:
 let
@@ -54,9 +53,7 @@ let
 
   wrapped = wrapFirefox firefox-unwrapped {
     version = "${lib.getVersion firefox-unwrapped}-pmos-${version}";
-    inherit forceWayland libName extraPolicies;
-
-    waylandDesktopSuffix = "";
+    inherit libName extraPolicies;
   };
 in wrapped.overrideAttrs (old: {
   buildCommand = old.buildCommand + ''
