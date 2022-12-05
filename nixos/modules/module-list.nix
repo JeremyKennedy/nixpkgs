@@ -46,6 +46,7 @@
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
+  ./hardware/cpu/amd-sev.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/cpu/intel-sgx.nix
   ./hardware/corectrl.nix
@@ -164,6 +165,7 @@
   ./programs/flexoptix-app.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
+  ./programs/fzf.nix
   ./programs/gamemode.nix
   ./programs/geary.nix
   ./programs/git.nix
@@ -966,6 +968,7 @@
   ./services/networking/syncthing-relay.nix
   ./services/networking/syncplay.nix
   ./services/networking/tailscale.nix
+  ./services/networking/tayga.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
@@ -1330,6 +1333,7 @@
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman/default.nix
   ./virtualisation/qemu-guest-agent.nix
+  ./virtualisation/rosetta.nix
   ./virtualisation/spice-usb-redirection.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
