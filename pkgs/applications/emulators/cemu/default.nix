@@ -20,6 +20,7 @@
 , pugixml
 , rapidjson
 , vulkan-headers
+, wayland
 , wxGTK32
 , zarchive
 
@@ -28,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-17";
+  version = "2.0-21";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-ryFph55o7s3eiqQ8kx5+3Et5S2U9H5i3fmZTc1CaCnA=";
+    hash = "sha256-6lg/MxduhoEEk5jH9LdT6yeCssIT3yh0AmoWeOMt6Fo=";
   };
 
   patches = [
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     pugixml
     rapidjson
     vulkan-headers
+    wayland
     wxGTK32
     zarchive
   ];
@@ -75,6 +77,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG"
     "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG"
+    "-DCMAKE_EXE_LINKER_FLAGS=-lwayland-client"
     "-DENABLE_VCPKG=OFF"
 
     # PORTABLE:
@@ -108,10 +111,6 @@ stdenv.mkDerivation rec {
   in ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
-
-      # Force X11 to be used until Wayland is natively supported
-      # <https://github.com/cemu-project/Cemu/pull/143>
-      --set GDK_BACKEND x11
     )
   '';
 
