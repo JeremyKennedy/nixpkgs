@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-21";
+  version = "2.0-22";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-6lg/MxduhoEEk5jH9LdT6yeCssIT3yh0AmoWeOMt6Fo=";
+    hash = "sha256-ZQfJHQnT5mV6GC3dO6QV1fGsnyZMYqXiVdBSsimL5yU=";
   };
 
   patches = [
@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG"
     "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG"
-    "-DCMAKE_EXE_LINKER_FLAGS=-lwayland-client"
     "-DENABLE_VCPKG=OFF"
 
     # PORTABLE:
