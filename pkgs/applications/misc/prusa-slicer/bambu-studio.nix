@@ -18,20 +18,20 @@ let
 
   versions = {
     official = rec {
-      version = "1.3.0.25";
+      version = "01.04.00.17";
 
       src = fetchFromGitHub {
         owner = "bambulab";
         repo = "BambuStudio";
         rev = "v${version}";
-        hash = "sha256-yaJr3rwkUKS7Ct6qf7irxjoX1ZBoQJLG1H8YKGeRJmY=";
+        hash = "sha256-FRlGMs5dMARCzHQ8dDomG722ODdIkDKqu5qUAEmiSwM=";
       };
 
       patches = [
         # Various fixes to be upstreamed
         (fetchpatch {
-          url = "https://github.com/zhaofengli/BambuStudio/compare/96707fc4b4b40c30b7e5610d2489ef283fe952a4...897d035d85b5b4e4a9e708551c6b9854c37139f6.patch";
-          hash = "sha256-uQdOjbgny9HBD0ZX52kJLBLeAtotTQBEvtRgW4PT+aY=";
+          url = "https://github.com/zhaofengli/BambuStudio/compare/d472eb7afb4dfc9dea0eb668f088fd15bd2a72ad...77199a8f373be4d967e124d82d0fb85d38cd6c65.patch";
+          hash = "sha256-/LcxVjWBrGpjJVOKIIF2ACFGv9kB8trV1kQtEmwxzJM=";
         })
 
         # Fix for webkitgtk linking
@@ -64,6 +64,7 @@ let
       "-DBBL_INTERNAL_TESTING=0"
       "-DDEP_WX_GTK3=ON"
       "-DSLIC3R_BUILD_TESTS=0"
+      "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
     ];
 
     postInstall = null;
