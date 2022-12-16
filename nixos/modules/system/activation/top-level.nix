@@ -84,7 +84,7 @@ let
 
       ${config.system.systemBuilderCommands}
 
-      echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
+      echo -n "$extraDependencies" > $out/extra-dependencies
 
       ${optionalString (!config.boot.isContainer) ''
         ${bootSpec.writer}
@@ -115,6 +115,8 @@ let
     activationScript = config.system.activationScripts.script;
     dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
+
+    inherit (config.system) extraDependencies;
 
     # Needed by switch-to-configuration.
     perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp DevelTrace ]);
@@ -234,6 +236,16 @@ in
       '';
     };
 
+    system.forbiddenDependenciesRegex = mkOption {
+      default = "";
+      example = "-dev$";
+      type = types.str;
+      description = lib.mdDoc ''
+        A POSIX Extended Regular Expression that matches store paths that
+        should not appear in the system closure, with the exception of {option}`system.extraDependencies`, which is not checked.
+      '';
+    };
+
     system.extraSystemBuilderCmds = mkOption {
       type = types.lines;
       internal = true;
@@ -309,7 +321,25 @@ in
         config.system.copySystemConfiguration
         ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
             "$out/configuration.nix"
+        '' +
+      optionalString
+        (config.system.forbiddenDependenciesRegex != "")
+        ''
+          if [[ $forbiddenDependenciesRegex != "" && -n $closureInfo ]]; then
+            if forbiddenPaths="$(grep -E -- "$forbiddenDependenciesRegex" $closureInfo/store-paths)"; then
+              echo -e "System closure $out contains the following disallowed paths:\n$forbiddenPaths"
+              exit 1
+            fi
+          fi
         '';
+
+    system.systemBuilderArgs = lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
+      inherit (config.system) forbiddenDependenciesRegex;
+      closureInfo = pkgs.closureInfo { rootPaths = [
+        # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
+        (config.system.build.toplevel.overrideAttrs (_: { extraDependencies = []; closureInfo = null; }))
+      ]; };
+    };
 
     system.build.toplevel = system;
 
