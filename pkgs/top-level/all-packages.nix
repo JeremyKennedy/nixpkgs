@@ -32180,6 +32180,9 @@ with pkgs;
       withCurl = true;
       withWebKit = true;
     };
+
+    # Needs to be the same version as in the closed-source networking plugin.
+    curl = curl.override { openssl = openssl_1_1; };
   };
 
   snapmaker-luban = callPackage ../applications/misc/snapmaker-luban { };
