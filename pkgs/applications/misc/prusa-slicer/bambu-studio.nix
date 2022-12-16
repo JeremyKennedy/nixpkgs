@@ -53,6 +53,12 @@ let
       webkitgtk
     ];
 
+    prePatch = ''
+      # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
+      # now seems to be integrated into the main lib.
+      sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
+    '';
+
     cmakeFlags = super.cmakeFlags ++ [
       "-DBBL_RELEASE_TO_PUBLIC=1"
       "-DBBL_INTERNAL_TESTING=0"

@@ -31,6 +31,7 @@
 , wxGTK31
 , xorg
 , fetchpatch
+, wxGTK31-override ? null
 , withSystemd ? stdenv.isLinux
 }:
 let
@@ -45,6 +46,7 @@ let
       fetchSubmodules = true;
     };
   });
+  wxGTK31-override' = if wxGTK31-override == null then wxGTK-prusa else wxGTK31-override;
 in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
@@ -78,7 +80,7 @@ stdenv.mkDerivation rec {
     openvdb
     pcre
     tbb
-    wxGTK-prusa
+    wxGTK31-override'
     xorg.libX11
   ] ++ lib.optionals withSystemd [
     systemd
