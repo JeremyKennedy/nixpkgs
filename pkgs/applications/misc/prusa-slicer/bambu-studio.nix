@@ -2,6 +2,7 @@
 , curl
 , wxGTK31
 , glfw
+, glib-networking
 , mesa
 , webkitgtk
 , wrapGAppsHook
@@ -47,6 +48,7 @@ let
 
     buildInputs = super.buildInputs ++ [
       glfw
+      glib-networking
       mesa.osmesa
       webkitgtk
     ];
