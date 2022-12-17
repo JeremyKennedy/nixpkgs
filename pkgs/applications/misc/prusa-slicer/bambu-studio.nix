@@ -18,22 +18,16 @@ let
 
   versions = {
     official = rec {
-      version = "01.04.00.17";
+      version = "unstable-2022-12-16";
 
       src = fetchFromGitHub {
         owner = "bambulab";
         repo = "BambuStudio";
-        rev = "v${version}";
-        hash = "sha256-FRlGMs5dMARCzHQ8dDomG722ODdIkDKqu5qUAEmiSwM=";
+        rev = "73679f6f2e1111cfeefba146f2897d2d593ae452";
+        hash = "sha256-j66FE81S7GNg7KyiBbLc5RvfHIkBAcxDQvQ99/ipzKM=";
       };
 
       patches = [
-        # Various fixes to be upstreamed
-        (fetchpatch {
-          url = "https://github.com/zhaofengli/BambuStudio/compare/d472eb7afb4dfc9dea0eb668f088fd15bd2a72ad...77199a8f373be4d967e124d82d0fb85d38cd6c65.patch";
-          hash = "sha256-/LcxVjWBrGpjJVOKIIF2ACFGv9kB8trV1kQtEmwxzJM=";
-        })
-
         # Fix for webkitgtk linking
         ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
       ];
