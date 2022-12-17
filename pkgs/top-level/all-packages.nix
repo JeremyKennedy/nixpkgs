@@ -32178,6 +32178,7 @@ with pkgs;
       withEGL = false;
 
       withCurl = true;
+      withPrivateFonts = true;
       withWebKit = true;
     };
 
