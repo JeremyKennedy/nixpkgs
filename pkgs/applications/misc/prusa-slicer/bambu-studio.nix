@@ -71,8 +71,6 @@ let
 
     preFixup = (super.preFixup or "") + ''
       gappsWrapperArgs+=(
-        --suffix XDG_DATA_DIRS : "$out/share/BambuStudio"
-
         # ~/.config/BambuStudio needs to exist, otherwise the app segfaults
         --run "mkdir -p \"\''${XDG_CONFIG_HOME:-\$HOME/.config}/BambuStudio\""
       )
