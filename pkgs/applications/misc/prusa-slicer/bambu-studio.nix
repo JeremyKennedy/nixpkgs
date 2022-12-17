@@ -28,6 +28,12 @@ let
       };
 
       patches = [
+        # Create the data dir if it doesn't exist
+        (fetchpatch {
+          url = "https://github.com/zhaofengli/BambuStudio/commit/a722c53f83f78775144ef6edd4b9debffff05cf5.patch";
+          hash = "sha256-wytf7Uuynh282yd4F35W1w7qAw/Uz1dAW80WGkxxs00=";
+        })
+
         # Fix for webkitgtk linking
         ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
       ];
@@ -63,13 +69,6 @@ let
 
     postInstall = null;
 
-    preFixup = (super.preFixup or "") + ''
-      gappsWrapperArgs+=(
-        # ~/.config/BambuStudio needs to exist, otherwise the app segfaults
-        --run "mkdir -p \"\''${XDG_CONFIG_HOME:-\$HOME/.config}/BambuStudio\""
-      )
-    '';
-
     passthru = allVersions;
 
     meta = with lib; {
@@ -82,10 +81,6 @@ let
   } // args;
 
   prusa-slicer' = prusa-slicer.override {
-    # We use --run in makeWrapper
-    wrapGAppsHook = wrapGAppsHook.override {
-      makeWrapper = makeShellWrapper;
-    };
     wxGTK31-override = wxGTK31';
 
     inherit curl;
