@@ -7100,6 +7100,8 @@ with pkgs;
 
   flashrom = callPackage ../tools/misc/flashrom { };
 
+  flashrom-cros = callPackage ../tools/misc/flashrom/cros.nix { };
+
   flent = python3Packages.callPackage ../applications/networking/flent { };
 
   flexoptix-app = callPackage ../tools/misc/flexoptix-app { };
