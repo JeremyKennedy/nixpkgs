@@ -9,14 +9,6 @@ let
         "${config.system.boot.loader.kernelFile}";
       initrdPath = "${config.system.build.initialRamdisk}/" +
         "${config.system.boot.loader.initrdFile}";
-
-      bootSpec = import ./bootspec.nix {
-        inherit
-          config
-          pkgs
-          lib
-          children;
-      };
     in ''
       mkdir $out
 
@@ -87,8 +79,9 @@ let
 
       echo -n "$extraDependencies" > $out/extra-dependencies
 
-      ${optionalString (!config.boot.isContainer) ''
-        ${bootSpec.writer}
+      ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
+        ${config.boot.bootspec.writer}
+        ${config.boot.bootspec.validator} "$out/bootspec/${config.boot.bootspec.filename}"
       ''}
 
       ${config.system.extraSystemBuilderCmds}
@@ -120,7 +113,7 @@ let
     inherit (config.system) extraDependencies;
 
     # Needed by switch-to-configuration.
-    perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp DevelTrace ]);
+    perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
   } // config.system.systemBuilderArgs);
 
   # Handle assertions and warnings
