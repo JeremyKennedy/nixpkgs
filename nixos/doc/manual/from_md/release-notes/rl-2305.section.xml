@@ -114,8 +114,8 @@
           <link linkend="opt-services.snapserver.openFirewall">services.snapserver.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
+          need to explicitly set this option to <literal>true</literal>,
+          or configure your firewall.
         </para>
       </listitem>
       <listitem>
@@ -124,8 +124,8 @@
           <link linkend="opt-services.tmate-ssh-server.openFirewall">services.tmate-ssh-server.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
+          need to explicitly set this option to <literal>true</literal>,
+          or configure your firewall.
         </para>
       </listitem>
       <listitem>
@@ -134,8 +134,18 @@
           <link linkend="opt-services.unifi-video.openFirewall">services.unifi-video.openFirewall</link>
           module option default value has been changed from
           <literal>true</literal> to <literal>false</literal>. You will
-          need to explicitely set this option to
-          <literal>true</literal>, or configure your firewall.
+          need to explicitly set this option to <literal>true</literal>,
+          or configure your firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Nginx module now validates the syntax of config files at
+          build time. For more complex configurations (using
+          <literal>include</literal> with out-of-store files notably)
+          you may need to disable this check by setting
+          <link linkend="opt-services.nginx.validateConfig">services.nginx.validateConfig</link>
+          to <literal>false</literal>.
         </para>
       </listitem>
       <listitem>
@@ -211,6 +221,16 @@
       </listitem>
       <listitem>
         <para>
+          The module <literal>usbmuxd</literal> now has the ability to
+          change the package used by the daemon. In case you’re
+          experiencing issues with <literal>usbmuxd</literal> you can
+          try an alternative program like <literal>usbmuxd2</literal>.
+          Available as
+          <link linkend="opt-services.usbmuxd.package">services.usbmuxd.package</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.mastodon</literal> gained a tootctl wrapped
           named <literal>mastodon-tootctl</literal> similar to
           <literal>nextcloud-occ</literal> which can be executed from
@@ -266,6 +286,14 @@
           The new option <literal>users.motdFile</literal> allows
           configuring a Message Of The Day that can be updated
           dynamically.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Enabling global redirect in
+          <literal>services.nginx.virtualHosts</literal> now allows one
+          to add exceptions with the <literal>locations</literal>
+          option.
         </para>
       </listitem>
       <listitem>

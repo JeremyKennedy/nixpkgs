@@ -418,10 +418,6 @@ with pkgs;
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
-  commitlint = nodePackages."@commitlint/cli";
-
-  commit-formatter = callPackage ../applications/version-management/commit-formatter { };
-
   commix = callPackage ../tools/security/commix { };
 
   conserver = callPackage ../tools/misc/conserver { };
@@ -450,8 +446,6 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
-  datalad = callPackage ../applications/version-management/datalad { };
-
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
@@ -465,6 +459,8 @@ with pkgs;
   deadnix = callPackage ../development/tools/deadnix { };
 
   dsq = callPackage ../tools/misc/dsq { };
+
+  dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
   dufs = callPackage ../servers/http/dufs {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -1087,6 +1083,8 @@ with pkgs;
     { deps = [ lcov enableGCOVInstrumentation ]; }
     ../build-support/setup-hooks/make-coverage-analysis-report.sh;
 
+  makeHardcodeGsettingsPatch = callPackage ../build-support/make-hardcode-gsettings-patch { };
+
   # intended to be used like nix-build -E 'with import <nixpkgs> {}; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
 
@@ -1538,9 +1536,9 @@ with pkgs;
 
   zq = callPackage ../development/tools/zq { };
 
-  ### APPLICATIONS/VERSION-MANAGEMENT/GIT-AND-TOOLS
+  ### APPLICATIONS/VERSION-MANAGEMENT
 
-  git = callPackage ../applications/version-management/git-and-tools/git {
+  git = callPackage ../applications/version-management/git {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
     smtpPerlLibs = [
@@ -1577,62 +1575,68 @@ with pkgs;
     withpcre2 = false;
   };
 
-  bfg-repo-cleaner = callPackage ../applications/version-management/git-and-tools/bfg-repo-cleaner { };
+  bfg-repo-cleaner = callPackage ../applications/version-management/bfg-repo-cleaner { };
 
-  bit = callPackage ../applications/version-management/git-and-tools/bit { };
+  bit = callPackage ../applications/version-management/bit { };
 
-  bitbucket-server-cli = callPackage ../applications/version-management/git-and-tools/bitbucket-server-cli { };
+  bitbucket-server-cli = callPackage ../applications/version-management/bitbucket-server-cli { };
 
-  bump2version = python3Packages.callPackage ../applications/version-management/git-and-tools/bump2version { };
+  bump2version = python3Packages.callPackage ../applications/version-management/bump2version { };
 
-  cgit = callPackage ../applications/version-management/git-and-tools/cgit { };
+  cgit = callPackage ../applications/version-management/cgit { };
 
-  cgit-pink = callPackage ../applications/version-management/git-and-tools/cgit/pink.nix { };
+  cgit-pink = callPackage ../applications/version-management/cgit/pink.nix { };
 
-  conform = callPackage ../applications/version-management/git-and-tools/conform { };
+  commit-formatter = callPackage ../applications/version-management/commit-formatter { };
 
-  darcs-to-git = callPackage ../applications/version-management/git-and-tools/darcs-to-git { };
+  commitlint = nodePackages."@commitlint/cli";
 
-  delta = callPackage ../applications/version-management/git-and-tools/delta {
+  conform = callPackage ../applications/version-management/conform { };
+
+  datalad = callPackage ../applications/version-management/datalad { };
+
+  darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
+
+  delta = callPackage ../applications/version-management/delta {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
   };
 
-  diff-so-fancy = callPackage ../applications/version-management/git-and-tools/diff-so-fancy { };
+  diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
 
-  gex = callPackage ../applications/version-management/git-and-tools/gex { };
+  gex = callPackage ../applications/version-management/gex { };
 
-  gfold = callPackage ../applications/version-management/git-and-tools/gfold {
+  gfold = callPackage ../applications/version-management/gfold {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  gita = python3Packages.callPackage ../applications/version-management/git-and-tools/gita { };
+  gita = python3Packages.callPackage ../applications/version-management/gita { };
 
-  gitoxide = callPackage ../applications/version-management/git-and-tools/gitoxide {
+  gitoxide = callPackage ../applications/version-management/gitoxide {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  gg-scm = callPackage ../applications/version-management/git-and-tools/gg { };
+  gg-scm = callPackage ../applications/version-management/gg { };
 
   github-cli = gh;
-  gh = callPackage ../applications/version-management/git-and-tools/gh { };
+  gh = callPackage ../applications/version-management/gh { };
 
-  ghorg = callPackage ../applications/version-management/git-and-tools/ghorg { };
+  ghorg = callPackage ../applications/version-management/ghorg { };
 
-  ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
+  ghq = callPackage ../applications/version-management/ghq { };
 
-  ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
+  ghr = callPackage ../applications/version-management/ghr { };
 
-  git-absorb = callPackage ../applications/version-management/git-and-tools/git-absorb {
+  git-absorb = callPackage ../applications/version-management/git-absorb {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-aggregator = callPackage ../applications/version-management/git-and-tools/git-aggregator { };
+  git-aggregator = callPackage ../applications/version-management/git-aggregator { };
 
-  git-annex-metadata-gui = libsForQt5.callPackage ../applications/version-management/git-and-tools/git-annex-metadata-gui {
+  git-annex-metadata-gui = libsForQt5.callPackage ../applications/version-management/git-annex-metadata-gui {
     inherit (python3Packages) buildPythonApplication pyqt5 git-annex-adapter;
   };
 
-  git-annex-remote-dbx = callPackage ../applications/version-management/git-and-tools/git-annex-remote-dbx {
+  git-annex-remote-dbx = callPackage ../applications/version-management/git-annex-remote-dbx {
     inherit (python3Packages)
     buildPythonApplication
     fetchPypi
@@ -1641,7 +1645,7 @@ with pkgs;
     humanfriendly;
   };
 
-  git-annex-remote-googledrive = callPackage ../applications/version-management/git-and-tools/git-annex-remote-googledrive {
+  git-annex-remote-googledrive = callPackage ../applications/version-management/git-annex-remote-googledrive {
     inherit (python3Packages)
     buildPythonApplication
     fetchPypi
@@ -1652,262 +1656,264 @@ with pkgs;
     humanfriendly;
   };
 
-  git-annex-remote-rclone = callPackage ../applications/version-management/git-and-tools/git-annex-remote-rclone { };
+  git-annex-remote-rclone = callPackage ../applications/version-management/git-annex-remote-rclone { };
 
-  git-annex-utils = callPackage ../applications/version-management/git-and-tools/git-annex-utils { };
+  git-annex-utils = callPackage ../applications/version-management/git-annex-utils { };
 
-  git-appraise = callPackage ../applications/version-management/git-and-tools/git-appraise { };
+  git-appraise = callPackage ../applications/version-management/git-appraise { };
 
-  git-backup = callPackage ../applications/version-management/git-and-tools/git-backup {
+  git-backup = callPackage ../applications/version-management/git-backup {
     openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-big-picture = callPackage ../applications/version-management/git-and-tools/git-big-picture { };
+  git-big-picture = callPackage ../applications/version-management/git-big-picture { };
 
-  git-branchless = callPackage ../applications/version-management/git-and-tools/git-branchless {
+  git-branchless = callPackage ../applications/version-management/git-branchless {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  git-bug = callPackage ../applications/version-management/git-and-tools/git-bug { };
+  git-branchstack = python3.pkgs.callPackage ../applications/version-management/git-branchstack { };
 
-  git-chglog = callPackage ../applications/version-management/git-and-tools/git-chglog { };
+  git-bug = callPackage ../applications/version-management/git-bug { };
 
-  git-cinnabar = callPackage ../applications/version-management/git-and-tools/git-cinnabar {
+  git-chglog = callPackage ../applications/version-management/git-chglog { };
+
+  git-cinnabar = callPackage ../applications/version-management/git-cinnabar {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  git-cliff = callPackage ../applications/version-management/git-and-tools/git-cliff {
+  git-cliff = callPackage ../applications/version-management/git-cliff {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-codeowners = callPackage ../applications/version-management/git-and-tools/git-codeowners { };
+  git-codeowners = callPackage ../applications/version-management/git-codeowners { };
 
-  git-codereview = callPackage ../applications/version-management/git-and-tools/git-codereview { };
+  git-codereview = callPackage ../applications/version-management/git-codereview { };
 
-  git-cola = callPackage ../applications/version-management/git-and-tools/git-cola { };
+  git-cola = callPackage ../applications/version-management/git-cola { };
 
-  git-crecord = callPackage ../applications/version-management/git-and-tools/git-crecord { };
+  git-crecord = callPackage ../applications/version-management/git-crecord { };
 
-  git-credential-1password = callPackage ../applications/version-management/git-and-tools/git-credential-1password { };
+  git-credential-1password = callPackage ../applications/version-management/git-credential-1password { };
 
-  git-credential-keepassxc = callPackage ../applications/version-management/git-and-tools/git-credential-keepassxc {
+  git-credential-keepassxc = callPackage ../applications/version-management/git-credential-keepassxc {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   };
 
-  git-crypt = callPackage ../applications/version-management/git-and-tools/git-crypt { };
+  git-crypt = callPackage ../applications/version-management/git-crypt { };
 
-  git-delete-merged-branches = callPackage ../applications/version-management/git-and-tools/git-delete-merged-branches { };
+  git-delete-merged-branches = callPackage ../applications/version-management/git-delete-merged-branches { };
 
-  git-extras = callPackage ../applications/version-management/git-and-tools/git-extras { };
+  git-extras = callPackage ../applications/version-management/git-extras { };
 
-  git-fame = callPackage ../applications/version-management/git-and-tools/git-fame { };
+  git-fame = callPackage ../applications/version-management/git-fame { };
 
-  git-fast-export = callPackage ../applications/version-management/git-and-tools/fast-export { };
+  git-fast-export = callPackage ../applications/version-management/fast-export { };
 
-  git-fire = callPackage ../applications/version-management/git-and-tools/git-fire { };
+  git-fire = callPackage ../applications/version-management/git-fire { };
 
-  git-ftp = callPackage ../applications/version-management/git-and-tools/git-ftp { };
+  git-ftp = callPackage ../applications/version-management/git-ftp { };
 
-  git-gone = callPackage ../applications/version-management/git-and-tools/git-gone {
+  git-gone = callPackage ../applications/version-management/git-gone {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-hound = callPackage ../applications/version-management/git-and-tools/git-hound { };
+  git-hound = callPackage ../applications/version-management/git-hound { };
 
-  git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
+  git-hub = callPackage ../applications/version-management/git-hub { };
 
-  git-ignore = callPackage ../applications/version-management/git-and-tools/git-ignore { };
+  git-ignore = callPackage ../applications/version-management/git-ignore { };
 
-  git-imerge = python3Packages.callPackage ../applications/version-management/git-and-tools/git-imerge { };
+  git-imerge = python3Packages.callPackage ../applications/version-management/git-imerge { };
 
-  git-interactive-rebase-tool = callPackage ../applications/version-management/git-and-tools/git-interactive-rebase-tool {
+  git-interactive-rebase-tool = callPackage ../applications/version-management/git-interactive-rebase-tool {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-lfs = lowPrio (callPackage ../applications/version-management/git-and-tools/git-lfs { });
+  git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
 
-  git-my = callPackage ../applications/version-management/git-and-tools/git-my { };
+  git-my = callPackage ../applications/version-management/git-my { };
 
-  git-machete = python3Packages.callPackage ../applications/version-management/git-and-tools/git-machete { };
+  git-machete = python3Packages.callPackage ../applications/version-management/git-machete { };
 
-  git-nomad = callPackage ../applications/version-management/git-and-tools/git-nomad {
+  git-nomad = callPackage ../applications/version-management/git-nomad {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
-  git-octopus = callPackage ../applications/version-management/git-and-tools/git-octopus { };
+  git-octopus = callPackage ../applications/version-management/git-octopus { };
 
-  git-open = callPackage ../applications/version-management/git-and-tools/git-open { };
+  git-open = callPackage ../applications/version-management/git-open { };
 
-  git-privacy = callPackage ../applications/version-management/git-and-tools/git-privacy { };
+  git-privacy = callPackage ../applications/version-management/git-privacy { };
 
-  git-publish = python3Packages.callPackage ../applications/version-management/git-and-tools/git-publish { };
+  git-publish = python3Packages.callPackage ../applications/version-management/git-publish { };
 
-  git-quick-stats = callPackage ../applications/version-management/git-and-tools/git-quick-stats { };
+  git-quick-stats = callPackage ../applications/version-management/git-quick-stats { };
 
-  git-quickfix = callPackage ../applications/version-management/git-and-tools/git-quickfix {
+  git-quickfix = callPackage ../applications/version-management/git-quickfix {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  git-radar = callPackage ../applications/version-management/git-and-tools/git-radar { };
+  git-radar = callPackage ../applications/version-management/git-radar { };
 
-  git-recent = callPackage ../applications/version-management/git-and-tools/git-recent {
+  git-recent = callPackage ../applications/version-management/git-recent {
     util-linux = if stdenv.isLinux then util-linuxMinimal else util-linux;
   };
 
-  git-remote-codecommit = python3Packages.callPackage ../applications/version-management/git-and-tools/git-remote-codecommit { };
+  git-remote-codecommit = python3Packages.callPackage ../applications/version-management/git-remote-codecommit { };
 
   gitRepo = git-repo;
-  git-repo = callPackage ../applications/version-management/git-and-tools/git-repo { };
+  git-repo = callPackage ../applications/version-management/git-repo { };
 
-  git-repo-updater = python3Packages.callPackage ../applications/version-management/git-and-tools/git-repo-updater { };
+  git-repo-updater = python3Packages.callPackage ../applications/version-management/git-repo-updater { };
 
-  git-review = python3Packages.callPackage ../applications/version-management/git-and-tools/git-review { };
+  git-review = python3Packages.callPackage ../applications/version-management/git-review { };
 
-  git-remote-gcrypt = callPackage ../applications/version-management/git-and-tools/git-remote-gcrypt { };
+  git-remote-gcrypt = callPackage ../applications/version-management/git-remote-gcrypt { };
 
-  git-remote-hg = callPackage ../applications/version-management/git-and-tools/git-remote-hg { };
+  git-remote-hg = callPackage ../applications/version-management/git-remote-hg { };
 
-  git-reparent = callPackage ../applications/version-management/git-and-tools/git-reparent { };
+  git-reparent = callPackage ../applications/version-management/git-reparent { };
 
-  git-secret = callPackage ../applications/version-management/git-and-tools/git-secret { };
+  git-secret = callPackage ../applications/version-management/git-secret { };
 
-  git-secrets = callPackage ../applications/version-management/git-and-tools/git-secrets { };
+  git-secrets = callPackage ../applications/version-management/git-secrets { };
 
-  git-series = callPackage ../applications/version-management/git-and-tools/git-series {
+  git-series = callPackage ../applications/version-management/git-series {
     openssl = openssl_1_1;
   };
 
-  git-sizer = callPackage ../applications/version-management/git-and-tools/git-sizer { };
+  git-sizer = callPackage ../applications/version-management/git-sizer { };
 
-  git-standup = callPackage ../applications/version-management/git-and-tools/git-standup { };
+  git-standup = callPackage ../applications/version-management/git-standup { };
 
-  git-stree = callPackage ../applications/version-management/git-and-tools/git-stree { };
+  git-stree = callPackage ../applications/version-management/git-stree { };
 
-  git-subrepo = callPackage ../applications/version-management/git-and-tools/git-subrepo { };
+  git-subrepo = callPackage ../applications/version-management/git-subrepo { };
 
-  git-subset = callPackage ../applications/version-management/git-and-tools/git-subset {
-    openssl = openssl_1_1;
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  git-subtrac = callPackage ../applications/version-management/git-and-tools/git-subtrac { };
-
-  git-sync = callPackage ../applications/version-management/git-and-tools/git-sync { };
-
-  git-team = callPackage ../applications/version-management/git-and-tools/git-team { };
-
-  git-test = callPackage ../applications/version-management/git-and-tools/git-test { };
-
-  git-town = callPackage ../applications/version-management/git-and-tools/git-town { };
-
-  git-trim = callPackage ../applications/version-management/git-and-tools/git-trim {
+  git-subset = callPackage ../applications/version-management/git-subset {
     openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-up = callPackage ../applications/version-management/git-and-tools/git-up {
+  git-subtrac = callPackage ../applications/version-management/git-subtrac { };
+
+  git-sync = callPackage ../applications/version-management/git-sync { };
+
+  git-team = callPackage ../applications/version-management/git-team { };
+
+  git-test = callPackage ../applications/version-management/git-test { };
+
+  git-town = callPackage ../applications/version-management/git-town { };
+
+  git-trim = callPackage ../applications/version-management/git-trim {
+    openssl = openssl_1_1;
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  git-up = callPackage ../applications/version-management/git-up {
     pythonPackages = python3Packages;
   };
 
-  git-vanity-hash = callPackage ../applications/version-management/git-and-tools/git-vanity-hash { };
+  git-vanity-hash = callPackage ../applications/version-management/git-vanity-hash { };
 
-  git-vendor = callPackage ../applications/version-management/git-and-tools/git-vendor { };
+  git-vendor = callPackage ../applications/version-management/git-vendor { };
 
-  git-when-merged = callPackage ../applications/version-management/git-and-tools/git-when-merged { };
+  git-when-merged = callPackage ../applications/version-management/git-when-merged { };
 
-  git-workspace = callPackage ../applications/version-management/git-and-tools/git-workspace {
+  git-workspace = callPackage ../applications/version-management/git-workspace {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git2cl = callPackage ../applications/version-management/git-and-tools/git2cl { };
+  git2cl = callPackage ../applications/version-management/git2cl { };
 
-  gitbatch = callPackage ../applications/version-management/git-and-tools/gitbatch { };
+  gitbatch = callPackage ../applications/version-management/gitbatch { };
 
-  gitflow = callPackage ../applications/version-management/git-and-tools/gitflow { };
+  gitflow = callPackage ../applications/version-management/gitflow { };
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
-  gitless = callPackage ../applications/version-management/git-and-tools/gitless { };
+  gitless = callPackage ../applications/version-management/gitless { };
 
-  gitlint = python3Packages.callPackage ../applications/version-management/git-and-tools/gitlint { };
+  gitlint = python3Packages.callPackage ../applications/version-management/gitlint { };
 
-  gitls = callPackage ../applications/version-management/git-and-tools/gitls { };
+  gitls = callPackage ../applications/version-management/gitls { };
 
-  gitmux = callPackage ../applications/version-management/git-and-tools/gitmux { };
+  gitmux = callPackage ../applications/version-management/gitmux { };
 
-  gitnuro = callPackage ../applications/version-management/git-and-tools/gitnuro { };
+  gitnuro = callPackage ../applications/version-management/gitnuro { };
 
-  gitsign = callPackage ../applications/version-management/git-and-tools/gitsign { };
+  gitsign = callPackage ../applications/version-management/gitsign { };
 
-  gitstats = callPackage ../applications/version-management/git-and-tools/gitstats { };
+  gitstats = callPackage ../applications/version-management/gitstats { };
 
-  gitstatus = callPackage ../applications/version-management/git-and-tools/gitstatus { };
+  gitstatus = callPackage ../applications/version-management/gitstatus { };
 
-  gitty = callPackage ../applications/version-management/git-and-tools/gitty { };
+  gitty = callPackage ../applications/version-management/gitty { };
 
-  gitui = callPackage ../applications/version-management/git-and-tools/gitui {
+  gitui = callPackage ../applications/version-management/gitui {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
 
-  gitweb = callPackage ../applications/version-management/git-and-tools/gitweb { };
+  gitweb = callPackage ../applications/version-management/gitweb { };
 
-  glab = callPackage ../applications/version-management/git-and-tools/glab { };
+  glab = callPackage ../applications/version-management/glab { };
 
-  glitter = callPackage ../applications/version-management/git-and-tools/glitter { };
+  glitter = callPackage ../applications/version-management/glitter { };
 
-  gst = callPackage ../applications/version-management/git-and-tools/gst { };
+  gst = callPackage ../applications/version-management/gst { };
 
-  hub = callPackage ../applications/version-management/git-and-tools/hub { };
+  hub = callPackage ../applications/version-management/hub { };
 
-  hut = callPackage ../applications/version-management/git-and-tools/hut { };
+  hut = callPackage ../applications/version-management/hut { };
 
-  josh = callPackage ../applications/version-management/git-and-tools/josh { };
+  josh = callPackage ../applications/version-management/josh { };
 
-  lab = callPackage ../applications/version-management/git-and-tools/lab { };
+  lab = callPackage ../applications/version-management/lab { };
 
-  lefthook = callPackage ../applications/version-management/git-and-tools/lefthook { };
+  lefthook = callPackage ../applications/version-management/lefthook { };
 
-  legit = callPackage ../applications/version-management/git-and-tools/legit { };
+  legit = callPackage ../applications/version-management/legit { };
 
-  lucky-commit = callPackage ../applications/version-management/git-and-tools/lucky-commit {
+  lucky-commit = callPackage ../applications/version-management/lucky-commit {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
-  pass-git-helper = python3Packages.callPackage ../applications/version-management/git-and-tools/pass-git-helper { };
+  pass-git-helper = python3Packages.callPackage ../applications/version-management/pass-git-helper { };
 
-  qgit = qt5.callPackage ../applications/version-management/git-and-tools/qgit { };
+  qgit = qt5.callPackage ../applications/version-management/qgit { };
 
-  radicle-cli = callPackage ../applications/version-management/git-and-tools/radicle-cli {
+  radicle-cli = callPackage ../applications/version-management/radicle-cli {
     inherit (darwin) DarwinTools;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
-  radicle-upstream = callPackage ../applications/version-management/git-and-tools/radicle-upstream { };
+  radicle-upstream = callPackage ../applications/version-management/radicle-upstream { };
 
-  rs-git-fsmonitor = callPackage ../applications/version-management/git-and-tools/rs-git-fsmonitor { };
+  rs-git-fsmonitor = callPackage ../applications/version-management/rs-git-fsmonitor { };
 
-  scmpuff = callPackage ../applications/version-management/git-and-tools/scmpuff { };
+  scmpuff = callPackage ../applications/version-management/scmpuff { };
 
-  stgit = callPackage ../applications/version-management/git-and-tools/stgit { };
+  stgit = callPackage ../applications/version-management/stgit { };
 
-  subgit = callPackage ../applications/version-management/git-and-tools/subgit { };
+  subgit = callPackage ../applications/version-management/subgit { };
 
-  svn-all-fast-export = libsForQt5.callPackage ../applications/version-management/git-and-tools/svn-all-fast-export { };
+  svn-all-fast-export = libsForQt5.callPackage ../applications/version-management/svn-all-fast-export { };
 
-  svn2git = callPackage ../applications/version-management/git-and-tools/svn2git {
+  svn2git = callPackage ../applications/version-management/svn2git {
     git = gitSVN;
   };
 
-  thicket = callPackage ../applications/version-management/git-and-tools/thicket { };
+  thicket = callPackage ../applications/version-management/thicket { };
 
-  tig = callPackage ../applications/version-management/git-and-tools/tig {
+  tig = callPackage ../applications/version-management/tig {
     readline = readline81;
   };
 
-  top-git = callPackage ../applications/version-management/git-and-tools/topgit { };
+  top-git = callPackage ../applications/version-management/topgit { };
 
-  transcrypt = callPackage ../applications/version-management/git-and-tools/transcrypt { };
+  transcrypt = callPackage ../applications/version-management/transcrypt { };
 
   inherit (haskellPackages) git-annex;
 
@@ -3257,7 +3263,7 @@ with pkgs;
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
-  pdepend = callPackage ../development/php-packages/pdepend/default.nix { };
+  pdepend = callPackage ../development/php-packages/pdepend { };
 
   platformsh = callPackage ../misc/platformsh { };
 
@@ -4418,7 +4424,7 @@ with pkgs;
   extrude = callPackage ../tools/security/extrude { };
 
   fastly = callPackage ../misc/fastly {
-    # If buildGoModule is overriden, provide a matching version of the go attribute
+    # If buildGoModule is overridden, provide a matching version of the go attribute
   };
 
   f2 = callPackage ../tools/misc/f2 {};
@@ -4587,6 +4593,8 @@ with pkgs;
   gdrive = callPackage ../applications/networking/gdrive { };
 
   gdu = callPackage ../tools/system/gdu { };
+
+  gfxreconstruct = callPackage ../tools/graphics/gfxreconstruct { };
 
   go-chromecast = callPackage ../applications/video/go-chromecast { };
 
@@ -10284,6 +10292,8 @@ with pkgs;
 
   opae = callPackage ../development/libraries/opae { };
 
+  open-pdf-sign = callPackage ../tools/misc/open-pdf-sign { };
+
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
   opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
 
@@ -12606,6 +12616,8 @@ with pkgs;
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
+  usbmuxd2 = callPackage ../tools/misc/usbmuxd2 {};
+
   ustreamer = callPackage ../applications/video/ustreamer { };
 
   usync = callPackage ../applications/misc/usync { };
@@ -13571,6 +13583,8 @@ with pkgs;
   wrapFish = callPackage ../shells/fish/wrapper.nix { };
 
   fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
+
+  fzf-git-sh = callPackage ../shells/fzf-git-sh {};
 
   ion = callPackage ../shells/ion {
     inherit (darwin) Security;
@@ -14580,7 +14594,7 @@ with pkgs;
 
   fstar = callPackage ../development/compilers/fstar {
     # Work around while compatibility with ppxlib >= 0.26 is unavailable
-    # Should be removed when a fix is availaible
+    # Should be removed when a fix is available
     # See https://github.com/FStarLang/FStar/issues/2681
     ocamlPackages =
       ocamlPackages.overrideScope' (self: super: {
@@ -14636,6 +14650,10 @@ with pkgs;
 
   hvm = callPackage ../development/compilers/hvm {
     inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  iay = callPackage ../tools/misc/iay {
+    inherit (darwin.apple_sdk.frameworks) AppKit Security Foundation Cocoa;
   };
 
   idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
@@ -14986,6 +15004,8 @@ with pkgs;
   millet = callPackage ../development/tools/millet {};
 
   mint = callPackage ../development/compilers/mint { };
+
+  mitama-cpp-result = callPackage ../development/libraries/mitama-cpp-result { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme
     { stdenv = gcc10StdenvCompat; texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; }; };
@@ -15760,7 +15780,9 @@ with pkgs;
   mbqn = callPackage ../development/interpreters/bqn/mlochbaum-bqn { };
 
   cbqn = cbqn-bootstrap.phase2;
+  cbqn-replxx = cbqn-bootstrap.phase2-replxx;
   cbqn-standalone = cbqn-bootstrap.phase0;
+  cbqn-standalone-replxx = cbqn-bootstrap.phase0-replxx;
 
   # Below, the classic self-bootstrapping process
   cbqn-bootstrap = lib.dontRecurseIntoAttrs {
@@ -15785,6 +15807,14 @@ with pkgs;
       mbqn-source = null;
     };
 
+    phase0-replxx = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqn-bootstrap) stdenv;
+      genBytecode = false;
+      bqn-path = null;
+      mbqn-source = null;
+      enableReplxx = true;
+    };
+
     phase1 = callPackage ../development/interpreters/bqn/cbqn {
       inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = true;
@@ -15795,6 +15825,13 @@ with pkgs;
       inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = true;
       bqn-path = "${buildPackages.cbqn-bootstrap.phase1}/bin/cbqn";
+    };
+
+    phase2-replxx = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqn-bootstrap) mbqn-source stdenv;
+      genBytecode = true;
+      bqn-path = "${buildPackages.cbqn-bootstrap.phase1}/bin/cbqn";
+      enableReplxx = true;
     };
   };
 
@@ -15823,7 +15860,13 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  clisp = callPackage ../development/interpreters/clisp { };
+  clisp = callPackage ../development/interpreters/clisp {
+    # On newer readline8 fails as:
+    #  #<FOREIGN-VARIABLE "rl_readline_state" #x...>
+    #   does not have the required size or alignment
+    readline = readline6;
+  };
+
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
 
   clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
@@ -17722,6 +17765,8 @@ with pkgs;
 
   nmrpflash = callPackage ../development/embedded/nmrpflash { };
 
+  norminette = callPackage ../development/tools/norminette { };
+
   nwjs = callPackage ../development/tools/nwjs { };
 
   nwjs-sdk = callPackage ../development/tools/nwjs {
@@ -18117,6 +18162,8 @@ with pkgs;
   stylua = callPackage ../development/tools/stylua { };
 
   summon = callPackage ../development/tools/summon { };
+
+  supabase-cli = callPackage ../development/tools/supabase-cli { };
 
   svlint = callPackage ../development/tools/analysis/svlint { };
 
@@ -18626,7 +18673,13 @@ with pkgs;
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-  cachix = haskell.lib.compose.justStaticExecutables haskellPackages.cachix;
+  cachix = (haskell.lib.compose.justStaticExecutables haskellPackages.cachix).overrideAttrs(o: {
+    passthru = o.passthru or {} // {
+      tests = o.passthru.tests or {} // {
+        inherit hci;
+      };
+    };
+  });
 
   cubeb = callPackage ../development/libraries/audio/cubeb { };
 
@@ -21723,6 +21776,7 @@ with pkgs;
   mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
     ogre = ogre1_9;
   };
 
@@ -22900,6 +22954,8 @@ with pkgs;
 
   tageditor = libsForQt5.callPackage ../applications/audio/tageditor { };
 
+  ta-lib = callPackage ../development/libraries/ta-lib { };
+
   taglib = callPackage ../development/libraries/taglib { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
@@ -23583,7 +23639,7 @@ with pkgs;
   R = callPackage ../applications/science/math/R {
     # TODO: split docs into a separate output
     texLive = texlive.combine {
-      inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
+      inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super rsfs;
     };
     withRecommendedPackages = false;
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
@@ -24761,6 +24817,8 @@ with pkgs;
 
   thttpd = callPackage ../servers/http/thttpd { };
 
+  static-web-server = callPackage ../servers/static-web-server { };
+
   storm = callPackage ../servers/computing/storm { };
 
   surrealdb = callPackage ../servers/nosql/surrealdb {
@@ -25428,6 +25486,8 @@ with pkgs;
   };
 
   osxsnarf = callPackage ../os-specific/darwin/osxsnarf { };
+
+  plistwatch = callPackage ../os-specific/darwin/plistwatch { };
 
   power-calibrate = callPackage ../os-specific/linux/power-calibrate { };
 
@@ -26156,6 +26216,7 @@ with pkgs;
     ubootCubieboard2
     ubootGuruplug
     ubootJetsonTK1
+    ubootLibreTechCC
     ubootNanoPCT4
     ubootNovena
     ubootOdroidC2
@@ -26589,6 +26650,8 @@ with pkgs;
 
   freepats = callPackage ../data/misc/freepats { };
 
+  garamond-libre = callPackage ../data/fonts/garamond-libre { };
+
   g15daemon = callPackage ../os-specific/linux/g15daemon {};
 
   galatia-sil = callPackage ../data/fonts/galatia-sil { };
@@ -26630,6 +26693,8 @@ with pkgs;
   gruvbox-dark-icons-gtk = callPackage ../data/icons/gruvbox-dark-icons-gtk {
     inherit (plasma5Packages) breeze-icons;
   };
+
+  gruvbox-gtk-theme = callPackage ../data/themes/gruvbox-gtk-theme {};
 
   gubbi-font = callPackage ../data/fonts/gubbi { };
 
@@ -28208,6 +28273,8 @@ with pkgs;
   dmenu = callPackage ../applications/misc/dmenu { };
   dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix { };
 
+  dmenu-rs = callPackage ../applications/misc/dmenu-rs { };
+
   dmensamenu = callPackage ../applications/misc/dmensamenu {
     inherit (python3Packages) buildPythonApplication requests;
   };
@@ -29277,9 +29344,7 @@ with pkgs;
 
   gollum = callPackage ../applications/misc/gollum { };
 
-  gonic = callPackage ../servers/gonic {
-    inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox;
-  };
+  gonic = callPackage ../servers/gonic { };
 
   goodvibes = callPackage ../applications/audio/goodvibes { };
 
@@ -30177,9 +30242,7 @@ with pkgs;
 
   lame = callPackage ../development/libraries/lame { };
 
-  labwc = callPackage ../applications/window-managers/labwc {
-    wlroots = wlroots_0_15;
-  };
+  labwc = callPackage ../applications/window-managers/labwc { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
@@ -30367,6 +30430,8 @@ with pkgs;
   ltc-tools = callPackage ../applications/audio/ltc-tools { };
 
   lscolors = callPackage ../applications/misc/lscolors { };
+
+  lswt = callPackage ../applications/misc/lswt { };
 
   luddite = with python3Packages; toPythonApplication luddite;
 
@@ -36412,6 +36477,8 @@ with pkgs;
     python3 = python39;
   };
 
+  grap = callPackage ../tools/security/grap { };
+
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly {
@@ -38275,4 +38342,6 @@ with pkgs;
   widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
 
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
+
+  tuner = callPackage ../applications/audio/tuner { };
 }
