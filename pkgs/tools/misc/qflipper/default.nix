@@ -92,9 +92,7 @@ mkDerivation {
     cp installer-assets/udev/42-flipperzero.rules $out/etc/udev/rules.d/
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     broken = stdenv.isDarwin;
