@@ -39,6 +39,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/adnanh/webhook">webhook</link>,
+          a lightweight webhook server. Available as
+          <link linkend="opt-services.webhook.enable">services.webhook</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/alexivkin/CUPS-PDF-to-PDF">cups-pdf-to-pdf</link>,
           a pdf-generating cups backend based on
           <link xlink:href="https://www.cups-pdf.de/">cups-pdf</link>.
@@ -76,6 +83,14 @@
           <link xlink:href="options.html#opt-services.v2raya.enable">services.v2raya</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.netfilter.org/projects/ulogd/index.html">ulogd</link>,
+          a userspace logging daemon for netfilter/iptables related
+          logging. Available as
+          <link xlink:href="options.html#opt-services.ulogd.enable">services.ulogd</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">
@@ -98,6 +113,15 @@
           inhibiting system sleep while backups are running, defaulting
           to off (not inhibiting sleep), available as
           <link linkend="opt-services.borgbackup.jobs._name_.inhibitsSleep"><literal>services.borgbackup.jobs.&lt;name&gt;.inhibitsSleep</literal></link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>podman</literal> now uses the
+          <literal>netavark</literal> network stack. Users will need to
+          delete all of their local containers, images, volumes, etc, by
+          running <literal>podman system reset --force</literal> once
+          before upgrading their systems.
         </para>
       </listitem>
       <listitem>
@@ -326,6 +350,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.chronyd</literal> is now started with
+          additional systemd sandbox/hardening options for better
+          security.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The module <literal>services.headscale</literal> was
           refactored to be compliant with
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
@@ -397,6 +428,21 @@
           been added to <literal>services.nginx</literal>. Learn more
           about compression in Brotli format
           <link xlink:href="https://github.com/google/ngx_brotli/blob/master/README.md">here</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>
+          version is based on
+          <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>,
+          existing installations will keep using version 0.7. New
+          installations will use version 0.8. In order to upgrade a
+          Garage cluster, please follow
+          <link xlink:href="https://garagehq.deuxfleurs.fr/documentation/cookbook/upgrading/">upstream
+          instructions</link> and force
+          <link xlink:href="options.html#opt-services.garage.package">services.garage.package</link>
+          or upgrade accordingly
+          <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>.
         </para>
       </listitem>
       <listitem>
