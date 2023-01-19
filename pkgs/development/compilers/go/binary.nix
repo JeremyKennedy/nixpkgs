@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, version, hashes, autoPatchelfHook }:
+{ lib, stdenv, fetchurl, version, hashes, urls ? {}, autoPatchelfHook }:
 let
   toGoKernel = platform:
     if platform.isDarwin then "darwin"
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   name = "go-${version}-${platform}-bootstrap";
 
   src = fetchurl {
-    url = "https://go.dev/dl/go${version}.${platform}.tar.gz";
+    url = urls.${platform} or "https://go.dev/dl/go${version}.${platform}.tar.gz";
     sha256 = hashes.${platform} or (throw "Missing Go bootstrap hash for platform ${platform}");
   };
 
