@@ -17,7 +17,10 @@
 }:
 
 let
-  goBootstrap = buildPackages.callPackage ./bootstrap116.nix { };
+  goBootstrap = if stdenv.hostPlatform.isRiscV then
+    buildPackages.callPackage ./bootstrap118-gentoo.nix { }
+  else
+    buildPackages.callPackage ./bootstrap116.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo119Module; };
 
