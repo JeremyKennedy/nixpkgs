@@ -53,6 +53,7 @@ let
     '';
   };
 
+  # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
   withLuaJIT = !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV;
 in rec { # un-indented
 

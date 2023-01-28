@@ -706,6 +706,22 @@ let
         };
       };
 
+      colejcummins.llvm-syntax-highlighting = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "llvm-syntax-highlighting";
+          publisher = "colejcummins";
+          version = "0.0.3";
+          sha256 = "sha256-D5zLp3ruq0F9UFT9emgOBDLr1tya2Vw52VvCc40TtV0=";
+        };
+        meta = with lib; {
+          description = "Lightweight syntax highlighting for LLVM IR";
+          homepage = "https://github.com/colejcummins/llvm-syntax-highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=colejcummins.llvm-syntax-highlighting";
+          maintainers = with lib.maintainers; [ inclyc ];
+          license = licenses.mit;
+        };
+      };
+
       coolbear.systemd-unit-file = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "coolbear";
@@ -740,8 +756,13 @@ let
           version = "2.2.6";
           sha256 = "sha256-1yZeyLrXuubhKzobWcd00F/CdU824uJDTkB6qlHkJlQ=";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/dbaeumer.vscode-eslint/changelog";
+          description = "Integrates ESLint JavaScript into VS Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint";
+          homepage = "https://github.com/Microsoft/vscode-eslint";
+          license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
@@ -1286,8 +1307,8 @@ let
           mktplcRef = {
             publisher = "github";
             name = "copilot";
-            version = "1.56.7152";
-            sha256 = "sha256-9WEvTcVY/yMF00GJVj4h57aWhfBYTSatbw10DjjAaAM=";
+            version = "1.70.8099";
+            sha256 = "sha256-+jlLM9UC1DZFBrtiiri4jvpuc/Rf9PcSVP8D8pmQC2s=";
           };
           meta = with lib; {
             description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
@@ -2897,6 +2918,22 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      vscode-icons-team.vscode-icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-icons";
+          publisher = "vscode-icons-team";
+          version = "12.2.0";
+          sha256 = "12s5br0s9n99vjn6chivzdsjb71p0lai6vnif7lv13x497dkw4rz";
+        };
+        meta = with lib; {
+          description = "Bring real icons to your Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons";
+          homepage = "https://github.com/vscode-icons/vscode-icons";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ggwpaiushtha ];
         };
       };
 
