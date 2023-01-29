@@ -1,6 +1,7 @@
 { self
 , bash
 , fetchpatch
+, fzf
 , lib
 , openssl
 , zstd
@@ -176,7 +177,7 @@ with self;
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [ sexplib0 ];
-    checkInputs = [ alcotest ];
+    nativeCheckInputs = [ alcotest ];
   };
 
   base_bigstring = janePackage {
@@ -380,6 +381,9 @@ with self;
     hash = "1ha0i6dx5bgwzbdi4rn98wjwi2imv5p2i7qs7hy0c6cmg88xbdry";
     meta.description = "A library for running the fzf command line tool";
     propagatedBuildInputs = [ async core_kernel ppx_jane ];
+    postPatch = ''
+      substituteInPlace src/fzf.ml --replace /usr/bin/fzf ${fzf}/bin/fzf
+    '';
   };
 
   higher_kinded = janePackage {
@@ -954,7 +958,7 @@ with self;
     meta.description = "Yet another implementation of fork&exec and related functionality";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
-    checkInputs = [ ounit ];
+    nativeCheckInputs = [ ounit ];
     # This currently fails with dune
     strictDeps = false;
   };

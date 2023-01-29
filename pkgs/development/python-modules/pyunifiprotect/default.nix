@@ -10,6 +10,7 @@
 , packaging
 , pillow
 , poetry-core
+, py
 , pydantic
 , pyjwt
 , pytest-aiohttp
@@ -22,6 +23,7 @@
 , pythonOlder
 , pytz
 , setuptools
+, setuptools-scm
 , termcolor
 , typer
 , ffmpeg
@@ -46,8 +48,11 @@ buildPythonPackage rec {
       --replace "--cov=pyunifiprotect --cov-append" ""
   '';
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -72,8 +77,9 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     ffmpeg # Required for command ffprobe
+    py
     pytest-aiohttp
     pytest-asyncio
     pytest-benchmark
