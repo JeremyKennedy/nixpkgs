@@ -1508,6 +1508,8 @@ with pkgs;
 
   tauon = callPackage ../applications/audio/tauon { };
 
+  tcllauncher = callPackage ../tools/misc/tcllauncher { };
+
   tere = callPackage ../tools/misc/tere { };
 
   termusic = callPackage ../applications/audio/termusic { };
