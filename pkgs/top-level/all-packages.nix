@@ -5296,6 +5296,8 @@ with pkgs;
 
   photoprism = callPackage ../servers/photoprism { };
 
+  piaware = callPackage ../applications/radio/piaware { };
+
   piglit = callPackage ../tools/graphics/piglit { };
 
   pika = callPackage ../applications/graphics/pika { };
