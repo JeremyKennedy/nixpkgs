@@ -756,6 +756,8 @@ with pkgs;
 
   flare-floss = callPackage ../tools/security/flare-floss { };
 
+  fr24feed = callPackage ../applications/radio/fr24feed { };
+
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro { };
