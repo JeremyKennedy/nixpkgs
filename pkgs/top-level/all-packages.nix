@@ -1464,6 +1464,8 @@ with pkgs;
 
   mgmt = callPackage ../applications/system/mgmt {};
 
+  mlat-client = callPackage ../applications/radio/mlat-client { };
+
   mprocs = callPackage ../tools/misc/mprocs { };
 
   nominatim = callPackage ../servers/nominatim { };
