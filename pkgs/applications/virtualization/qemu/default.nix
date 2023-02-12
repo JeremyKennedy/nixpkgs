@@ -34,6 +34,7 @@
                     else null)
 , nixosTestRunner ? false
 , doCheck ? false
+, enableDocs ? true
 , qemu  # for passthru.tests
 }:
 
@@ -51,7 +52,8 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3.pkgs.sphinx python3.pkgs.sphinx-rtd-theme ]
+  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 ]
+    ++ lib.optionals enableDocs [ python3.pkgs.sphinx python3.pkgs.sphinx-rtd-theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -135,7 +137,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
-    "--enable-docs"
     "--enable-tools"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
@@ -145,7 +146,8 @@ stdenv.mkDerivation rec {
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--cpu=${stdenv.hostPlatform.uname.processor}"
     (lib.enableFeature guestAgentSupport "guest-agent")
-  ] ++ lib.optional numaSupport "--enable-numa"
+  ] ++ lib.optional enableDocs "--enable-docs"
+    ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
     ++ lib.optional spiceSupport "--enable-spice"
