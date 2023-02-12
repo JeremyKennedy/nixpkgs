@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals canokeySupport [ canokey-qemu ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
@@ -117,7 +118,8 @@ stdenv.mkDerivation rec {
       revert = true;
     })
   ]
-  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
+  ++ lib.optional stdenv.hostPlatform.isStatic ./aio-find-static-library.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -170,7 +172,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
     ++ lib.optional canokeySupport "--enable-canokey"
-    ++ lib.optional (!pluginsSupport) "--disable-plugins";
+    ++ lib.optional (!pluginsSupport) "--disable-plugins"
+
+    # FIXME: "multiple definition of `strtoll'" with libnbcompat
+    ++ lib.optional stdenv.hostPlatform.isStatic "--static --extra-ldflags=-Wl,--allow-multiple-definition";
 
   dontWrapGApps = true;
 
