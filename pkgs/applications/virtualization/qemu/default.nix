@@ -233,8 +233,12 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
-    ln -s $out/libexec/virtiofsd $out/bin
-    ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+    if [ -f $out/libexec/virtiofsd ]; then
+      ln -s $out/libexec/virtiofsd $out/bin
+    fi
+    if [ -f $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
+      ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+    fi
   '';
 
   passthru = {
