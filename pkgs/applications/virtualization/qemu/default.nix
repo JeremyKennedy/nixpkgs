@@ -117,6 +117,11 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+    # Adds binfmt P support, activated when argv[0] ends with `-binfmt-P`.
+    (fetchpatch {
+      url = "https://salsa.debian.org/qemu-team/qemu/-/raw/master/debian/patches/linux-user-binfmt-P.diff";
+      sha256 = "sha256-oWMF0hbpzskus/1Ga4n1n868qx7PbY6nNjVHLZoOMeA=";
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
   ++ lib.optional stdenv.hostPlatform.isStatic ./aio-find-static-library.patch;
