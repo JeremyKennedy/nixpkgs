@@ -37,6 +37,7 @@
 , doCheck ? false
 , enableDocs ? true
 , enableTools ? true
+, enableBlobs ? true
 , qemu  # for passthru.tests
 }:
 
@@ -149,6 +150,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional enableDocs "--enable-docs"
     ++ lib.optional enableTools "--enable-tools"
+    ++ lib.optional (!enableBlobs) "--disable-install-blobs"
     ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
