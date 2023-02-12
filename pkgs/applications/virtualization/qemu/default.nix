@@ -36,6 +36,7 @@
 , nixosTestRunner ? false
 , doCheck ? false
 , enableDocs ? true
+, enableTools ? true
 , qemu  # for passthru.tests
 }:
 
@@ -138,7 +139,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
-    "--enable-tools"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     # Always use our Meson, not the bundled version, which doesn't
@@ -148,6 +148,7 @@ stdenv.mkDerivation rec {
     "--cpu=${stdenv.hostPlatform.uname.processor}"
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional enableDocs "--enable-docs"
+    ++ lib.optional enableTools "--enable-tools"
     ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
