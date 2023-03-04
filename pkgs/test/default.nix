@@ -51,6 +51,8 @@ with pkgs;
 
   php = recurseIntoAttrs (callPackages ./php {});
 
+  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
+
   rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
@@ -58,6 +60,8 @@ with pkgs;
   vim = callPackage ./vim {};
 
   nixos-functions = callPackage ./nixos-functions {};
+
+  overriding = callPackage ./overriding.nix { };
 
   patch-shebangs = callPackage ./patch-shebangs {};
 

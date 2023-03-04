@@ -11,6 +11,8 @@
 , sha256
 , patches ? []
 , fd
+, ripgrep
+, wezterm
 , firefox
 , thunderbird
 }:
@@ -165,7 +167,6 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ]
-    # TODO: remove libiconv once 1.66 is used to bootstrap
     ++ optionals stdenv.isDarwin [ libiconv Security ]
     ++ optional (!withBundledLLVM) llvmShared;
 
@@ -205,13 +206,15 @@ in stdenv.mkDerivation rec {
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
-    tests = { inherit fd; } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
+    tests = {
+      inherit fd ripgrep wezterm;
+    } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
   };
 
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "A safe, concurrent, practical language";
-    maintainers = with maintainers; [ cstrahan globin havvy ];
+    maintainers = with maintainers; [ cstrahan globin havvy ] ++ teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
   };

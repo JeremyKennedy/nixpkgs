@@ -17,14 +17,15 @@
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.37.1";
+  # Don't forget to update go.d.plugin.nix as well
+  version = "1.38.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-SsrdjFENPkI7Ed1gKt28sygJ5NgZ5un+5baIQ3Kv7yE=";
+    sha256 = "sha256-y+rjqS95JS1PU+iR8c7spcg1UoYCjpzbpunTAgTJ35U=";
     fetchSubmodules = true;
   };
 
@@ -66,7 +67,7 @@ in stdenv.mkDerivation rec {
   # We pick zlib.dev as a simple canary package with pkg-config input.
   disallowedReferences = [ zlib.dev ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''
     ln -s ${go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d

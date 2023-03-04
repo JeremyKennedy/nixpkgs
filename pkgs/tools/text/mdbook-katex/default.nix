@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-katex";
-  version = "0.3.3";
+  version = "0.3.9";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-PmNoux12A6MBlviyCy9kjGUHigBDxCiiqXlwf6Sc76I=";
+    hash = "sha256-FsKHGw/6n/8eCJh1XatNsw3iCzD+siHdJ3i0dNKD5Go=";
   };
 
-  cargoHash = "sha256-YSLJsiIkoeSAh3oUMkbk5jSW0NMdJLB6YsOt1YlGyfs=";
+  cargoHash = "sha256-nyLWbwruzQeyPGkVuMiRCTHtFE+E9nQ57ZMXxqIcLxE=";
 
   OPENSSL_DIR = "${lib.getDev openssl}";
   OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";

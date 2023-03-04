@@ -25,15 +25,21 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.9.17"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.10.4"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-5d/XEkM01SJj9M3e+5qbJrwWX+CU8fb097D45+Hp/Qc=";
+    hash = "sha256-NXsXAyxlhW63vWP7oBh2hh0G+KjmGAZVRSdRUac+lgk=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "distro>=1.5.0,<1.6.0" "distro>=1.5.0" \
+      --replace "cryptography>=3.3.2,<38.0.5" "cryptography>=3.3.2"
+  '';
 
   nativeBuildInputs = [
     flit-core
@@ -62,13 +68,6 @@ with py.pkgs; buildPythonApplication rec {
     mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    sed -i pyproject.toml \
-      -e 's/colorama.*/colorama",/' \
-      -e 's/cryptography.*/cryptography",/' \
-      -e 's/distro.*/distro",/'
-  '';
 
   postInstall = ''
     mkdir -p $out/${python3.sitePackages}/awscli/data

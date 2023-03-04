@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   # Disable compiler warnings that clutter the build log.
   # It seems to be a known issue for Eigen:
   # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
-  NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes -fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
   NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";

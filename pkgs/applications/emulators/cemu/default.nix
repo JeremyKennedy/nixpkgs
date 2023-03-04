@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-25";
+  version = "2.0-26";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-jCr8fOrrW3yBbGpWeGWHNzA4zcAeb6JetFWZEC4VwnA=";
+    hash = "sha256-+y+PJE2biRvuxIwrFVMjmkZyD8/zhHVMw6vzNKlsOZE=";
   };
 
   patches = [

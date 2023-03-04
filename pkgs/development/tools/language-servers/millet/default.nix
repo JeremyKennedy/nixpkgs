@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "millet";
-  version = "0.7.4";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "azdavis";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YTONlTE9cTl0O7EHRVhrPtuGgIUdX8mvdWu352uHbCE=";
+    hash = "sha256-yIOb6AeEpIbKarY4I0X4zq5Gtrv05QLrDlFaBD3x6rw=";
   };
 
-  cargoHash = "sha256-U2bbZZCeY7/Jp7AuAKYcZzDIpIxGbNJrmr2Sr2CMr2A=";
+  cargoHash = "sha256-DIRs+xhcdV74NFjsB1jJYgd8Cu/BmAUcBf58rGAp/yo=";
 
   postPatch = ''
     rm .cargo/config.toml
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A language server for Standard ML";
     homepage = "https://github.com/azdavis/millet";
-    changelog = "https://github.com/azdavis/millet/raw/v${version}/docs/changelog.md";
+    changelog = "https://github.com/azdavis/millet/raw/v${version}/docs/CHANGELOG.md";
     license = [ licenses.mit /* or */ licenses.asl20 ];
     maintainers = with maintainers; [ marsam ];
     mainProgram = "millet-ls";

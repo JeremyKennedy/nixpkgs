@@ -87,10 +87,10 @@ stdenv.mkDerivation rec {
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '') +
-    (if hipSupport then ''
+    (lib.optionalString hipSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
-    '' else "");
+    '');
 
   cmakeFlags =
     [
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
       "-DOPTIX_ROOT_DIR=${optix}"
     ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.

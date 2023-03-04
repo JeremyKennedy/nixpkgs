@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.301.1";
+  version = "2.302.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-GIWuN3/CnA0uZfpo1Gty+5tL2eDXmFyzYFHrRozHwk0=";
+    hash = "sha256-l7kGKhHpE5kEo8QMmwZKnG4cctj2INhnko7KfAXfrQ8=";
   };
 
   nativeBuildInputs = [
@@ -357,7 +357,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse zimbatm ];
     platforms = attrNames runtimeIds;
   };
 }

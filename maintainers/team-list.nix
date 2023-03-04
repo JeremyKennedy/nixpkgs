@@ -81,6 +81,7 @@ with lib.maintainers; {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
       cdepillabout
+      wraithm
     ];
     scope = "Group registration for packages maintained by Bitnomial.";
     shortName = "Bitnomial employees";
@@ -166,6 +167,15 @@ with lib.maintainers; {
     ];
     scope = "Maintain the Cosmopolitan LibC and related programs.";
     shortName = "Cosmopolitan";
+  };
+
+  deepin = {
+    members = [
+      rewine
+    ];
+    scope = "Maintain deepin desktop environment and related packages.";
+    shortName = "DDE";
+    enableFeatureFreezePing = true;
   };
 
   deshaw = {
@@ -301,6 +311,19 @@ with lib.maintainers; {
     scope = "Maintain GNOME desktop environment and platform.";
     shortName = "GNOME";
     enableFeatureFreezePing = true;
+  };
+
+  graalvm-ce = {
+    members = [
+      bandresen
+      hlolli
+      glittershark
+      babariviere
+      ericdallo
+      thiagokokada
+    ];
+    scope = "Maintain GraalVM Community Edition packages.";
+    shortName = "GraalVM-CE";
   };
 
   haskell = {
@@ -689,9 +712,11 @@ with lib.maintainers; {
 
   rust = {
     members = [
-      andir
+      figsoda
       lnl7
       mic92
+      tjni
+      winter
       zowoq
     ];
     scope = "Maintain the Rust compiler toolchain and nixpkgs integration.";

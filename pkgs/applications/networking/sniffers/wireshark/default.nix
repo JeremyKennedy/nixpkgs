@@ -9,7 +9,7 @@
 assert withQt  -> qt5  != null;
 
 let
-  version = "4.0.2";
+  version = "4.0.3";
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "sha256-81kVaZ8vmyjdshEgLUDsiYTlg008kRSDFEpJhLpEQR0=";
+    sha256 = "sha256-bFHhW8wK+5NzTmhtv/NU/9FZ9XC9KQS8u61vP+t+lRE=";
   };
 
   cmakeFlags = [
@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
   ];
 
   # Avoid referencing -dev paths because of debug assertions.
-  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DQT_NO_DEBUG" ];
 
   nativeBuildInputs = [ asciidoctor bison cmake flex makeWrapper pkg-config python3 perl ]
     ++ lib.optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
   buildInputs = [
     gettext pcre2 libpcap lua5 libssh nghttp2 openssl libgcrypt
     libgpg-error gnutls geoip c-ares glib zlib
-  ] ++ lib.optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
+  ] ++ lib.optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools qtwayland ])
     ++ lib.optionals stdenv.isLinux  [ libcap libnl ]
     ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
     ++ lib.optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);

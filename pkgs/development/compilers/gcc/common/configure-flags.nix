@@ -25,7 +25,6 @@
 , langJit
 }:
 
-assert cloog != null -> lib.versionOlder version "5";
 assert langJava -> lib.versionOlder version "7";
 
 # Note [Windows Exception Handling]
@@ -119,7 +118,7 @@ let
       #  or ${with_sysroot}${native_system_header_dir}
       # While native build (build == host == target) uses passed headers
       # path as is:
-      #    ${native_system_header_dir}
+      #    ${with_build_sysroot}${native_system_header_dir}
       #
       # Nixpkgs uses flat directory structure for both native and cross
       # cases. As a result libc headers don't get found for cross case
@@ -188,7 +187,7 @@ let
 
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
-    ++ lib.optionals (cloog != null) [
+    ++ lib.optionals (lib.versionOlder version "5" && cloog != null) [
       "--with-cloog=${cloog}"
       "--disable-cloog-version-check"
       "--enable-cloog-backend=isl"

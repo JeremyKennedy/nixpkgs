@@ -88,19 +88,19 @@ let
       updateManyAttrsByPath;
     inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
-      optional optionals toList range partition zipListsWith zipLists
+      optional optionals toList range replicate partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
       drop sublist last init crossLists unique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy';
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
-      concatImapStringsSep makeSearchPath makeSearchPathOutput
+      concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs
       isStorePath isStringLike
       isValidPosixName toShellVar toShellVars
-      escapeRegex escapeXML replaceChars lowerChars
+      escapeRegex escapeURL escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion

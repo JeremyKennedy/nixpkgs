@@ -4,7 +4,6 @@
 , rust
 , stdenv
 , callPackage
-, cacert
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
@@ -124,7 +123,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       inherit cargo cargo-auditable;
     })
   ] ++ [
-    cacert
     cargoBuildHook
     (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
@@ -155,8 +153,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   doCheck = args.doCheck or true;
 
   strictDeps = true;
-
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
 
   meta = {
     # default to Rust's platforms

@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "0.26.1";
+  version = "0.27.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7.1";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
-    rev = "v${version}";
-    hash = "sha256-M6ZaYTOBAwLogWPafSnBYw3rUry+sS9VwQWAM9tDfr8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pXttGvnApYuwkWU7kCDNjw0rjHD5AyUvujfvpDVjgxM=";
   };
 
   propagatedBuildInputs = [
@@ -91,6 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
+    changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ malo ];
   };

@@ -53,11 +53,13 @@
   ./hardware/cpu/intel-sgx.nix
   ./hardware/device-tree.nix
   ./hardware/digitalbitbox.nix
+  ./hardware/flipperzero.nix
   ./hardware/flirc.nix
   ./hardware/gkraken.nix
   ./hardware/gpgsmartcards.nix
   ./hardware/hackrf.nix
   ./hardware/i2c.nix
+  ./hardware/keyboard/qmk.nix
   ./hardware/keyboard/teck.nix
   ./hardware/keyboard/uhk.nix
   ./hardware/keyboard/zsa.nix
@@ -195,6 +197,7 @@
   ./programs/mdevctl.nix
   ./programs/mepo.nix
   ./programs/mininet.nix
+  ./programs/miriway.nix
   ./programs/mosh.nix
   ./programs/msmtp.nix
   ./programs/mtr.nix
@@ -214,6 +217,7 @@
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
   ./programs/proxychains.nix
+  ./programs/qdmr.nix
   ./programs/qt5ct.nix
   ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
@@ -221,6 +225,7 @@
   ./programs/seahorse.nix
   ./programs/sedutil.nix
   ./programs/shadow.nix
+  ./programs/sharing.nix
   ./programs/singularity.nix
   ./programs/skim.nix
   ./programs/slock.nix
@@ -311,6 +316,7 @@
   ./services/audio/snapserver.nix
   ./services/audio/spotifyd.nix
   ./services/audio/squeezelite.nix
+  ./services/audio/tts.nix
   ./services/audio/ympd.nix
   ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix
@@ -695,6 +701,7 @@
   ./services/monitoring/arbtt.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
+  ./services/monitoring/cockpit.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/das_watchdog.nix
   ./services/monitoring/datadog-agent.nix
@@ -856,6 +863,7 @@
   ./services/networking/i2pd.nix
   ./services/networking/icecream/daemon.nix
   ./services/networking/icecream/scheduler.nix
+  ./services/networking/imaginary.nix
   ./services/networking/inspircd.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
@@ -907,6 +915,7 @@
   ./services/networking/ndppd.nix
   ./services/networking/nebula.nix
   ./services/networking/netbird.nix
+  ./services/networking/networkd-dispatcher.nix
   ./services/networking/networkmanager.nix
   ./services/networking/nextdns.nix
   ./services/networking/nftables.nix
@@ -1043,6 +1052,8 @@
   ./services/search/hound.nix
   ./services/search/kibana.nix
   ./services/search/meilisearch.nix
+  ./services/search/opensearch.nix
+  ./services/search/qdrant.nix
   ./services/search/solr.nix
   ./services/security/aesmd.nix
   ./services/security/certmgr.nix
@@ -1158,6 +1169,7 @@
   ./services/web-apps/moodle.nix
   ./services/web-apps/netbox.nix
   ./services/web-apps/nextcloud.nix
+  ./services/web-apps/nextcloud-notify_push.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/nifi.nix
   ./services/web-apps/node-red.nix
@@ -1303,6 +1315,7 @@
   ./system/boot/systemd/logind.nix
   ./system/boot/systemd/nspawn.nix
   ./system/boot/systemd/oomd.nix
+  ./system/boot/systemd/repart.nix
   ./system/boot/systemd/shutdown.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
@@ -1363,6 +1376,7 @@
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix
   ./virtualisation/lxd.nix
+  ./virtualisation/multipass.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix
   ./virtualisation/openstack-options.nix

@@ -64,6 +64,12 @@ let
         extraPrefix = "src/3rdparty/";
         hash = "sha256-MZGYeMdGzwypfKoSUaa56K3inbcGRx7he/+AFyk5ekA=";
       })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/7ae178a617d1e0eceb742557e63721af949bd28a/qt5/qt5-webengine-gcc12.patch";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+        hash = "sha256-s4GsGMJTBNWw2gTJuIEP3tqT82AmTsR2mbj59m2p6rM=";
+      })
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
@@ -174,10 +180,11 @@ let
           cp -r ${srcs.catapult} src/3rdparty/chromium/third_party/catapult
         '';
         inherit (darwin) cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libunwind;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
-          ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication;
+          ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication
+          MediaPlayer MediaAccessibility SecurityInterface Vision CoreML;
         libobjc = darwin.apple_sdk_11_0.objc4;
       };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
@@ -203,7 +210,8 @@ let
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
       qmake = makeSetupHook {
-        deps = [ self.qtbase.dev ];
+        name = "qmake-hook";
+        propagatedBuildInputs = [ self.qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
@@ -211,7 +219,8 @@ let
       } ../hooks/qmake-hook.sh;
 
       wrapQtAppsHook = makeSetupHook {
-        deps = [ self.qtbase.dev buildPackages.makeWrapper ]
+        name = "wrap-qt5-apps-hook";
+        propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };

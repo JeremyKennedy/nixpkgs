@@ -92,6 +92,7 @@ in {
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
+  binary-cache = handleTest ./binary-cache.nix {};
   bind = handleTest ./bind.nix {};
   bird = handleTest ./bird.nix {};
   bitcoind = handleTest ./bitcoind.nix {};
@@ -126,6 +127,7 @@ in {
   cfssl = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cfssl.nix {};
   charliecloud = handleTest ./charliecloud.nix {};
   chromium = (handleTestOn ["aarch64-linux" "x86_64-linux"] ./chromium.nix {}).stable or {};
+  chrony-ptp = handleTestOn ["aarch64-linux" "x86_64-linux"] ./chrony-ptp.nix {};
   cinnamon = handleTest ./cinnamon.nix {};
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
@@ -133,8 +135,10 @@ in {
   cloud-init-hostname = handleTest ./cloud-init-hostname.nix {};
   cloudlog = handleTest ./cloudlog.nix {};
   cntr = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cntr.nix {};
+  cockpit = handleTest ./cockpit.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   collectd = handleTest ./collectd.nix {};
+  connman = handleTest ./connman.nix {};
   consul = handleTest ./consul.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
   containers-custom-pkgs.nix = handleTest ./containers-custom-pkgs.nix {};
@@ -224,6 +228,7 @@ in {
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
+  forgejo = handleTest ./gitea.nix { giteaPackage = pkgs.forgejo; };
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   freshrss-sqlite = handleTest ./freshrss-sqlite.nix {};
@@ -237,7 +242,7 @@ in {
   geth = handleTest ./geth.nix {};
   ghostunnel = handleTest ./ghostunnel.nix {};
   gitdaemon = handleTest ./gitdaemon.nix {};
-  gitea = handleTest ./gitea.nix {};
+  gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix {};
@@ -245,6 +250,7 @@ in {
   gnome = handleTest ./gnome.nix {};
   gnome-flashback = handleTest ./gnome-flashback.nix {};
   gnome-xorg = handleTest ./gnome-xorg.nix {};
+  gnupg = handleTest ./gnupg.nix {};
   go-neb = handleTest ./go-neb.nix {};
   gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
@@ -363,6 +369,7 @@ in {
   login = handleTest ./login.nix {};
   logrotate = handleTest ./logrotate.nix {};
   loki = handleTest ./loki.nix {};
+  luks = handleTest ./luks.nix {};
   lvm2 = handleTest ./lvm2 {};
   lxd = handleTest ./lxd.nix {};
   lxd-nftables = handleTest ./lxd-nftables.nix {};
@@ -396,6 +403,7 @@ in {
   minidlna = handleTest ./minidlna.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
+  miriway = handleTest ./miriway.nix {};
   misc = handleTest ./misc.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
   mod_perl = handleTest ./mod_perl.nix {};
@@ -409,8 +417,11 @@ in {
   mpd = handleTest ./mpd.nix {};
   mpv = handleTest ./mpv.nix {};
   mtp = handleTest ./mtp.nix {};
+  multipass = handleTest ./multipass.nix {};
   mumble = handleTest ./mumble.nix {};
-  musescore = handleTest ./musescore.nix {};
+  # Fails on aarch64-linux at the PDF creation step - need to debug this on an
+  # aarch64 machine..
+  musescore = handleTestOn ["x86_64-linux"] ./musescore.nix {};
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
   mxisd = handleTest ./mxisd.nix {};
@@ -422,10 +433,8 @@ in {
   nagios = handleTest ./nagios.nix {};
   nar-serve = handleTest ./nar-serve.nix {};
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
-  nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
   nat.nftables.firewall = handleTest ./nat.nix { withFirewall = true; nftables = true; };
-  nat.nftables.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; nftables = true; };
   nat.nftables.standalone = handleTest ./nat.nix { withFirewall = false; nftables = true; };
   nats = handleTest ./nats.nix {};
   navidrome = handleTest ./navidrome.nix {};
@@ -481,10 +490,12 @@ in {
   ombi = handleTest ./ombi.nix {};
   openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
+  opensearch = discoverTests (import ./opensearch.nix);
   openresty-lua = handleTest ./openresty-lua.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
   opensmtpd-rspamd = handleTest ./opensmtpd-rspamd.nix {};
   openssh = handleTest ./openssh.nix {};
+  octoprint = handleTest ./octoprint.nix {};
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
   openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   opentabletdriver = handleTest ./opentabletdriver.nix {};
@@ -511,7 +522,6 @@ in {
   peering-manager = handleTest ./web-apps/peering-manager.nix {};
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
   pgadmin4 = handleTest ./pgadmin4.nix {};
-  pgadmin4-standalone = handleTest ./pgadmin4-standalone.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   phosh = handleTest ./phosh.nix {};
@@ -636,6 +646,7 @@ in {
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-coredump = handleTest ./systemd-coredump.nix {};
   systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
+  systemd-credentials-tpm2 = handleTest ./systemd-credentials-tpm2.nix {};
   systemd-escaping = handleTest ./systemd-escaping.nix {};
   systemd-initrd-btrfs-raid = handleTest ./systemd-initrd-btrfs-raid.nix {};
   systemd-initrd-luks-fido2 = handleTest ./systemd-initrd-luks-fido2.nix {};
@@ -646,6 +657,7 @@ in {
   systemd-initrd-shutdown = handleTest ./systemd-shutdown.nix { systemdStage1 = true; };
   systemd-initrd-simple = handleTest ./systemd-initrd-simple.nix {};
   systemd-initrd-swraid = handleTest ./systemd-initrd-swraid.nix {};
+  systemd-initrd-vconsole = handleTest ./systemd-initrd-vconsole.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
@@ -657,6 +669,7 @@ in {
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   systemd-oomd = handleTest ./systemd-oomd.nix {};
   systemd-portabled = handleTest ./systemd-portabled.nix {};
+  systemd-repart = handleTest ./systemd-repart.nix {};
   systemd-shutdown = handleTest ./systemd-shutdown.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-user-tmpfiles-rules = handleTest ./systemd-user-tmpfiles-rules.nix {};
@@ -750,6 +763,7 @@ in {
   zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
+  zram-generator = handleTest ./zram-generator.nix {};
   zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
 }
