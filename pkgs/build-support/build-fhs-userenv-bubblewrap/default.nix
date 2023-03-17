@@ -102,7 +102,7 @@ let
     blacklist=(/nix /dev /proc /etc)
     ro_mounts=()
     symlinks=()
-    etc_blacklist=()
+    etc_ignored=()
     for i in ${env}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
@@ -125,12 +125,12 @@ let
           continue
         fi
         ro_mounts+=(--ro-bind "$i" "/etc$path")
-        etc_blacklist+=("/etc$path")
+        etc_ignored+=("/etc$path")
       done
     fi
 
     for i in ${etcBindEntries}; do
-      if [[ "''${etc_blacklist[@]}" =~ "$i" ]]; then
+      if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
       if [[ -L $i ]]; then
