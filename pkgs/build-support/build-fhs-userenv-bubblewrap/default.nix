@@ -69,8 +69,7 @@ let
       "ca-certificates"
       "pki"
     ];
-  in concatStringsSep " "
-    (map (file: "\"/etc/${file}\"") files);
+  in map (path: "/etc/${path}") files;
 
   # Create this on the fly instead of linking from /nix
   # The container might have to modify it and re-run ldconfig if there are
@@ -129,7 +128,7 @@ let
       done
     fi
 
-    for i in ${etcBindEntries}; do
+    for i in ${lib.escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
