@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, haskell }:
 
 let
   inherit (lib)
@@ -132,13 +132,12 @@ rec {
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     , meta ? { }
+    , allowSubstitutes ? false
+    , preferLocalBuild ? true
     }:
     runCommand name
-      { inherit text executable checkPhase meta;
+      { inherit text executable checkPhase meta allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
-        # Pointless to do this on a remote machine.
-        preferLocalBuild = true;
-        allowSubstitutes = false;
       }
       ''
         target=$out${lib.escapeShellArg destination}
@@ -324,6 +323,8 @@ rec {
       inherit name;
       executable = true;
       destination = "/bin/${name}";
+      allowSubstitutes = true;
+      preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
         set -o errexit
@@ -341,7 +342,9 @@ rec {
         if checkPhase == null then ''
           runHook preCheck
           ${stdenv.shellDryRun} "$target"
-          ${shellcheck.unwrapped}/bin/shellcheck "$target"
+          # use shellcheck which does not include docs
+          # pandoc takes long to build and documentation isn't needed for in nixpkgs usage
+          ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
           runHook postCheck
         ''
         else checkPhase;
@@ -509,8 +512,8 @@ rec {
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir $i $out
-        done 2>&1 | sed 's/^/symlinkJoin: warning: keeping existing file: /'
+          ${lndir}/bin/lndir -silent $i $out
+        done
         ${postBuild}
       '';
 

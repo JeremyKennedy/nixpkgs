@@ -17,7 +17,9 @@
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
-, cudaSupport ? false, cudaPackages ? {}
+, cudaSupport ? false
+, cudaPackages ? { }
+, cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
 , mklSupport ? false, mkl
 , tensorboardSupport ? true
 # XLA without CUDA is broken
@@ -30,7 +32,27 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
+  originalStdenv = stdenv;
+in
+let
+  # Tensorflow looks at many toolchain-related variables which may diverge.
+  #
+  # Toolchain for cuda-enabled builds.
+  # We want to achieve two things:
+  # 1. NVCC should use a compatible back-end (e.g. gcc11 for cuda11)
+  # 2. Normal C++ files should be compiled with the same toolchain,
+  #    to avoid potential weird dynamic linkage errors at runtime.
+  #    This may not be necessary though
+  #
+  # Toolchain for Darwin:
+  # clang 7 fails to emit a symbol for
+  # __ZN4llvm11SmallPtrSetIPKNS_10AllocaInstELj8EED1Ev in any of the
+  # translation units, so the build fails at link time
+  stdenv =
+    if cudaSupport then cudaPackages.backendStdenv
+    else if originalStdenv.isDarwin then llvmPackages_11.stdenv
+    else originalStdenv;
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
 in
 
 assert cudaSupport -> cudatoolkit != null
@@ -42,6 +64,7 @@ assert ! (stdenv.isDarwin && cudaSupport);
 let
   withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
 
+  # FIXME: migrate to redist cudaPackages
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-merged";
     paths = [
@@ -54,10 +77,13 @@ let
     ];
   };
 
+  # Tensorflow expects bintools at hard-coded paths, e.g. /usr/bin/ar
+  # The only way to overcome that is to set GCC_HOST_COMPILER_PREFIX,
+  # but that path must contain cc as well, so we merge them
   cudatoolkit_cc_joined = symlinkJoin {
-    name = "${cudatoolkit.cc.name}-merged";
+    name = "${stdenv.cc.name}-merged";
     paths = [
-      cudatoolkit.cc
+      stdenv.cc
       binutils.bintools # for ar, dwp, nm, objcopy, objdump, strip
     ];
   };
@@ -114,14 +140,14 @@ let
       (fetchpatch {
         name = "tensorflow-rules_cc-libtool-path.patch";
         url = "https://github.com/bazelbuild/rules_cc/commit/8c427ab30bf213630dc3bce9d2e9a0e29d1787db.diff";
-        sha256 = "sha256-C4v6HY5+jm0ACUZ58gBPVejCYCZfuzYKlHZ0m2qDHCk=";
+        hash = "sha256-C4v6HY5+jm0ACUZ58gBPVejCYCZfuzYKlHZ0m2qDHCk=";
       })
 
       # https://github.com/bazelbuild/rules_cc/pull/124
       (fetchpatch {
         name = "tensorflow-rules_cc-install_name_tool-path.patch";
         url = "https://github.com/bazelbuild/rules_cc/commit/156497dc89100db8a3f57b23c63724759d431d05.diff";
-        sha256 = "sha256-NES1KeQmMiUJQVoV6dS4YGRxxkZEjOpFSCyOq9HZYO0=";
+        hash = "sha256-NES1KeQmMiUJQVoV6dS4YGRxxkZEjOpFSCyOq9HZYO0=";
       })
     ];
     postPatch = "popd";
@@ -173,12 +199,7 @@ let
     '';
   }) else _bazel-build;
 
-  _bazel-build = (buildBazelPackage.override (lib.optionalAttrs stdenv.isDarwin {
-    # clang 7 fails to emit a symbol for
-    # __ZN4llvm11SmallPtrSetIPKNS_10AllocaInstELj8EED1Ev in any of the
-    # translation units, so the build fails at link time
-    stdenv = llvmPackages_11.stdenv;
-  })) {
+  _bazel-build = buildBazelPackage.override { inherit stdenv; } {
     name = "${pname}-${version}";
     bazel = bazel_5;
 
@@ -209,12 +230,13 @@ let
       flatbuffers-core
       giflib
       grpc
-      icu
+      # Necessary to fix the "`GLIBCXX_3.4.30' not found" error
+      (icu.override { inherit stdenv; })
       jsoncpp
       libjpeg_turbo
       libpng
       lmdb-core
-      pybind11
+      (pybind11.overridePythonAttrs (_: { inherit stdenv; }))
       snappy
       sqlite
     ] ++ lib.optionals cudaSupport [
@@ -299,9 +321,11 @@ let
 
     TF_NEED_CUDA = tfFeature cudaSupport;
     TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
+    TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
+
+    # Needed even when we override stdenv: e.g. for ar
     GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
-    GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
-    TF_CUDA_COMPUTE_CAPABILITIES = builtins.concatStringsSep "," cudaFlags.cudaRealArches;
+    GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/cc";
 
     postPatch = ''
       # bazel 3.3 should work just as well as bazel 3.1
@@ -361,7 +385,7 @@ let
     ]
     ++ lib.optionals (mklSupport) [ "--config=mkl" ];
 
-    bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
+    bazelTargets = [ "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow" ];
 
     removeRulesCC = false;
     # Without this Bazel complaints about sandbox violations.
@@ -421,9 +445,30 @@ let
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = licenses.asl20;
-      maintainers = with maintainers; [ jyp abbradar ];
+      maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
       broken = !(xlaSupport -> cudaSupport);
+      knownVulnerabilities = [
+        "CVE-2023-27579"
+        "CVE-2023-25801"
+        "CVE-2023-25676"
+        "CVE-2023-25675"
+        "CVE-2023-25674"
+        "CVE-2023-25673"
+        "CVE-2023-25671"
+        "CVE-2023-25670"
+        "CVE-2023-25669"
+        "CVE-2023-25668"
+        "CVE-2023-25667"
+        "CVE-2023-25665"
+        "CVE-2023-25666"
+        "CVE-2023-25664"
+        "CVE-2023-25663"
+        "CVE-2023-25662"
+        "CVE-2023-25660"
+        "CVE-2023-25659"
+        "CVE-2023-25658"
+      ];
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s

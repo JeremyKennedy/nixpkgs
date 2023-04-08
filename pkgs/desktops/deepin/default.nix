@@ -18,6 +18,7 @@ let
     dtkcore = callPackage ./library/dtkcore { };
     dtkgui = callPackage ./library/dtkgui { };
     dtkwidget = callPackage ./library/dtkwidget { };
+    deepin-pdfium = callPackage ./library/deepin-pdfium { };
     qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
     qt5integration = callPackage ./library/qt5integration { };
     deepin-wayland-protocols = callPackage ./library/deepin-wayland-protocols { };
@@ -28,8 +29,10 @@ let
     gio-qt = callPackage ./library/gio-qt { };
     image-editor = callPackage ./library/image-editor { };
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
+    util-dfm = callPackage ./library/util-dfm { };
 
     #### CORE
+    dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
     dde-polkit-agent = callPackage ./core/dde-polkit-agent { };
     dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
@@ -39,12 +42,14 @@ let
     deepin-calculator = callPackage ./apps/deepin-calculator { };
     deepin-camera = callPackage ./apps/deepin-camera { };
     deepin-compressor = callPackage ./apps/deepin-compressor { };
+    deepin-clone = callPackage ./apps/deepin-clone { };
     deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
     deepin-movie-reborn = callPackage ./apps/deepin-movie-reborn { };
     deepin-music = callPackage ./apps/deepin-music { };
     deepin-picker = callPackage ./apps/deepin-picker { };
+    deepin-shortcut-viewer = callPackage ./apps/deepin-shortcut-viewer { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
     deepin-reader = callPackage ./apps/deepin-reader { };
     deepin-voice-note = callPackage ./apps/deepin-voice-note { };

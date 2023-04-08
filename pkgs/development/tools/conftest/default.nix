@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.39.1";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CSvsHp89FugOQ0PLb26PH1nnw5bOVk7bU5q3lJh0HiU=";
+    hash = "sha256-4rAu81f2ZkYbK+DQHXlAwFexauWWEo+XaPfcrP2/pbQ=";
   };
-  vendorHash = "sha256-HMHG7vGfic9ZseTyM9Fs2fFsJzMTKjHpz67I+WkMJXk=";
+  vendorHash = "sha256-4geHr4bbvnKViC754YznhR33wXbkUxwlV5NNjwhpssY=";
 
   ldflags = [
     "-s"

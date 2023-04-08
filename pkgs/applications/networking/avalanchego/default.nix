@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "avalanchego";
-  version = "1.9.9";
+  version = "1.9.16";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xaFSqcVVRXy1JYOWGnzoPKLnnxk9NgZ3FIZR3qydOLM=";
+    hash = "sha256-xskLRQLjLSXXHK39h7e8knP5OtIbcllF7OvefPpIQCU=";
   };
 
-  vendorHash = "sha256-ZCIy1cQ62MNLor39Pi0/nU6KsbgG1z7SowMpj9tXLT8=";
+  vendorHash = "sha256-lyXP1mkJmHpHHMtH0rXa0orf5u+AbZ4H/MJXt8o49ng=";
   # go mod vendor has a bug, see: https://github.com/golang/go/issues/57529
   proxyVendor = true;
 

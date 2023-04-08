@@ -1,10 +1,11 @@
 { lib
-, mkDerivation
+, stdenv
 , variant ? "standalone"
-, fetchFromGitHub
+, fetchzip
 , cmake
 , pkg-config
 , ninja
+, wrapQtAppsHook
 , opencv3
 , openexr
 , graphicsmagick
@@ -16,15 +17,8 @@
 , curl
 , gimp ? null
 , gmic
-, cimg
 , qtbase
 , qttools
-, writeShellScript
-, common-updater-scripts
-, gnugrep
-, gnused
-, coreutils
-, jq
 , nix-update-script
 , gimpPlugins
 }:
@@ -50,26 +44,26 @@ assert lib.assertMsg (builtins.hasAttr variant variants) "gmic-qt variant “${v
 
 assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps or []) "gmic-qt variant “${variant}” is missing one of its dependencies.";
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.1";
+  version = "3.2.3";
 
-  src = fetchFromGitHub {
-    owner = "c-koi";
-    repo = "gmic-qt";
-    rev = "v.${version}";
-    sha256 = "sha256-z+GtYLBcHVufXwdeSd8WKmPmU1+/EKMv26kNaEgyt5w=";
+  src = fetchzip {
+    url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
+    hash = "sha256-OTdf9BtaRak/jv1GknidDAkdxf99saBqj6EMoRJDIuo=";
   };
+
+  sourceRoot = "source/gmic-qt";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     ninja
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     gmic
-    cimg
     qtbase
     qttools
     fftw
@@ -85,7 +79,8 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
-    "-DENABLE_SYSTEM_GMIC:BOOL=ON"
+    "-DENABLE_SYSTEM_GMIC=ON"
+    "-DENABLE_DYNAMIC_LINKING=ON"
   ];
 
   postPatch = ''
@@ -108,11 +103,10 @@ mkDerivation rec {
   };
 
   meta = with lib; {
-    # Broken since 3.2.0 update, cannot handle system gmic and cimg.
-    broken = true;
     description = variants.${variant}.description;
     homepage = "http://gmic.eu/";
     license = licenses.gpl3Plus;
+    maintainers = [ maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }
