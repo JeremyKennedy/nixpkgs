@@ -31,6 +31,7 @@ let
 
   # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
   # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
+  # "text/html" is implicitly included in {brotli,gzip,zstd}_types
   compressMimeTypes = [
     "application/atom+xml"
     "application/geo+json"
@@ -55,7 +56,6 @@ let
     "text/calendar"
     "text/css"
     "text/csv"
-    "text/html"
     "text/javascript"
     "text/markdown"
     "text/plain"
@@ -318,7 +318,7 @@ let
 
         listenString = { addr, port, ssl, extraParameters ? [], ... }:
           # UDP listener for QUIC transport protocol.
-          (if ssl && vhost.quic then "
+          (optionalString (ssl && vhost.quic) ("
             listen ${addr}:${toString port} quic "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
@@ -326,7 +326,7 @@ let
             let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
                 isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
             in filter isCompatibleParameter extraParameters))
-          + ";" else "")
+          + ";"))
           + "
 
             listen ${addr}:${toString port} "

@@ -1,6 +1,7 @@
 { stdenv
 , cacert
 , lib
+, writeCBin
 }:
 
 args@{
@@ -75,6 +76,28 @@ let
         ${lib.strings.concatStringsSep " " additionalFlags} \
         ${lib.strings.concatStringsSep " " targets}
     '';
+  # we need this to chmod dangling symlinks on darwin, gnu coreutils refuses to do so:
+  # chmod: cannot operate on dangling symlink '$symlink'
+  chmodder = writeCBin "chmodder" ''
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
+    #include <errno.h>
+    #include <string.h>
+
+    int main(int argc, char** argv) {
+      mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+      if (argc != 2) {
+        fprintf(stderr, "usage: chmodder file");
+        exit(EXIT_FAILURE);
+      }
+      if (lchmod(argv[1], mode) != 0) {
+        fprintf(stderr, "failed to lchmod '%s': %s", argv[0], strerror(errno));
+        exit(EXIT_FAILURE);
+      }
+    }
+  '';
 in
 stdenv.mkDerivation (fBuildAttrs // {
 
@@ -116,7 +139,7 @@ stdenv.mkDerivation (fBuildAttrs // {
       runHook postBuild
     '';
 
-    installPhase = fFetchAttrs.installPhase or ''
+    installPhase = fFetchAttrs.installPhase or (''
       runHook preInstall
 
       # Remove all built in external workspaces, Bazel will recreate them when building
@@ -149,6 +172,10 @@ stdenv.mkDerivation (fBuildAttrs // {
         new_target="$(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,")"
         rm "$symlink"
         ln -sf "$new_target" "$symlink"
+    '' + lib.optionalString stdenv.isDarwin ''
+        # on linux symlink permissions cannot be modified, so we modify those on darwin to match the linux ones
+        ${chmodder}/bin/chmodder "$symlink"
+    '' + ''
       done
 
       echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
@@ -156,7 +183,7 @@ stdenv.mkDerivation (fBuildAttrs // {
       (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
       runHook postInstall
-    '';
+    '');
 
     dontFixup = true;
     allowedRequisites = [];
