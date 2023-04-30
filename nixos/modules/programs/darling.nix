@@ -1,24 +1,19 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
-{
+let
+  cfg = config.programs.darling;
+in {
   options = {
     programs.darling = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
-          Whether to set up Darling, a Darwin/macOS compatibility layer
-          for Linux.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "Darling, a Darwin/macOS compatibility layer for Linux");
+      package = mkPackageOptionMD pkgs "darling" {};
     };
   };
 
-  config = mkIf config.programs.darling.enable {
+  config = mkIf cfg.enable {
     security.wrappers.darling = {
-      source = "${pkgs.darling}/bin/darling";
+      source = lib.getExe cfg.package;
       owner = "root";
       group = "root";
       setuid = true;
