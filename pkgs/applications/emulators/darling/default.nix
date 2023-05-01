@@ -105,49 +105,16 @@ let
   ];
 in stdenv.mkDerivation {
   pname = "darling";
-  version = "unstable-2023-04-26";
+  version = "unstable-2023-05-01";
 
   src = fetchFromGitHub {
     owner = "darlinghq";
     repo = "darling";
-    rev = "410e215184d85b78edd7dbac911a2d398b1def98";
+    rev = "565f9639caf1d7681455b2e2df1fbc79a6db35dc";
     fetchSubmodules = true;
-    hash = "sha256-dt6uyAMRAYMGyVxh8uNvRdNdHY5GzU4Hv0/m+mseuao=";
+    hash = "sha256-xEZ1mt0IimTLY3e/UqITtOb4XjgcuQbEUNw9dsiew6E=";
   };
 
-  patches = [
-    # Fixes incorrect assumption during ELF parsing
-    # https://github.com/darlinghq/darling/pull/1355
-    (fetchpatch {
-      url = "https://github.com/darlinghq/darling/commit/8fa8c70d7db7db4be140ecb0758f78d13e72de2a.patch";
-      hash = "sha256-gxXeNNutvEplpX8Wj2Sd17BxBWds+fmYo4vxs2Ip7vk=";
-    })
-
-    # Removes libm's reference to /nix/store
-    # https://github.com/darlinghq/darling/pull/1358
-    (fetchpatch {
-      url = "https://github.com/darlinghq/darling/commit/ce466ff2964e0ad17e960d98e3b08d16700d0dac.patch";
-      hash = "sha256-X1AIvphz1R1KZfyzNBSJnHW4Sml+qm6l5D/8R0h0Pco=";
-    })
-
-    # Fixes nano sysconfdir inside the sandbox
-    # https://github.com/darlinghq/darling-nano/pull/1
-    (fetchpatch {
-      url = "https://github.com/darlinghq/darling-nano/commit/37841db50b9d19cc97c9f87c8487090cf9b50580.patch";
-      hash = "sha256-7I9sblPqna3EHTJvvZi2yUk2O4RTNtttU2Q8dhfd0QU=";
-      stripLen = 1;
-      extraPrefix = "src/external/nano/";
-    })
-
-    # Allows pinning the xdg-user-dir executable
-    # https://github.com/darlinghq/darlingserver/pull/10
-    (fetchpatch {
-      url = "https://github.com/darlinghq/darlingserver/commit/21e3c369049ea0b44dd4f26a42e407b3dda4719f.patch";
-      hash = "sha256-DHYCJ2CnZFphhkoIIN71Bd/NeKSpgtM+4RMzN5GzXB0=";
-      stripLen = 1;
-      extraPrefix = "src/external/darlingserver/";
-    })
-  ];
 
   postPatch = ''
     # We have to be careful - Patching everything indiscriminately
