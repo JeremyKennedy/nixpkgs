@@ -41,6 +41,8 @@ final: prev: {
     ];
   };
 
+  "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli;
+
   "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override (oldAttrs: {
     nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
       glib
@@ -349,6 +351,12 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = let
       patches = [
+        # Needed to fix packages with DOS line-endings after above patch - PR svanderburg/node2nix#314
+        (fetchpatch {
+          name = "convert-crlf-for-script-bin-files.patch";
+          url = "https://github.com/svanderburg/node2nix/commit/91aa511fe7107938b0409a02ab8c457a6de2d8ca.patch";
+          hash = "sha256-ISiKYkur/o8enKDzJ8mQndkkSC4yrTNlheqyH+LiXlU=";
+        })
         # fix nodejs attr names
         (fetchpatch {
           url = "https://github.com/svanderburg/node2nix/commit/3b63e735458947ef39aca247923f8775633363e5.patch";
@@ -618,6 +626,10 @@ final: prev: {
           inherit (final) vega-lite;
         };
       };
+  };
+
+  volar = final."@volar/vue-language-server".override {
+    name = "volar";
   };
 
   wavedrom-cli = prev.wavedrom-cli.override {

@@ -130,7 +130,7 @@ let
           ${concatStringsSep " \\\n" ([ "-f qcow2" ]
           ++ optional (cfg.useBootLoader && cfg.useDefaultFilesystems) "-F qcow2 -b ${systemImage}/nixos.qcow2"
           ++ optional (!(cfg.useBootLoader && cfg.useDefaultFilesystems)) "-o size=${toString config.virtualisation.diskSize}M"
-          ++ [ "$NIX_DISK_IMAGE" ])}
+          ++ [ ''"$NIX_DISK_IMAGE"'' ])}
           echo "Virtualisation disk image created."
       fi
 
@@ -169,18 +169,26 @@ let
       # Create a directory for exchanging data with the VM.
       mkdir -p "$TMPDIR/xchg"
 
-      ${lib.optionalString cfg.useBootLoader
+      ${lib.optionalString cfg.useEFIBoot
       ''
+        # Expose EFI variables, it's useful even when we are not using a bootloader (!).
+        # We might be interested in having EFI variable storage present even if we aren't booting via UEFI, hence
+        # no guard against `useBootLoader`.  Examples:
+        # - testing PXE boot or other EFI applications
+        # - directbooting LinuxBoot, which `kexec()s` into a UEFI environment that can boot e.g. Windows
         NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${config.system.name}-efi-vars.fd}")
-
-        ${lib.optionalString cfg.useEFIBoot
-        ''
-          # VM needs writable EFI vars
-          if ! test -e "$NIX_EFI_VARS"; then
-            cp ${systemImage}/efi-vars.fd "$NIX_EFI_VARS"
-            chmod 0644 "$NIX_EFI_VARS"
-          fi
-        ''}
+        # VM needs writable EFI vars
+        if ! test -e "$NIX_EFI_VARS"; then
+        ${if cfg.useBootLoader then
+            # We still need the EFI var from the make-disk-image derivation
+            # because our "switch-to-configuration" process might
+            # write into it and we want to keep this data.
+            ''cp ${systemImage}/efi-vars.fd "$NIX_EFI_VARS"''
+            else
+            ''cp ${cfg.efi.variables} "$NIX_EFI_VARS"''
+          }
+          chmod 0644 "$NIX_EFI_VARS"
+        fi
       ''}
 
       cd "$TMPDIR"
