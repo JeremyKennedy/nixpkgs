@@ -201,7 +201,7 @@ in stdenv.mkDerivation {
 
     mkdir -p $sdk/bin
     cp src/external/cctools-port/cctools/ld64/src/*-ld $sdk/bin
-    cp src/external/cctools-port/cctools/ar/*-ar $sdk/bin
+    cp src/external/cctools-port/cctools/ar/*-{ar,ranlib} $sdk/bin
   '';
 
   postFixup = ''
