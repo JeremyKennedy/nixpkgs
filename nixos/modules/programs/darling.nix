@@ -10,7 +10,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers.darling = {
       source = lib.getExe cfg.package;
       owner = "root";
