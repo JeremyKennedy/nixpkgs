@@ -107,14 +107,14 @@ let
   ];
 in stdenv.mkDerivation {
   pname = "darling";
-  version = "unstable-2023-05-01";
+  version = "unstable-2023-05-02";
 
   src = fetchFromGitHub {
     owner = "darlinghq";
     repo = "darling";
-    rev = "565f9639caf1d7681455b2e2df1fbc79a6db35dc";
+    rev = "557e7e9dece394a3f623825679474457e5b64fd0";
     fetchSubmodules = true;
-    hash = "sha256-xEZ1mt0IimTLY3e/UqITtOb4XjgcuQbEUNw9dsiew6E=";
+    hash = "sha256-SOoLaV7wg33qRHPQXkdMvrY++CvoG85kwd6IU6DkYa0=";
   };
 
   outputs = [ "out" "sdk" ];
