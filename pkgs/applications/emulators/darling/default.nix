@@ -79,6 +79,8 @@ let
   '';
 
   wrappedLibs = [
+    # To find all of them: rg -w wrap_elf
+
     # src/native/CMakeLists.txt
     freetype
     libjpeg
@@ -96,10 +98,10 @@ let
     dbus
     libGLU
 
-    # darling-dmg
+    # src/external/darling-dmg/CMakeLists.txt
     fuse
 
-    # CoreAudio
+    # src/CoreAudio/CMakeLists.txt
     ffmpeg
     pulseaudio
   ];
