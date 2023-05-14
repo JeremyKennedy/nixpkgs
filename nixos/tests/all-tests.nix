@@ -207,6 +207,7 @@ in {
   dovecot = handleTest ./dovecot.nix {};
   drbd = handleTest ./drbd.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
+  early-mount-options = handleTest ./early-mount-options.nix {};
   ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
   ecryptfs = handleTest ./ecryptfs.nix {};
@@ -352,6 +353,7 @@ in {
   kafka = handleTest ./kafka.nix {};
   kanidm = handleTest ./kanidm.nix {};
   karma = handleTest ./karma.nix {};
+  kavita = handleTest ./kavita.nix {};
   kbd-setfont-decompress = handleTest ./kbd-setfont-decompress.nix {};
   kbd-update-search-paths-patch = handleTest ./kbd-update-search-paths-patch.nix {};
   kea = handleTest ./kea.nix {};
