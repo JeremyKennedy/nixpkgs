@@ -620,6 +620,7 @@ broken-packages:
   - cassava-conduit
   - cassava-records
   - cassette
+  - castagnoli #  failure  in job https://hydra.nixos.org/build/219826672 at 2023-05-19
   - castle
   - catamorphism
   - Catana
@@ -1173,8 +1174,10 @@ broken-packages:
   - directed-cubical
   - direct-fastcgi
   - direct-http
+  - directory-ospath-streaming # dependency missing in job https://hydra.nixos.org/build/219209527 at 2023-05-10
   - direct-plugins
   - direm
+  - disco # failure building library in job https://hydra.nixos.org/build/219207076 at 2023-05-10
   - discordian-calendar
   - discord-register
   - discord-types
@@ -1897,6 +1900,7 @@ broken-packages:
   - Grempa
   - greplicate
   - gridfs
+  - grid-proto # failure building library in job https://hydra.nixos.org/build/219248049 at 2023-05-10
   - grids
   - grm
   - GroteTrap
@@ -5106,11 +5110,9 @@ broken-packages:
   - streaming-png
   - streaming-postgresql-simple
   - streaming-sort
-  - streamly-archive
   - streamly-binary
   - streamly-cassava
   - streamly-examples
-  - streamly-lmdb
   - streamly-lz4
   - streamly-process
   - stream-monad
@@ -5584,6 +5586,7 @@ broken-packages:
   - unamb-custom
   - unbeliever
   - unbounded-delays-units
+  - unbound-kind-generics # failure building library in job https://hydra.nixos.org/build/219201570 at 2023-05-10
   - unboxed
   - unboxed-containers
   - unboxed-references
@@ -5773,6 +5776,7 @@ broken-packages:
   - wai-middleware-travisci
   - wai-middleware-validation
   - wai-predicates
+  - wai-problem-details # dependency missing in job https://hydra.nixos.org/build/219206235 at 2023-05-10
   - wai-rate-limit-postgres
   - wai-rate-limit-redis
   - wai-request-spec

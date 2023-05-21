@@ -1270,7 +1270,6 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_0_9_5
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1448,6 +1447,7 @@ dont-distribute-packages:
  - feature-flipper-postgres
  - fedora-composes
  - fedora-img-dl
+ - fedora-repoquery
  - feed-gipeda
  - feed-translator
  - feed2lj
@@ -1514,7 +1514,7 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
- - freckle-app_1_9_0_0
+ - freckle-app_1_9_0_1
  - free-functors
  - free-game
  - free-theorems-counterexamples
@@ -3247,7 +3247,6 @@ dont-distribute-packages:
  - quickcheck-relaxng
  - quickcheck-state-machine
  - quickcheck-state-machine-distributed
- - quickcheck-state-machine_0_7_2
  - quicktest
  - quipper
  - quipper-algorithms
