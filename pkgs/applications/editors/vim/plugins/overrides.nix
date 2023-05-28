@@ -18,6 +18,7 @@
 , Cocoa
 , code-minimap
 , dasht
+, deno
 , direnv
 , fish
 , fzf
@@ -94,6 +95,9 @@
   # sg-nvim dependencies
 , openssl
 , pkg-config
+
+  # vim-agda dependencies
+, agda
 
   # vim-go dependencies
 , asmfmt
@@ -408,6 +412,13 @@ self: super: {
     dependencies = with self; [ nvim-yarp ];
   });
 
+  denops-vim = super.denops-vim.overrideAttrs (old: {
+    postPatch = ''
+      # Use Nix's Deno instead of an arbitrary install
+      substituteInPlace ./autoload/denops.vim --replace "call denops#_internal#conf#define('denops#deno', 'deno')" "call denops#_internal#conf#define('denops#deno', '${deno}/bin/deno')"
+    '';
+  });
+
   deoplete-fish = super.deoplete-fish.overrideAttrs (old: {
     dependencies = with self; [ deoplete-nvim vim-fish ];
   });
@@ -629,6 +640,10 @@ self: super: {
 
   lazy-lsp-nvim = super.lazy-lsp-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig ];
+  });
+
+  lazy-nvim = super.lazy-nvim.overrideAttrs (old: {
+    patches = [ ./patches/lazy-nvim/no-helptags.patch ];
   });
 
   lean-nvim = super.lean-nvim.overrideAttrs (old: {
@@ -1217,6 +1232,13 @@ self: super: {
 
   vim-addon-xdebug = super.vim-addon-xdebug.overrideAttrs (old: {
     dependencies = with self; [ webapi-vim vim-addon-mw-utils vim-addon-signs vim-addon-async ];
+  });
+
+  vim-agda = super.vim-agda.overrideAttrs (old: {
+    preFixup = ''
+      substituteInPlace "$out"/autoload/agda.vim \
+        --replace "jobstart(['agda'" "jobstart(['${agda}/bin/agda'"
+    '';
   });
 
   vim-bazel = super.vim-bazel.overrideAttrs (old: {

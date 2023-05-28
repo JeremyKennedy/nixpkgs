@@ -309,8 +309,8 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "0.29.7";
-          sha256 = "sha256-hr8opkNnYpnc8ZRd8tkO8GgMN2lK0YwCETDNe4QnUNQ=";
+          version = "1.0.6";
+          sha256 = "sha256-/gpZtOO8MA/MJ1o9eG4qmPqhWRZ5E+elA9Rr/kpOprI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
@@ -757,8 +757,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.49.0";
-          sha256 = "sha256-Mh/OoRK410aXEr3sK2CYFDsXGSqFT+JOWi9jHOdK01Y=";
+          version = "0.50.0";
+          sha256 = "sha256-F+lryIhSudDz68t1eGrfqI8EuoUUOWU5LfWj0IRCQyY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -1069,8 +1069,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.13.0";
-          sha256 = "sha256-1uaLFTMvkcYrYAt9qDdISJneKxHo9qsris70iowGW2s=";
+          version = "0.14.7";
+          sha256 = "sha256-RkwgQqasBKMA+0293QhbZhgyGSqhJSic5DuIpBB+OEA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1132,8 +1132,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.12.0";
-          sha256 = "sha256-b7EaYYJNZQBqhyKJ04tytmD9DDRcvA68HTo5JHTr9Fo=";
+          version = "9.13.0";
+          sha256 = "sha256-Iqz1O6odSzAfojCgGDwDA1YtnWU5Ei7vx9Qt25/1SLw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1581,8 +1581,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.5.2";
-          sha256 = "sha256-v2fd2vGaGwRnebKiyjyd/2pgWit0H5lhJT+PXWQq0h4=";
+          version = "7.5.4";
+          sha256 = "sha256-cM3ssUzQnqt5WL8UaLYkrmfHscVa2sGa7/UWLXMIHGg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -1924,8 +1924,8 @@ let
         mktplcRef = {
           name = "caddyfile-support";
           publisher = "matthewpi";
-          version = "0.2.4";
-          sha256 = "sha256-7D7fNlI55MxD6M8ml/dzBAMwCGCEkC+9aKhreZCVMv4=";
+          version = "0.3.0";
+          sha256 = "sha256-1yiOnvC2w33kiPRdQYskee38Cid/GOj9becLadP1fUY=";
         };
         meta = {
           description = "Rich Caddyfile support for Visual Studio Code";
@@ -2312,8 +2312,8 @@ let
         mktplcRef = {
           name = "typst-lsp";
           publisher = "nvarner";
-          version = "0.4.1";
-          sha256 = "sha256-NZejUb99JDcnqjihLTPkNzVCgpqDkbiwAySbBVZ0esY=";
+          version = "0.5.0";
+          sha256 = "sha256-4bZbjbcd/EjSRBMkzMs1pD00qyQb5W6gePh4xfoU6Ug=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
@@ -2837,8 +2837,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "107.2.5";
-          sha256 = "sha256-IsZFIk+jOIxzACaZagL64I8Cs0NLI0aWwUPy6xwAmlQ=";
+          version = "107.4.3";
+          sha256 = "sha256-z1foIJXVKmJ0G4FfO9xsjiQgmq/ZtoB3b6Ch8Nyj1zY=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";

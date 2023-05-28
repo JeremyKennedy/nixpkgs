@@ -1150,6 +1150,8 @@
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/video/epgstation/default.nix
+  ./services/video/go2rtc/default.nix
+  ./services/video/frigate.nix
   ./services/video/mirakurun.nix
   ./services/video/replay-sorcery.nix
   ./services/video/mediamtx.nix
@@ -1228,6 +1230,7 @@
   ./services/web-apps/powerdns-admin.nix
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/restya-board.nix
+  ./services/web-apps/sftpgo.nix
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
@@ -1343,6 +1346,7 @@
   ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/loader/systemd-boot/systemd-boot.nix
   ./system/boot/luksroot.nix
+  ./system/boot/stratisroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
   ./system/boot/plymouth.nix
