@@ -34,7 +34,9 @@ let
 
   getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
   getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
+
   getStaticEmulator = system: (lib.systems.elaborate { inherit system; }).staticEmulator pkgs;
+  getStaticEmulatorAvailable = system: (lib.systems.elaborate { inherit system; }).staticEmulatorAvailable pkgs;
 
   # Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
   # - https://github.com/cleverca22/nixos-configs/blob/master/qemu.nix
@@ -306,25 +308,27 @@ in {
       name = system;
       value = { config, ... }: let
         staticEmulator = getStaticEmulator system;
-        interpreter =
-          if cfg.preferStaticEmulators && staticEmulator != null then staticEmulator
-          else getEmulator system;
-        qemuArch = getQemuArch system;
+        staticEmulatorAvailable = getStaticEmulatorAvailable system;
+        useStaticEmulator = cfg.preferStaticEmulators && staticEmulatorAvailable;
 
+        interpreter =
+          if useStaticEmulator then staticEmulator
+          else getEmulator system;
+
+        qemuArch = getQemuArch system;
         isQemu = "qemu-${qemuArch}" == baseNameOf interpreter;
-        isStaticEmulator = interpreter == staticEmulator;
 
         interpreterReg = let
           wrapperName = "qemu-${qemuArch}-binfmt-P";
           wrapper = pkgs.wrapQemuBinfmtP wrapperName interpreter;
         in
-          if isQemu && !isStaticEmulator then "${wrapper}/bin/${wrapperName}"
+          if isQemu && !useStaticEmulator then "${wrapper}/bin/${wrapperName}"
           else interpreter;
       in ({
         preserveArgvZero = mkDefault isQemu;
 
         interpreter = mkDefault interpreterReg;
-        fixBinary = mkDefault isStaticEmulator;
+        fixBinary = mkDefault useStaticEmulator;
         wrapInterpreterInShell = mkDefault (!config.preserveArgvZero && !config.fixBinary);
         interpreterSandboxPath = mkDefault
           (if config.fixBinary then null else dirOf (dirOf config.interpreter));

@@ -205,6 +205,11 @@ rec {
           else if final.isMmix
           then "${pkgs.mmixware}/bin/mmix"
           else null;
+
+        selectStaticEmulator = pkgs:
+          if builtins.elem final.system pkgs.qemu-user-static.passthru.qemuUserPlatforms then
+            "${pkgs.qemu-user-static}/bin/qemu-${final.qemuArch}"
+          else null;
       in {
         emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
 
@@ -213,10 +218,12 @@ rec {
           then selectEmulator pkgs
           else throw "Don't know how to run ${final.config} executables.";
 
+        staticEmulatorAvailable = pkgs: (selectStaticEmulator pkgs) != null;
+
         staticEmulator = pkgs:
-          if builtins.elem final.system pkgs.qemu-user-static.passthru.qemuUserPlatforms then
-            "${pkgs.qemu-user-static}/bin/qemu-${final.qemuArch}"
-          else null;
+          if (final.staticEmulatorAvailable pkgs)
+          then selectStaticEmulator pkgs
+          else throw "Don't know a static emulator that runs ${final.config} executables.";
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args;
