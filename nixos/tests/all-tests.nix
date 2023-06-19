@@ -95,6 +95,7 @@ in {
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
   acme = runTest ./acme.nix;
+  acme-dns = handleTest ./acme-dns.nix {};
   adguardhome = runTest ./adguardhome.nix;
   aesmd = runTestOn ["x86_64-linux"] ./aesmd.nix;
   agate = runTest ./web-servers/agate.nix;
@@ -170,6 +171,7 @@ in {
   cntr = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cntr.nix {};
   cockpit = handleTest ./cockpit.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
+  code-server = handleTest ./code-server.nix {};
   coder = handleTest ./coder.nix {};
   collectd = handleTest ./collectd.nix {};
   connman = handleTest ./connman.nix {};
@@ -278,6 +280,7 @@ in {
   fsck = handleTest ./fsck.nix {};
   fsck-systemd-stage-1 = handleTest ./fsck.nix { systemdStage1 = true; };
   ft2-clone = handleTest ./ft2-clone.nix {};
+  legit = handleTest ./legit.nix {};
   mimir = handleTest ./mimir.nix {};
   garage = handleTest ./garage {};
   gemstash = handleTest ./gemstash.nix {};
@@ -303,6 +306,7 @@ in {
   gonic = handleTest ./gonic.nix {};
   google-oslogin = handleTest ./google-oslogin {};
   gotify-server = handleTest ./gotify-server.nix {};
+  gotosocial = runTest ./web-apps/gotosocial.nix;
   grafana = handleTest ./grafana {};
   grafana-agent = handleTest ./grafana-agent.nix {};
   graphite = handleTest ./graphite.nix {};
@@ -611,6 +615,7 @@ in {
   postfix-raise-smtpd-tls-security-level = handleTest ./postfix-raise-smtpd-tls-security-level.nix {};
   postfixadmin = handleTest ./postfixadmin.nix {};
   postgis = handleTest ./postgis.nix {};
+  apache_datasketches = handleTest ./apache_datasketches.nix {};
   postgresql = handleTest ./postgresql.nix {};
   postgresql-jit = handleTest ./postgresql-jit.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
@@ -638,6 +643,7 @@ in {
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix {};
   quorum = handleTest ./quorum.nix {};
   quake3 = handleTest ./quake3.nix {};
+  qownnotes = handleTest ./qownnotes.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
@@ -740,6 +746,7 @@ in {
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-no-tainted = handleTest ./systemd-no-tainted.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
+  systemd-nspawn-configfile = handleTest ./systemd-nspawn-configfile.nix {};
   systemd-oomd = handleTest ./systemd-oomd.nix {};
   systemd-portabled = handleTest ./systemd-portabled.nix {};
   systemd-repart = handleTest ./systemd-repart.nix {};
@@ -808,6 +815,7 @@ in {
   victoriametrics = handleTest ./victoriametrics.nix {};
   vikunja = handleTest ./vikunja.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
+  vscode-remote-ssh = handleTestOn ["x86_64-linux"] ./vscode-remote-ssh.nix {};
   vscodium = discoverTests (import ./vscodium.nix);
   vsftpd = handleTest ./vsftpd.nix {};
   warzone2100 = handleTest ./warzone2100.nix {};

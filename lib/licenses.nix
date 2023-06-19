@@ -178,6 +178,11 @@ in mkLicense lset) ({
     fullName = ''BSD 3-clause "New" or "Revised" License'';
   };
 
+  bsd3Clear = {
+    spdxId = "BSD-3-Clause-Clear";
+    fullName = "BSD 3-Clause Clear License";
+  };
+
   bsdOriginal = {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
@@ -213,6 +218,12 @@ in mkLicense lset) ({
   cal10 = {
     fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
     url = "https://opensource.org/licenses/CAL-1.0";
+  };
+
+  caldera = {
+    spdxId = "Caldera";
+    fullName = "Caldera License";
+    url = "http://www.lemis.com/grog/UNIX/ancient-source-all.pdf";
   };
 
   capec = {
@@ -554,6 +565,12 @@ in mkLicense lset) ({
   imlib2 = {
     spdxId = "Imlib2";
     fullName = "Imlib2 License";
+  };
+
+  info-zip = {
+    spdxId = "Info-ZIP";
+    fullName = "Info-ZIP License";
+    url = "http://www.info-zip.org/pub/infozip/license.html";
   };
 
   inria-compcert = {

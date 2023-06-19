@@ -190,14 +190,6 @@ in {
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck (doJailbreak super.relude);
 
-  # Fixes compilation failure with GHC >= 9.4 on aarch64-* due to an API change
-  cborg = appendPatch (pkgs.fetchpatch {
-    name = "cborg-support-ghc-9.4.patch";
-    url = "https://github.com/well-typed/cborg/pull/304.diff";
-    sha256 = "sha256-W4HldlESKOVkTPhz9nkFrvbj9akCOtF1SbIt5eJqtj8=";
-    relative = "cborg";
-  }) super.cborg;
-
   ormolu = doDistribute self.ormolu_0_5_3_0;
   # https://github.com/tweag/ormolu/issues/941
   fourmolu = overrideCabal (drv: {
@@ -212,11 +204,6 @@ in {
   glib = __CabalEagerPkgConfigWorkaround (doJailbreak super.glib);
   cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
   pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
-
-  # The gtk2hs setup hook provided by this package lacks the ppOrdering field that
-  # recent versions of Cabal require. This leads to builds like cairo and glib
-  # failing during the Setup.hs phase: https://github.com/gtk2hs/gtk2hs/issues/323.
-  gtk2hs-buildtools = appendPatch ./patches/gtk2hs-buildtools-fix-ghc-9.4.x.patch super.gtk2hs-buildtools;
 
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;

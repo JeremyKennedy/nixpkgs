@@ -1,9 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
 , curl
-, gnome2
 , gst_all_1
 , gtk3
 , libGL
@@ -20,7 +18,7 @@
 , withCurl ? false
 , withPrivateFonts ? false
 , withEGL ? true
-, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? !stdenv.isDarwin
 , withWebKit ? stdenv.isDarwin
 , webkitgtk
 , setfile
@@ -102,7 +100,7 @@ stdenv.mkDerivation rec {
     "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
+  SEARCH_LIB = lib.optionalString (!stdenv.isDarwin) "${libGLU.out}/lib ${libGL.out}/lib ";
 
   preConfigure = ''
     substituteInPlace configure --replace \

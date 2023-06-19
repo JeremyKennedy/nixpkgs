@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.24.1";
+  version = "0.27.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-nFio45LxoVQK/IzVo2ZHGYzG6bHHr3yvA7P3kMZOUso=";
+    hash = "sha256-ag+sJFprYW3IpH+BiMR5eSRUFMBeVuOnF6GTTuXGBHw=";
   };
 
   nativeBuildInputs = [

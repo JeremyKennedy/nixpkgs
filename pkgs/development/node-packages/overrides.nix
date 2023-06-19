@@ -17,6 +17,8 @@ let
 in
 
 final: prev: {
+  inherit nodejs;
+
   fetchNodeModules = callPackage ../../build-support/fetchnodemodules { };
 
   "@angular/cli" = prev."@angular/cli".override {
@@ -136,6 +138,15 @@ final: prev: {
     buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
     meta = oldAttrs.meta // { broken = since "12"; };
   });
+
+  castnow = prev.castnow.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    postInstall = ''
+      wrapProgram "$out/bin/castnow" \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.ffmpeg ]}
+    '';
+  };
 
   eask = prev."@emacs-eask/cli".override {
     name = "eask";
@@ -424,26 +435,6 @@ final: prev: {
     '';
   };
 
-  readability-cli = prev.readability-cli.override (oldAttrs: {
-    # Wrap src to fix this build error:
-    # > readability-cli/readable.ts: unsupported interpreter directive "#!/usr/bin/env -S deno..."
-    #
-    # Need to wrap the source, instead of patching in patchPhase, because
-    # buildNodePackage only unpacks sources in the installPhase.
-    src = pkgs.srcOnly {
-      src = oldAttrs.src;
-      name = oldAttrs.name;
-      patchPhase = "chmod a-x readable.ts";
-    };
-
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = with pkgs; [
-      pixman
-      cairo
-      pango
-    ];
-  });
-
   reveal-md = prev.reveal-md.override (
     lib.optionalAttrs (!stdenv.isDarwin) {
       nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -503,16 +494,6 @@ final: prev: {
         --add-flags "$out/lib/node_modules/tedicross/main.js"
     '';
   };
-
-  thelounge = prev.thelounge.override (oldAttrs: {
-    buildInputs = [ final.node-pre-gyp ];
-    postInstall = ''
-      echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
-      patch -d $out/lib/node_modules/thelounge -p1 < ${./thelounge-packages-path.patch}
-    '';
-    passthru.tests = { inherit (nixosTests) thelounge; };
-    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ winter ]; };
-  });
 
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
     nativeBuildInputs = [ final.node-pre-gyp ];

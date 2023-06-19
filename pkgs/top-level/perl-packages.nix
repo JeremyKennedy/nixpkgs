@@ -160,6 +160,21 @@ with self; {
     };
   };
 
+  AlgorithmBackoff = buildPerlPackage {
+    pname = "Algorithm-Backoff";
+    version = "0.009";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Algorithm-Backoff-0.009.tar.gz";
+      sha256 = "9f0ffcdf1e65a88022d6412f46ad977ede5a7b64be663009d13948fe8c9d180b";
+    };
+    buildInputs = [ TestException TestNumberDelta ];
+    meta = {
+      homepage = "https://metacpan.org/release/Algorithm-Backoff";
+      description = "Various backoff strategies for retry";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AlgorithmC3 = buildPerlPackage {
     pname = "Algorithm-C3";
     version = "0.11";
@@ -9857,10 +9872,10 @@ with self; {
 
   FinanceQuote = buildPerlPackage {
     pname = "Finance-Quote";
-    version = "1.55";
+    version = "1.56";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-1.55.tar.gz";
-      hash = "sha256-4uAAtnxmtq9Q1HYYWEkhEFEKVaAwqJEBfUDH3iGLdI8=";
+      url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-1.56.tar.gz";
+      hash = "sha256-ER1vBY5kZLdIXAGPidDhiR/OC5aNnG+6G/JU1hLHpKs=";
     };
     buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
     propagatedBuildInputs = [ DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
@@ -10912,6 +10927,7 @@ with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Hash-SharedMem-0.005.tar.gz";
       hash = "sha256-Mkd2gIYC973EStqpN4lTZUVAKakm+mEfMhyb9rlAu14=";
     };
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-mno-outline-atomics";
     buildInputs = [ ScalarString ];
     meta = {
       description = "Efficient shared mutable hash";
@@ -12593,11 +12609,11 @@ with self; {
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.55";
+    version = "12.62";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-CFgb16GnYPIKG0PLbTiSfm7FRdWZBtroXH32c5Ru6gg=";
+      hash = "sha256-SZCkbGm2VoiNfVcyuvQDnalkaI7d33ocLutRQEmZ7B0=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -25171,8 +25187,8 @@ with self; {
       url = "mirror://cpan/authors/id/A/AM/AMBS/Text-BibTeX-0.88.tar.gz";
       hash = "sha256-sBRYbmi9vK+wos+gQB6woE6l3oxNW8Nt0Pf66ras9Cw=";
     };
-    # libbtparse.so: cannot open shared object file (aarch64 only)
-    patches = [ ../development/perl-modules/TextBibTeX-use-lib-on-aarch64.patch ];
+    # libbtparse.so: cannot open shared object file
+    patches = [ ../development/perl-modules/TextBibTeX-use-lib.patch ];
     perlPreHook = "export LD=$CC";
     perlPostHook = lib.optionalString stdenv.isDarwin ''
       oldPath="$(pwd)/btparse/src/libbtparse.dylib"
@@ -25928,7 +25944,7 @@ with self; {
     buildInputs = lib.optionals (!stdenv.isDarwin) [ pkgs.glibcLocales ];
     propagatedBuildInputs = [ TextCharWidth ];
     preConfigure = ''
-      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${if stdenv.isDarwin then pkgs.darwin.adv_cmds else pkgs.glibc.bin}/bin/locale'
+      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.unixtools.locale}/bin/locale'
     '';
     meta = {
       description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";

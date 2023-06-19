@@ -25,14 +25,12 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "525.116.04";
-    sha256_64bit = "sha256-hhDsgkR8/3LLXxizZX7ppjSlFRZiuK2QHrgfTE+2F/4=";
-    sha256_aarch64 = "sha256-k7k22z5PYZdBVfuYXVcl9SFUMqZmK4qyxoRwlYyRdgU=";
-    openSha256 = "sha256-dktHCoESqoNfu5M73aY5MQGROlZawZwzBqs3RkOyfoQ=";
-    settingsSha256 = "sha256-qNjfsT9NGV151EHnG4fgBonVFSKc4yFEVomtXg9uYD4=";
-    persistencedSha256 = "sha256-ci86XGlno6DbHw6rkVSzBpopaapfJvk0+lHcR4LDq50=";
-
-    ibtSupport = true;
+    version = "535.54.03";
+    sha256_64bit = "sha256-RUdk9X6hueGRZqNw94vhDnHwYmQ4+xl/cm3DyvBbQII=";
+    sha256_aarch64 = "sha256-SUxW/Z8sJJ7bc/yhozTh8Wd2gKLsniJwKmXh1tJwUm8=";
+    openSha256 = "sha256-dp74UiiZfsQbZbAKHgFkLdRNyYbRlVMF3tIXcxok7FU";
+    settingsSha256 = "sha256-5yIdOAaYQCQ2CmCayD/a5opoQppjK56s9cDqLmm17ww=";
+    persistencedSha256 = "sha256-R5WCh09BSPjfifui0ODkCsdIXTowceNjLDq5XHwda08=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -54,22 +52,22 @@ rec {
   });
 
   beta = selectHighestVersion latest (generic {
-    version = "530.30.02";
-    sha256_64bit = "sha256-R/3bvXoiumYZI9vObn9R7sVN9oBQxAbMBJDDv77eeWM=";
-    sha256_aarch64 = "sha256-/b5Jdow+O7ExXjtXTzDX38qgmBDUYDUl+5zxXvbi1ts=";
-    openSha256 = "sha256-LCtTyuJ8s8isTBt9HetItLqSjL1GOn0tPUarjuxHpMk=";
-    settingsSha256 = "sha256-6mynLNSaWeiB52HdwZ0EQNyPg+tuat0oEqpZGSb2yQo=";
-    persistencedSha256 = "sha256-h6iq0iD9F41a7s6jWKPTI+oVzgDRIr1Kk97LNH9rg7E=";
+    version = "535.43.02";
+    sha256_64bit = "sha256-4KTdk4kGDmBGyHntMIzWRivUpEpzmra+p7RBsTL8mYM=";
+    sha256_aarch64 = "sha256-0blD8R+xpOVlitWefIbtw1d3KAnmWHBy7hkxGZHBrE4=";
+    openSha256 = "sha256-W1fwbbEEM7Z/S3J0djxGTtVTewbSALqX1G1OSpdajCM=";
+    settingsSha256 = "sha256-j0sSEbtF2fapv4GSthVTkmJga+ycmrGc1OnGpV6jEkc=";
+    persistencedSha256 = "sha256-M0ovNaJo8SZwLW4CQz9accNK79Z5JtTJ9kKwOzicRZ4=";
   });
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "525.47.26";
+    version = "525.47.27";
     persistencedVersion = "525.116.04";
     settingsVersion = "525.116.04";
-    sha256_64bit = "sha256-QfxEUTi71Pav1qzO0mObmKbsyg6FHTAyc7jkOj9D4lY=";
-    openSha256 = "sha256-QFpFRPpBXAB7v2+NP/M/1T1qKDqjdhigHkktnVyWw20=";
+    sha256_64bit = "sha256-PEbaspVKTONl9W3M80RJfzPQwd6p231NTjcCXhB+MX4=";
+    openSha256 = "sha256-TyI77WGCL6JPVgx7SjdcTqwQ5neEqehrWo0QHKpAVrM=";
     settingsSha256 = "sha256-qNjfsT9NGV151EHnG4fgBonVFSKc4yFEVomtXg9uYD4=";
     persistencedSha256 = "sha256-ci86XGlno6DbHw6rkVSzBpopaapfJvk0+lHcR4LDq50=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
