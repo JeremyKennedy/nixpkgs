@@ -1957,6 +1957,16 @@
       fingerprint = "E9A3 7864 2165 28CE 507C  CA82 72EA BF75 C331 CD25";
     }];
   };
+  Benjamin-L = {
+    name = "Benjamin Lee";
+    email = "benjamin@computer.surgery";
+    matrix = "@benjamin:computer.surgery";
+    github = "Benjamin-L";
+    githubId = 6504174;
+    keys = [{
+      fingerprint = "9D84 09A0 44FC 1EEB AE2D  FA30 FB96 24E2 885D 55A4";
+    }];
+  };
   benkuhn = {
     email = "ben@ben-kuhn.com";
     github = "ben-kuhn";
@@ -5795,6 +5805,13 @@
     githubId = 48872998;
     name = "Seth";
   };
+  getpsyched = {
+    name = "Priyanshu Tripathi";
+    email = "priyanshutr@proton.me";
+    matrix = "@getpsyched:matrix.org";
+    github = "getpsyched";
+    githubId = 43472218;
+  };
   gfrascadorio = {
     email = "gfrascadorio@tutanota.com";
     github = "gfrascadorio";
@@ -6622,6 +6639,11 @@
     keys = [{
       fingerprint = "78C2 E81C 828A 420B 269A  EBC1 49FA 39F8 A7F7 35F9";
     }];
+  };
+  hulr = {
+    github = "hulr";
+    githubId = 17255815;
+    name = "hulr";
   };
   humancalico = {
     email = "humancalico@disroot.org";
@@ -11858,7 +11880,7 @@
     name = "Kartik Gokte";
   };
   nullishamy = {
-    email = "amy.codes@null.net";
+    email = "spam@amyerskine.me";
     name = "nullishamy";
     github = "nullishamy";
     githubId = 99221043;
