@@ -651,15 +651,15 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.22.0";
-          sha256 = "sha256-RhEDf/EbUD5YdHDyoZwr68OfOgKfkSXJFsKcLHC5bcc=";
+          version = "2023.26.0";
+          sha256 = "sha256-5JaOo0BqTWo3NAdzS9DSClTwB9YiBhICEPOqWmBv270=";
         };
         meta = {
           license = lib.licenses.mit;
-          changelog = "https://github.com/charliermarsh/ruff-vscode/releases";
+          changelog = "https://github.com/astral-sh/ruff-vscode/releases";
           description = "Ruff extension for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
-          homepage = "https://github.com/charliermarsh/ruff-vscode/";
+          homepage = "https://github.com/astral-sh/ruff-vscode/";
           maintainers = [ lib.maintainers.azd325 ];
         };
       };
@@ -1222,8 +1222,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.13.0";
-          sha256 = "sha256-Iqz1O6odSzAfojCgGDwDA1YtnWU5Ei7vx9Qt25/1SLw=";
+          version = "9.14.0";
+          sha256 = "sha256-0eb3W9SErsqPofjR1DaChDghvWOQFSYIMnnWbu8GiHY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -3445,7 +3445,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons";
           homepage = "https://github.com/vscode-icons/vscode-icons";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.ggwpaiushtha ];
+          maintainers = [ lib.maintainers.bastaynav ];
         };
       };
 
