@@ -1,11 +1,14 @@
-{ lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
+{ lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, wrapGAppsNoGuiHook, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
 , e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
 , spiceSupport ? true, spice-gtk ? null
+, cliOnly ? false # Whether to build the CLI tools only
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  wrapGAppsHook' = if cliOnly then wrapGAppsNoGuiHook else wrapGAppsHook;
+in python3.pkgs.buildPythonApplication rec {
   pname = "virt-manager";
   version = "4.1.0";
 
@@ -20,13 +23,15 @@ python3.pkgs.buildPythonApplication rec {
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
+    wrapGAppsHook'
   ];
 
-  buildInputs = [
-    wrapGAppsHook
-    libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
-    gsettings-desktop-schemas libosinfo gtksourceview4
-  ] ++ lib.optional spiceSupport spice-gtk;
+  buildInputs = [ libosinfo ]
+    ++ lib.optionals (!cliOnly) [
+      libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
+      gsettings-desktop-schemas gtksourceview4
+    ]
+    ++ lib.optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3 libvirt libxml2 requests cdrtools
@@ -73,11 +78,15 @@ python3.pkgs.buildPythonApplication rec {
     "testCLI0001virt_install_many_devices"  # expects /var to exist
   ];
 
+  postInstall = lib.optionalString cliOnly ''
+    rm $out/bin/virt-manager
+  '';
+
   preCheck = ''
     export HOME=.
   ''; # <- Required for "tests/test_urldetect.py".
 
-  postCheck = ''
+  postCheck = lib.optionalString (!cliOnly) ''
     $out/bin/virt-manager --version | grep -Fw ${version} > /dev/null
   '';
 
