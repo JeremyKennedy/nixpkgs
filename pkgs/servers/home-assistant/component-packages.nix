@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.6.2";
+  version = "2023.6.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -1446,9 +1446,10 @@
     ];
     "google_generative_ai_conversation" = ps: with ps; [
       aiohttp-cors
+      google-generativeai
       hassil
       home-assistant-intents
-    ]; # missing inputs: google-generativeai
+    ];
     "google_mail" = ps: with ps; [
       aiohttp-cors
       fnv-hash-fast
@@ -4966,6 +4967,7 @@
     "google_assistant"
     "google_assistant_sdk"
     "google_domains"
+    "google_generative_ai_conversation"
     "google_mail"
     "google_pubsub"
     "google_sheets"

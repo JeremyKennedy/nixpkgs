@@ -9,6 +9,7 @@
 , vulkan-loader
 , vulkan-headers
 , wayland
+, wayland-scanner
 , wayland-protocols
 , libxkbcommon
 , libcap
@@ -55,10 +56,18 @@ stdenv.mkDerivation {
     ./use-pkgconfig.patch
   ];
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     pkg-config
     ninja
+    wayland-scanner
+    glslang
     makeBinaryWrapper
   ];
 
@@ -76,7 +85,6 @@ stdenv.mkDerivation {
     libliftoff
     vulkan-loader
     vulkan-headers
-    glslang
     SDL2
     wayland
     wayland-protocols
