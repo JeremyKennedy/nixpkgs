@@ -1,4 +1,5 @@
 { lib
+, nix-update-script
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
@@ -11,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rtx";
-  version = "1.32.1";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "jdxcode";
     repo = "rtx";
     rev = "v${version}";
-    sha256 = "sha256-de3d3tW1VWx91fFXhfMKcWlAraUltfkT9p4i9AciSB0=";
+    sha256 = "sha256-ePRYlTGgZDrIClZ4kb9v62/FiLzZT6DzL3kaY6eAq5g=";
   };
 
-  cargoHash = "sha256-dz6q7sfmtSzk5UwoAx969oImGDPifr2Nhh/vrXV5fxc=";
+  cargoSha256 = "sha256-RFAIc4KfMvxz2BYX8x8j8T5evMqFP8ML4+wHwWdODVk=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
@@ -52,6 +53,10 @@ rustPlatform.buildRustPackage rec {
       --fish ./completions/rtx.fish \
       --zsh ./completions/_rtx
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/jdxcode/rtx";

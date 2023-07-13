@@ -186,21 +186,24 @@ let
     subPackages = [ "cmd/server" ];
     ldflags = versionldflags;
 
-    tags = [ "libsqlite3" "linux" ];
+    tags = [ "ctrd" "libsqlite3" "linux" ];
 
     # create the multicall symlinks for k3s
     postInstall = ''
       mv $out/bin/server $out/bin/k3s
       pushd $out
       # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/build#L105-L113
-      ln -s k3s ./bin/k3s-agent
-      ln -s k3s ./bin/k3s-server
-      ln -s k3s ./bin/k3s-etcd-snapshot
-      ln -s k3s ./bin/k3s-secrets-encrypt
-      ln -s k3s ./bin/k3s-certificate
-      ln -s k3s ./bin/kubectl
+      ln -s k3s ./bin/containerd
       ln -s k3s ./bin/crictl
       ln -s k3s ./bin/ctr
+      ln -s k3s ./bin/k3s-agent
+      ln -s k3s ./bin/k3s-certificate
+      ln -s k3s ./bin/k3s-completion
+      ln -s k3s ./bin/k3s-etcd-snapshot
+      ln -s k3s ./bin/k3s-secrets-encrypt
+      ln -s k3s ./bin/k3s-server
+      ln -s k3s ./bin/k3s-token
+      ln -s k3s ./bin/kubectl
       popd
     '';
 
@@ -208,6 +211,8 @@ let
       description = "The various binaries that get packaged into the final k3s binary";
     };
   };
+  # Only used for the shim since
+  # https://github.com/k3s-io/k3s/blob/v1.27.2%2Bk3s1/scripts/build#L153
   k3sContainerd = buildGoModule {
     pname = "k3s-containerd";
     version = containerdVersion;
@@ -219,7 +224,7 @@ let
     };
     vendorSha256 = null;
     buildInputs = [ btrfs-progs ];
-    subPackages = [ "cmd/containerd" "cmd/containerd-shim-runc-v2" ];
+    subPackages = [ "cmd/containerd-shim-runc-v2" ];
     ldflags = versionldflags;
   };
 in
@@ -227,6 +232,7 @@ buildGoModule rec {
   pname = "k3s";
   version = k3sVersion;
 
+  tags = [ "libsqlite3" "linux" "ctrd" ];
   src = k3sRepo;
   vendorSha256 = k3sVendorSha256;
 
@@ -263,6 +269,7 @@ buildGoModule rec {
     ethtool
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
+    runc
   ];
 
   buildInputs = k3sRuntimeDeps;
@@ -279,7 +286,6 @@ buildGoModule rec {
     k3sCNIPlugins
     k3sContainerd
     k3sServer
-    runc
   ];
 
   # We override most of buildPhase due to peculiarities in k3s's build.
@@ -293,9 +299,8 @@ buildGoModule rec {
     # copy needed 'go generate' inputs into place
     mkdir -p ./bin/aux
     rsync -a --no-perms ${k3sServer}/bin/ ./bin/
-    ln -vsf ${runc}/bin/runc ./bin/runc
     ln -vsf ${k3sCNIPlugins}/bin/cni ./bin/cni
-    ln -vsf ${k3sContainerd}/bin/* ./bin/
+    ln -vsf ${k3sContainerd}/bin/containerd-shim-runc-v2 ./bin
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
     mkdir -p ./build/static/charts
 

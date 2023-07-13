@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "datree";
-  version = "1.9.8";
+  version = "1.9.10";
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
     rev = "refs/tags/${version}";
-    hash = "sha256-nT41Pw5DJJ9iSp1uFXaCySuKCwh1/wuV2iY++dfs9FY=";
+    hash = "sha256-A5l5ZCKkDqVHy7DWd2Tb75g21t+WnLMiJuUxAYVTTUM=";
   };
 
   vendorHash = "sha256-ECVKofvmLuFAFvncq63hYUaYW8/2+F4gZr8wIGQyrdU=";
