@@ -46,7 +46,7 @@ let
           Enhancing productivity for every C and C++
           developer on Linux, macOS and Windows.
         '';
-        maintainers = with maintainers; [ edwtjo mic92 ];
+        maintainers = with maintainers; [ edwtjo mic92 tymscar ];
       };
     }).overrideAttrs (attrs: {
       nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
@@ -77,8 +77,6 @@ let
             --replace-needed libcrypto.so.10 libcrypto.so
 
           autoPatchelf $PWD/bin
-          wrapProgram $out/bin/clion \
-            --set CL_JDK "${jdk}"
         )
       '';
     });
@@ -143,7 +141,7 @@ let
           The new IDE extends the IntelliJ platform with the coding assistance
           and tool integrations specific for the Go language
         '';
-        maintainers = [ ];
+        maintainers = with maintainers; [ tymscar ];
       };
     }).overrideAttrs (attrs: {
       postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
@@ -174,7 +172,7 @@ let
           with JUnit, TestNG, popular SCMs, Ant & Maven. Also known
           as IntelliJ.
         '';
-        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius steinybot AnatolyPopov ];
+        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius steinybot AnatolyPopov tymscar ];
         platforms = ideaPlatforms;
       };
     });
@@ -209,7 +207,7 @@ let
           with on-the-fly code analysis, error prevention and
           automated refactorings for PHP and JavaScript code.
         '';
-        maintainers = with maintainers; [ dritter ];
+        maintainers = with maintainers; [ dritter tymscar ];
       };
     });
 
@@ -234,7 +232,7 @@ let
           providing you almost everything you need for your comfortable
           and productive development!
         '';
-        maintainers = with maintainers; [ genericnerdyusername ];
+        maintainers = with maintainers; [ genericnerdyusername tymscar ];
       };
     }).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs cythonSpeedup {
       buildInputs = with python3.pkgs; [ python3 setuptools ];
@@ -288,7 +286,7 @@ let
         homepage = "https://www.jetbrains.com/ruby/";
         inherit description license platforms;
         longDescription = description;
-        maintainers = with maintainers; [ edwtjo ];
+        maintainers = with maintainers; [ edwtjo tymscar ];
       };
     });
 
@@ -304,7 +302,7 @@ let
           and CSS with on-the-fly code analysis, error prevention and
           automated refactorings for JavaScript code.
         '';
-        maintainers = with maintainers; [ abaldeau ];
+        maintainers = with maintainers; [ abaldeau tymscar ];
       };
     });
 

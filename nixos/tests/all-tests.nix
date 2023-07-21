@@ -138,6 +138,7 @@ in {
   borgbackup = handleTest ./borgbackup.nix {};
   botamusique = handleTest ./botamusique.nix {};
   bpf = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bpf.nix {};
+  bpftune = handleTest ./bpftune.nix {};
   breitbandmessung = handleTest ./breitbandmessung.nix {};
   brscan5 = handleTest ./brscan5.nix {};
   btrbk = handleTest ./btrbk.nix {};
@@ -337,6 +338,7 @@ in {
   hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
+  homepage-dashboard = handleTest ./homepage-dashboard.nix {};
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
   oci-containers = handleTestOn ["aarch64-linux" "x86_64-linux"] ./oci-containers.nix {};
@@ -575,6 +577,7 @@ in {
   openvscode-server = handleTest ./openvscode-server.nix {};
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
+  osquery = handleTestOn ["x86_64-linux"] ./osquery.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
   overlayfs = handleTest ./overlayfs.nix {};
   pacemaker = handleTest ./pacemaker.nix {};
