@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "17.11.2";
+  version = "18.1.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-cDuHjkbsX8YmAHCchgLEY2B81f3qtrm6DVcee+z4KfQ=";
+    hash = "sha256-qK9hjsWhVTzxFo4SSvKb5IgZteVabWlCtoetu9v9xIE=";
   };
 
-  vendorHash = "sha256-FDVzJQuxrzypqke9gbDdQfMR3dM/y8msAvZYyrlMv+o=";
+  vendorHash = "sha256-cATGMi/nL8dvlsR+cuvKH6Y9eR3UqcVjvZAj35Ydn2c=";
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [
     installShellFiles

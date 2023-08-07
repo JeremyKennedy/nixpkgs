@@ -242,7 +242,11 @@ rec {
 
 
   */
-  writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
+  writeScriptBin = name: text: writeTextFile {
+    inherit name text;
+    executable = true;
+    destination = "/bin/${name}";
+  };
 
   /*
     Similar to writeScript. Writes a Shell script and checks its syntax.
@@ -374,6 +378,9 @@ rec {
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
+      meta = {
+        mainProgram = name;
+      };
     }
     ''
       n=$out/bin/$name
@@ -817,9 +824,10 @@ rec {
         or
           nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
       '';
-      hashAlgo = if hash != null then ""
+      hashAlgo = if hash != null then (builtins.head (lib.strings.splitString "-" hash))
             else if sha256 != null then "sha256"
             else "sha1";
+      hashAlgo_ = if hash != null then "" else hashAlgo;
       hash_ = if hash != null then hash
          else if sha256 != null then sha256
          else sha1;
@@ -828,7 +836,7 @@ rec {
     stdenvNoCC.mkDerivation {
       name = name_;
       outputHashMode = hashMode;
-      outputHashAlgo = hashAlgo;
+      outputHashAlgo = hashAlgo_;
       outputHash = hash_;
       preferLocalBuild = true;
       allowSubstitutes = false;

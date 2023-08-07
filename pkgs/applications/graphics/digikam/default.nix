@@ -54,7 +54,7 @@
 , breeze-icons
 , oxygen
 
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
 
@@ -151,5 +151,6 @@ mkDerivation rec {
     license = licenses.gpl2;
     homepage = "https://www.digikam.org";
     platforms = platforms.linux;
+    mainProgram = "digikam";
   };
 }

@@ -271,7 +271,56 @@ in /* No rec! Add dependencies on this file at the top. */ {
               second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
         joinRelPath components;
 
+  /*
+  Split the filesystem root from a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path).
+  The result is an attribute set with these attributes:
+  - `root`: The filesystem root of the path, meaning that this directory has no parent directory.
+  - `subpath`: The [normalised subpath string](#function-library-lib.path.subpath.normalise) that when [appended](#function-library-lib.path.append) to `root` returns the original path.
+
+  Laws:
+  - [Appending](#function-library-lib.path.append) the `root` and `subpath` gives the original path:
+
+        p ==
+          append
+            (splitRoot p).root
+            (splitRoot p).subpath
+
+  - Trying to get the parent directory of `root` using [`readDir`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readDir) returns `root` itself:
+
+        dirOf (splitRoot p).root == (splitRoot p).root
+
+  Type:
+    splitRoot :: Path -> { root :: Path, subpath :: String }
+
+  Example:
+    splitRoot /foo/bar
+    => { root = /.; subpath = "./foo/bar"; }
+
+    splitRoot /.
+    => { root = /.; subpath = "./."; }
+
+    # Nix neutralises `..` path components for all path values automatically
+    splitRoot /foo/../bar
+    => { root = /.; subpath = "./bar"; }
+
+    splitRoot "/foo/bar"
+    => <error>
+  */
+  splitRoot = path:
+    assert assertMsg
+      (isPath path)
+      "lib.path.splitRoot: Argument is of type ${typeOf path}, but a path was expected";
+    let
+      deconstructed = deconstructPath path;
+    in {
+      root = deconstructed.root;
+      subpath = joinRelPath deconstructed.components;
+    };
+
   /* Whether a value is a valid subpath string.
+
+  A subpath string points to a specific file or directory within an absolute base directory.
+  It is a stricter form of a relative path that excludes `..` components, since those could escape the base directory.
 
   - The value is a string
 
@@ -388,6 +437,37 @@ in /* No rec! Add dependencies on this file at the top. */ {
           lib.path.subpath.join: Element at index ${toString i} is not a valid subpath string:
               ${subpathInvalidReason path}''
       ) 0 subpaths;
+
+  /*
+  Split [a subpath](#function-library-lib.path.subpath.isValid) into its path component strings.
+  Throw an error if the subpath isn't valid.
+  Note that the returned path components are also valid subpath strings, though they are intentionally not [normalised](#function-library-lib.path.subpath.normalise).
+
+  Laws:
+
+  - Splitting a subpath into components and [joining](#function-library-lib.path.subpath.join) the components gives the same subpath but [normalised](#function-library-lib.path.subpath.normalise):
+
+        subpath.join (subpath.components s) == subpath.normalise s
+
+  Type:
+    subpath.components :: String -> [ String ]
+
+  Example:
+    subpath.components "."
+    => [ ]
+
+    subpath.components "./foo//bar/./baz/"
+    => [ "foo" "bar" "baz" ]
+
+    subpath.components "/foo"
+    => <error>
+  */
+  subpath.components =
+    subpath:
+    assert assertMsg (isValid subpath) ''
+      lib.path.subpath.components: Argument is not a valid subpath string:
+          ${subpathInvalidReason subpath}'';
+    splitRelPath subpath;
 
   /* Normalise a subpath. Throw an error if the subpath isn't valid, see
   `lib.path.subpath.isValid`

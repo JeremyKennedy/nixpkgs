@@ -66,7 +66,7 @@ in rec {
       "Systemd ${group} field `${name}' must be a valid MAC address.";
 
   assertNetdevMacAddress = name: group: attr:
-    optional (attr ? ${name} && (! isMacAddress attr.${name} || attr.${name} != "none"))
+    optional (attr ? ${name} && (! isMacAddress attr.${name} && attr.${name} != "none"))
       "Systemd ${group} field `${name}` must be a valid MAC address or the special value `none`.";
 
 
@@ -443,4 +443,21 @@ in rec {
           ${attrsToSection def.sliceConfig}
         '';
     };
+
+  # Create a directory that contains systemd definition files from an attrset
+  # that contains the file names as keys and the content as values. The values
+  # in that attrset are determined by the supplied format.
+  definitions = directoryName: format: definitionAttrs:
+    let
+      listOfDefinitions = lib.mapAttrsToList
+        (name: format.generate "${name}.conf")
+        definitionAttrs;
+    in
+    pkgs.runCommand directoryName { } ''
+      mkdir -p $out
+      ${(lib.concatStringsSep "\n"
+        (map (pkg: "cp ${pkg} $out/${pkg.name}") listOfDefinitions)
+      )}
+    '';
+
 }

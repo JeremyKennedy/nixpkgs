@@ -4,8 +4,8 @@
   ./config/debug-info.nix
   ./config/fonts/fontconfig.nix
   ./config/fonts/fontdir.nix
-  ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
+  ./config/fonts/packages.nix
   ./config/gnu.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/i18n.nix
@@ -93,8 +93,8 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/ubertooth.nix
   ./hardware/uinput.nix
+  ./hardware/usb-modeswitch.nix
   ./hardware/usb-storage.nix
-  ./hardware/usb-wwan.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/capture/mwprocapture.nix
@@ -221,6 +221,7 @@
   ./programs/nncp.nix
   ./programs/noisetorch.nix
   ./programs/npm.nix
+  ./programs/ns-usbloader.nix
   ./programs/oblogout.nix
   ./programs/oddjobd.nix
   ./programs/openvpn3.nix
@@ -264,6 +265,7 @@
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/waybar.nix
+  ./programs/wayland/wayfire.nix
   ./programs/weylus.nix
   ./programs/wireshark.nix
   ./programs/xastir.nix
@@ -418,6 +420,7 @@
   ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
+  ./services/databases/pgbouncer.nix
   ./services/databases/pgmanage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
@@ -536,6 +539,7 @@
   ./services/hardware/usbrelayd.nix
   ./services/hardware/vdr.nix
   ./services/hardware/keyd.nix
+  ./services/home-automation/ebusd.nix
   ./services/home-automation/esphome.nix
   ./services/home-automation/evcc.nix
   ./services/home-automation/home-assistant.nix
@@ -596,9 +600,11 @@
   ./services/matrix/dendrite.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-telegram.nix
+  ./services/matrix/mautrix-whatsapp.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
+  ./services/matrix/matrix-sliding-sync.nix
   ./services/matrix/synapse.nix
   ./services/misc/airsonic.nix
   ./services/misc/ananicy.nix
@@ -633,6 +639,7 @@
   ./services/misc/etcd.nix
   ./services/misc/etebase-server.nix
   ./services/misc/etesync-dav.nix
+  ./services/misc/evdevremapkeys.nix
   ./services/misc/felix.nix
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
@@ -859,7 +866,6 @@
   ./services/networking/croc.nix
   ./services/networking/dante.nix
   ./services/networking/dhcpcd.nix
-  ./services/networking/dhcpd.nix
   ./services/networking/dnscache.nix
   ./services/networking/dnscrypt-proxy2.nix
   ./services/networking/dnscrypt-wrapper.nix
@@ -1107,6 +1113,7 @@
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
+  ./services/search/typesense.nix
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
   ./services/security/certmgr.nix
@@ -1393,6 +1400,7 @@
   ./system/boot/systemd/oomd.nix
   ./system/boot/systemd/repart.nix
   ./system/boot/systemd/shutdown.nix
+  ./system/boot/systemd/sysupdate.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
   ./system/boot/systemd/userdbd.nix
