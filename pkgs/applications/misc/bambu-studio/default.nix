@@ -51,7 +51,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.07.00.65";
+  version = "01.07.04.52";
 
   src = fetchFromGitHub {
     owner = "bambulab";
