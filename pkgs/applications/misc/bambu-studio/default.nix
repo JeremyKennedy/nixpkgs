@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-IYkfKumi9gy1pQ5FnOzbbozTbjd1HY/xu19hrv8Bs6s=";
+    hash = "sha256-1bsg88czdlm9qx9c9wb94wwr4rxm1fi8qll79r6pv845xxfzgj4w";
   };
 
   nativeBuildInputs = [
