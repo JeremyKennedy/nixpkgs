@@ -4,7 +4,7 @@ let
   platformSlug =
     if stdenv.hostPlatform.is32bit then
       "linux32" else "linux64";
-  inifile = "linux/v0.${dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}_${platformSlug}.ini";
+  inifile = "linux/v0.50.11-steam_linux64.ini";
 
 in
 
